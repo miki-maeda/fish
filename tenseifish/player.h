@@ -6,7 +6,7 @@ int PLAYER_POS_X =100;
 int PLAYER_POS_Y =100;
 int PLAYER_WIDTH = 30;
 int PLAYER_HEIGHT = 30;
-int PLAYER_SPEED = 5;
+int PLAYER_SPEED = 3;
 
 //int ACT_SPEED = 20;
 int ACT_SPEED = 3;

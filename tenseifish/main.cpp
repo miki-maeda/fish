@@ -2,7 +2,6 @@
 #include "player.h"
 #include "image.h"
 #include "Feed.h"
-
 int	g_OldKey;				// 前回の入力キー
 int	g_NowKey;				// 今回の入力キー
 int	g_KeyFlg;				// 入力キー情報
@@ -105,8 +104,23 @@ void BackScrool()
 
 	//描画可能エリアを設定
 	SetDrawArea(0, 0, 640, 480);
-	DrawGraph(ScroolSpeed % 640, 0, StageImage, FALSE);
-	DrawGraph(640 + (ScroolSpeed % 640), 0, StageImage, FALSE);
+	//透過
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 122);
+	DrawGraph(ScroolSpeed % 640, 0, StageImage, TRUE);
+	DrawGraph(640 + (ScroolSpeed % 640), 0, StageImage, TRUE);
+	//設定を元に戻す。
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	//エリアを戻す
+	SetDrawArea(0, 0, 640, 480);
+
+	//岩画像表示
+
+	//描画可能エリアを設定
+	SetDrawArea(0, 0, 640, 480);
+
+	DrawGraph((ScroolSpeed*2) % 640, 40, Iwa, TRUE);
+	DrawGraph(640 + ((ScroolSpeed*2) % 640), 40, Iwa, TRUE);
 
 	//エリアを戻す
 	SetDrawArea(0, 0, 640, 480);
@@ -150,7 +164,9 @@ int LoadImages() {
 	//魚レベル2
 	if ((LoadDivGraph("Image/sakana2.png", 9, 10, 1, 100, 100, sakana[1])) == -1)return-1;
 	//ステージ背景
-	if ((StageImage = LoadGraph("Image/bg_natural_ocean.jpg")) == -1) return -1;
+	if ((StageImage = LoadGraph("Image/背景2.png")) == -1) return -1;
+	//手前の背景
+	if ((Iwa = LoadGraph("Image/手前の背景2.png")) == -1) return -1;
 	//餌(食べれる生き物)画像
 	//エビ
 	if ((feedImage[1] = LoadGraph("Image/ebi.png")) == -1)return 0;
