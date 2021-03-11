@@ -8,7 +8,8 @@ int PLAYER_WIDTH = 30;
 int PLAYER_HEIGHT = 30;
 int PLAYER_SPEED = 5;
 
-int ACT_SPEED = 20;
+//int ACT_SPEED = 20;
+int ACT_SPEED = 3;
 int act_wait = ACT_SPEED;
 
 int act_index = 0;

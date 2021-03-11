@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include "player.h"
 #include "image.h"
+#include "Feed.h"
 
 int	g_OldKey;				// 前回の入力キー
 int	g_NowKey;				// 今回の入力キー
@@ -36,7 +37,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	if (LoadImages() == -1)return -1; //画像呼び出し
 
 	//ゲームループ
-	while (ProcessMessage() == 0 && GetHitKeyStateAll(key) == 0 &&GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
+	while (ProcessMessage() == 0 && GetHitKeyStateAll(key) == 0 && GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
 
 		//入力キー取得
 		g_OldKey = g_NowKey;
@@ -57,7 +58,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	}
 
 	DxLib_End();	// DXライブラリ使用の終了処理
-    return 0;	// ソフトの終了
+	return 0;	// ソフトの終了
 }
 /***********************************************
  * ゲーム初期処理
@@ -82,7 +83,9 @@ void GameInit() {
 /***********************************************/
 void GameMain() {
 	BackScrool();
-    PlayerMove();
+	PlayerMove();
+	EatImage();
+	Hit();
 }
 /*************************************
  *背景画像スクロール処理
@@ -95,21 +98,26 @@ void BackScrool()
 		ScroolSpeed -= player.speed;
 
 	}
-	
+
+	DrawGraph(500, 500, feedImage[0], TRUE);
+
 	//ステージ画像表示
 
 	//描画可能エリアを設定
-	SetDrawArea(0, 0,640, 480);
+	SetDrawArea(0, 0, 640, 480);
 	DrawGraph(ScroolSpeed % 640, 0, StageImage, FALSE);
 	DrawGraph(640 + (ScroolSpeed % 640), 0, StageImage, FALSE);
-	
-	//エリアを戻す
-	SetDrawArea(0,0,640,480);
 
+	//エリアを戻す
+	SetDrawArea(0, 0, 640, 480);
+
+	SetFontSize(30);
+	DrawFormatString(0, 0, 0x000000, "Leve = %d", Leve);
+	/*DrawFormatString(100, 160, 0x000000, "Scke = %f", Scke);*/
 }
 
 void PlayerMove() {
-	
+
 	if (--act_wait <= 0)
 	{
 		act_index++;
@@ -125,18 +133,74 @@ void PlayerMove() {
 		if (g_NowKey & PAD_INPUT_RIGHT)player.x += player.speed;
 	}
 
-	
-	act_index++;
-	act_index %= MAX_MOTION_INDEX;
+
+	/*act_index++;
+	act_index %= MAX_MOTION_INDEX;*/
 	int motion_index = anime[act_index];
-	DrawGraph(player.x, player.y,sakana[motion_index],TRUE);
-	ScreenFlip();
-	
+	/*DrawGraph(player.x, player.y, sakana[motion_index], TRUE);*/
+	DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+	/*ScreenFlip();*/
+
 }
+
 int LoadImages() {
 	//プレイヤー画像
-	if((LoadDivGraph("Image/sakana.png", 10,10,1,30,30,sakana))==-1)return -1;
+	//魚レベル1
+	if ((LoadDivGraph("Image/sakana.png", 10, 10, 1, 30, 30, sakana[0])) == -1)return -1;
+	//魚レベル2
+	if ((LoadDivGraph("Image/sakana2.png", 9, 10, 1, 100, 100, sakana[1])) == -1)return-1;
 	//ステージ背景
 	if ((StageImage = LoadGraph("Image/bg_natural_ocean.jpg")) == -1) return -1;
+	//餌(食べれる生き物)画像
+	//エビ
+	if ((feedImage[1] = LoadGraph("Image/ebi.png")) == -1)return 0;
+	//アジ
+	if ((feedImage[2] = LoadGraph("Image/azi.png")) == -1)return 0;
+	//イカ
+	if ((feedImage[3] = LoadGraph("Image/ika.png")) == -1)return 0;
+
 	return 0;
+}
+
+void EatImage() {
+
+	DrawExtendGraph(e_x, e_x, e_y, e_y, feedImage[1], FALSE);
+	/*DrawFormatString(100,100,0xffffff,"w %d",player.w);*/
+}
+
+
+//成長
+void PlayerGrowth() {
+
+	//プレイヤーのサイズ変更
+	player.w *= Scke;
+	player.h *= Scke;
+
+	//サイズの変更量の増加
+	Scke++;
+	//レベルを上げる
+	Leve++;
+}
+
+//ゲージ
+void PlayerEat() {
+
+	//食べたものを量を増加させる
+	EatAmount++;
+
+	//食べたものの量が一定量に達したら処理を移す
+	if (EatAmount <= LeveUp) {
+		PlayerGrowth();
+	}
+}
+
+void Hit() {
+
+	//魚に当たったら場合の処理
+	if (e_x - 10 >= player.x && e_x + 10 <= player.x + 40 &&
+		e_y - 10 >= player.y && e_y + 10 <= player.y + 40) {
+		feedImage[1] = 0;
+		PlayerEat();
+	}
+
 }

@@ -1,0 +1,4 @@
+﻿  main.cpp
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\main.cpp(176,18): warning C4244: '*=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\main.cpp(177,18): warning C4244: '*=': 'float' から 'int' への変換です。データが失われる可能性があります。
+  tenseifish.vcxproj -> C:\Users\崎濱秀人\Desktop\fish\tenseifish\Debug\tenseifish.exe
