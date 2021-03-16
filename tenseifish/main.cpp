@@ -94,6 +94,7 @@ void GameMain() {
 	EatImage();
 	Hit();
 	LifeImage();
+	MeterImage();
 	
 }
 /*************************************
@@ -187,6 +188,7 @@ int LoadImages() {
 	//UI画像
 	//ライフ
 	if ((Life = LoadGraph("Image/Life.png")) == -1)return 0;
+	if ((Meter = LoadGraph("Image/Meter.png")) == -1)return 0;
 
 	return 0;
 }
@@ -211,6 +213,22 @@ void LifeImage() {
 	DrawGraph(LifeX, LIfeY, Life, TRUE);
 	DrawGraph(LifeX + 60, LIfeY, Life, TRUE);
 	DrawGraph(LifeX + 120, LIfeY, Life, TRUE);
+}
+
+void MeterImage() {
+
+	//エビメーター
+	DrawGraph(0, 80, feedImage[0], TRUE);
+	DrawGraph(m_x, m_y, Meter, TRUE);
+	
+	//アジメーター
+	DrawGraph(m_x, m_y+50, Meter, TRUE);
+	DrawGraph(0, 130, feedImage[1], TRUE);
+
+	//イカメーター
+	DrawGraph(m_x, m_y + 100, Meter, TRUE);
+	DrawGraph(0, 180, feedImage[2], TRUE);
+
 }
 
 
