@@ -1,6 +1,7 @@
 #pragma once
 
 void PlayerMove();
+void LifeImage();
 //自機の初期値
 int PLAYER_POS_X =100;
 int PLAYER_POS_Y =100;
@@ -14,6 +15,10 @@ int act_wait = ACT_SPEED;
 
 int act_index = 0;
 int MAX_MOTION_INDEX = 4;	// 0,1,2,1 の4種類 
+
+//ライフ位置
+int LifeX = 150;
+int LIfeY = 10;
 
 
 

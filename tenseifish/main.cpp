@@ -93,6 +93,8 @@ void GameMain() {
 	PlayerMove();
 	EatImage();
 	Hit();
+	LifeImage();
+	
 }
 /*************************************
  *背景画像スクロール処理
@@ -131,8 +133,8 @@ void BackScrool()
 	////エリアを戻す
 	//SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	SetFontSize(30);
-	//DrawFormatString(0, 0, 0x000000, "Level = %d", Leve);
+	SetFontSize(60);
+	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
 	/*DrawFormatString(100, 160, 0x000000, "Scke = %f", Scke);*/
 }
 
@@ -182,6 +184,10 @@ int LoadImages() {
 	//イカ
 	if ((feedImage[2] = LoadGraph("Image/ika.png")) == -1)return 0;
 
+	//UI画像
+	//ライフ
+	if ((Life = LoadGraph("Image/Life.png")) == -1)return 0;
+
 	return 0;
 }
 
@@ -199,6 +205,14 @@ void EatImage() {
 
 	/*DrawFormatString(100,100,0xffffff,"x %d y %d",e_xs,e_ys);*/
 }
+
+void LifeImage() {
+
+	DrawGraph(LifeX, LIfeY, Life, TRUE);
+	DrawGraph(LifeX + 60, LIfeY, Life, TRUE);
+	DrawGraph(LifeX + 120, LIfeY, Life, TRUE);
+}
+
 
 //成長
 void PlayerGrowth() {
