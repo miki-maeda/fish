@@ -10,8 +10,8 @@ char key[256];
 int GameState = 0;          //初期化　
 
 //画面領域の大きさ
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1410;
+const int SCREEN_HEIGHT = 800;
 
 int ScroolSpeed;
 
@@ -28,6 +28,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	SetMainWindowText("a");// タイトル変更
 
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
+
+	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
+
+	//SetGraphMode(800, 600, 16);
 
 	if (DxLib_Init() == -1) return -1;	// DXライブラリの初期化処理
 
@@ -72,9 +76,13 @@ void GameInit() {
 	player.w = PLAYER_WIDTH;
 	player.h = PLAYER_HEIGHT;
 	player.speed = PLAYER_SPEED;
+
+	//餌の初期化
+	for (int i = 0; i < 10; i++) {
+		eat[i].flg = FALSE;
+	}
 	//ゲームメインへ
 	GameState = 1;
-
 }
 
 /***********************************************
@@ -98,35 +106,33 @@ void BackScrool()
 
 	}
 
-	DrawGraph(500, 500, feedImage[0], TRUE);
-
 	//ステージ画像表示
 
 	//描画可能エリアを設定
-	SetDrawArea(0, 0, 640, 480);
+	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	//透過
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 122);
+	/*SetDrawBlendMode(DX_BLENDMODE_ALPHA, 122);*/
 	DrawGraph(ScroolSpeed % 640, 0, StageImage, TRUE);
 	DrawGraph(640 + (ScroolSpeed % 640), 0, StageImage, TRUE);
 	//設定を元に戻す。
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	//エリアを戻す
-	SetDrawArea(0, 0, 640, 480);
+	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//岩画像表示
 
-	//描画可能エリアを設定
-	SetDrawArea(0, 0, 640, 480);
+	////描画可能エリアを設定
+	//SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	DrawGraph((ScroolSpeed*2) % 640, 40, Iwa, TRUE);
-	DrawGraph(640 + ((ScroolSpeed*2) % 640), 40, Iwa, TRUE);
+	//DrawGraph((ScroolSpeed * 2) % SCREEN_WIDTH, 40, Iwa, TRUE);
+	//DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * 2) % SCREEN_WIDTH), 40, Iwa, TRUE);
 
-	//エリアを戻す
-	SetDrawArea(0, 0, 640, 480);
+	////エリアを戻す
+	//SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	SetFontSize(30);
-	DrawFormatString(0, 0, 0x000000, "Leve = %d", Leve);
+	//DrawFormatString(0, 0, 0x000000, "Level = %d", Leve);
 	/*DrawFormatString(100, 160, 0x000000, "Scke = %f", Scke);*/
 }
 
@@ -152,7 +158,8 @@ void PlayerMove() {
 	act_index %= MAX_MOTION_INDEX;*/
 	int motion_index = anime[act_index];
 	/*DrawGraph(player.x, player.y, sakana[motion_index], TRUE);*/
-	DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+	//DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+	DrawGraph(player.x, player.y, sakana[Leve - 1][motion_index], TRUE);
 	/*ScreenFlip();*/
 
 }
@@ -164,26 +171,34 @@ int LoadImages() {
 	//魚レベル2
 	if ((LoadDivGraph("Image/sakana2.png", 9, 10, 1, 100, 100, sakana[1])) == -1)return-1;
 	//ステージ背景
-	if ((StageImage = LoadGraph("Image/背景2.png")) == -1) return -1;
+	if ((StageImage = LoadGraph("Image/Hikei.png")) == -1) return -1;
 	//手前の背景
 	if ((Iwa = LoadGraph("Image/手前の背景2.png")) == -1) return -1;
 	//餌(食べれる生き物)画像
 	//エビ
-	if ((feedImage[1] = LoadGraph("Image/ebi.png")) == -1)return 0;
+	if ((feedImage[0] = LoadGraph("Image/ebi.png")) == -1)return 0;
 	//アジ
-	if ((feedImage[2] = LoadGraph("Image/azi.png")) == -1)return 0;
+	if ((feedImage[1] = LoadGraph("Image/azi.png")) == -1)return 0;
 	//イカ
-	if ((feedImage[3] = LoadGraph("Image/ika.png")) == -1)return 0;
+	if ((feedImage[2] = LoadGraph("Image/ika.png")) == -1)return 0;
 
 	return 0;
 }
 
 void EatImage() {
 
-	DrawExtendGraph(e_x, e_x, e_y, e_y, feedImage[1], FALSE);
-	/*DrawFormatString(100,100,0xffffff,"w %d",player.w);*/
-}
+	/*for (int i = 0; i < 10; i++) {
+		if (eat[i].flg == FALSE) {
 
+		}
+	}*/
+
+	DrawGraph(e_x + ((ScroolSpeed * 2) % SCREEN_WIDTH), e_y, feedImage[0], FALSE);
+	//スクロールしている間の座標を格納している
+	e_xs = e_x + ((ScroolSpeed * 2) % SCREEN_WIDTH);
+
+	/*DrawFormatString(100,100,0xffffff,"x %d y %d",e_xs,e_ys);*/
+}
 
 //成長
 void PlayerGrowth() {
@@ -213,9 +228,9 @@ void PlayerEat() {
 void Hit() {
 
 	//魚に当たったら場合の処理
-	if (e_x - 10 >= player.x && e_x + 10 <= player.x + 40 &&
-		e_y - 10 >= player.y && e_y + 10 <= player.y + 40) {
-		feedImage[1] = 0;
+	if (e_xs + 40 >= player.x && e_xs <= player.x + 30 &&
+		e_y + 40 >= player.y && e_y <= player.y + 30) {
+		feedImage[0] = 0;
 		PlayerEat();
 	}
 
