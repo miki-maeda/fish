@@ -173,7 +173,7 @@ int LoadImages() {
 	//ƒXƒe[ƒW”wŒi
 	if ((StageImage = LoadGraph("Image/Hikei.png")) == -1) return -1;
 	//è‘O‚Ì”wŒi
-	if ((Iwa = LoadGraph("Image/è‘O‚Ì”wŒi2.png")) == -1) return -1;
+	if ((Iwa = LoadGraph("Image/temae.png")) == -1) return -1;
 	//‰a(H‚×‚ê‚é¶‚«•¨)‰æ‘œ
 	//ƒGƒr
 	if ((feedImage[0] = LoadGraph("Image/ebi.png")) == -1)return 0;
