@@ -69,6 +69,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 void GameInit() {
 	//スクロール速度を初期化
 	ScroolSpeed = 0;
+	//食べた量個別
+	em = 0;
+	am = 0;
+	im = 0;
+	EatAmount = 0;
 	//プレイヤーの初期化
 	player.flg = TRUE;
 	player.x = PLAYER_POS_X;
@@ -91,11 +96,9 @@ void GameInit() {
 void GameMain() {
 	BackScrool();
 	PlayerMove();
-	EatImage();
-	Hit();
+	EatMove();
 	LifeImage();
 	MeterImage();
-	
 }
 /*************************************
  *背景画像スクロール処理
@@ -104,6 +107,9 @@ void GameMain() {
  *************************************/
 void BackScrool()
 {
+
+	Range += player.speed;
+
 	if (GameState == 1) {
 		ScroolSpeed -= player.speed;
 
@@ -134,6 +140,7 @@ void BackScrool()
 	////エリアを戻す
 	//SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	//レベル表示
 	SetFontSize(60);
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
 	/*DrawFormatString(100, 160, 0x000000, "Scke = %f", Scke);*/
@@ -188,26 +195,92 @@ int LoadImages() {
 	//UI画像
 	//ライフ
 	if ((Life = LoadGraph("Image/Life.png")) == -1)return 0;
-	if ((Meter = LoadGraph("Image/Meter.png")) == -1)return 0;
+	//メーター
+	for (int i = 0; i < 3; i++) {
+		if ((Meter[i][0] = LoadGraph("Image/Meter.png")) == -1)return 0;
+		//エビメーター
+		if (i == 0) {
+			if ((Meter[i][1] = LoadGraph("Image/MeterE1.png")) == -1)return 0;
+			if ((Meter[i][2] = LoadGraph("Image/MeterE2.png")) == -1)return 0;
+			if ((Meter[i][3] = LoadGraph("Image/MeterE3.png")) == -1)return 0;
+			if ((Meter[i][4] = LoadGraph("Image/MeterE4.png")) == -1)return 0;
+			if ((Meter[i][5] = LoadGraph("Image/MeterE5.png")) == -1)return 0;
+		}
+		//アジメーター
+		if (i == 1) {
+			if ((Meter[i][1] = LoadGraph("Image/MeterA1.png")) == -1)return 0;
+			if ((Meter[i][2] = LoadGraph("Image/MeterA2.png")) == -1)return 0;
+			if ((Meter[i][3] = LoadGraph("Image/MeterA3.png")) == -1)return 0;
+			if ((Meter[i][4] = LoadGraph("Image/MeterA4.png")) == -1)return 0;
+			if ((Meter[i][5] = LoadGraph("Image/MeterA5.png")) == -1)return 0;
+		}
+		//イカメーター
+		if (i == 2) {
+			if ((Meter[i][1] = LoadGraph("Image/MeterI1.png")) == -1)return 0;
+			if ((Meter[i][2] = LoadGraph("Image/MeterI2.png")) == -1)return 0;
+			if ((Meter[i][3] = LoadGraph("Image/MeterI3.png")) == -1)return 0;
+			if ((Meter[i][4] = LoadGraph("Image/MeterI4.png")) == -1)return 0;
+			if ((Meter[i][5] = LoadGraph("Image/MeterI5.png")) == -1)return 0;
+		}
+	}
 
 	return 0;
 }
 
-void EatImage() {
+void EatMove() {
+	for (int i = 0; i < 10; i++) {
+		if (eat[i].flg == TRUE) {
+			//餌の表示
+			DrawGraph(eat[i].e_x, eat[i].e_y, eat[i].image, FALSE);
 
-	/*for (int i = 0; i < 10; i++) {
-		if (eat[i].flg == FALSE) {
+			//真っすぐ左に移動
+			eat[i].e_x -= 10;
 
+			if (eat[i].flg == FALSE)continue;
+
+			//画面外に行ったら削除
+			if (eat[i].e_x < 0 - 40)eat[i].flg = FALSE;
+
+			//魚に当たったら場合の処理
+			if (Hit(&player, &eat[i]) == TRUE) {
+				PlayerEat(&eat[i].type);
+				eat[i].flg = FALSE;
+			}
 		}
-	}*/
+	}
 
-	DrawGraph(e_x + ((ScroolSpeed * 2) % SCREEN_WIDTH), e_y, feedImage[0], FALSE);
-	//スクロールしている間の座標を格納している
-	e_xs = e_x + ((ScroolSpeed * 2) % SCREEN_WIDTH);
-
-	/*DrawFormatString(100,100,0xffffff,"x %d y %d",e_xs,e_ys);*/
+	//餌の設定
+	if (Range / 5 % 10 == 0) {
+		EatImage();
+	}
 }
 
+int EatImage() {
+
+	for (int i = 0; i < 10; i++) {
+		if (eat[i].flg == FALSE) {
+			eat[i] = eat0;
+			eat[i].type = GetRand(2);
+			eat[i].image = feedImage[eat[i].type];
+			switch (eat[i].type) {
+			case 0:
+				eat[i].e_y = (GetRand(1) + 4) * 100 + 100;
+				break;
+			case 1:
+				eat[i].e_y = GetRand(2) * 100 + 100;
+				break;
+			case 2:
+				eat[i].e_y = GetRand(5) * 100 + 100;
+				break;
+			}
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+//ライフ
 void LifeImage() {
 
 	DrawGraph(LifeX, LIfeY, Life, TRUE);
@@ -215,29 +288,29 @@ void LifeImage() {
 	DrawGraph(LifeX + 120, LIfeY, Life, TRUE);
 }
 
+//メーター表示
 void MeterImage() {
 
 	//エビメーター
+	DrawGraph(m_x, m_y, Meter[0][em], TRUE);
 	DrawGraph(0, 80, feedImage[0], TRUE);
-	DrawGraph(m_x, m_y, Meter, TRUE);
-	
+
 	//アジメーター
-	DrawGraph(m_x, m_y+50, Meter, TRUE);
-	DrawGraph(0, 130, feedImage[1], TRUE);
+	DrawGraph(m_x, m_y + 50, Meter[1][am], TRUE);
+	DrawGraph(0, 80 + 50, feedImage[1], TRUE);
 
 	//イカメーター
-	DrawGraph(m_x, m_y + 100, Meter, TRUE);
-	DrawGraph(0, 180, feedImage[2], TRUE);
+	DrawGraph(m_x, m_y + 100, Meter[2][im], TRUE);
+	DrawGraph(0, 80 + 100, feedImage[2], TRUE);
 
 }
-
 
 //成長
 void PlayerGrowth() {
 
 	//プレイヤーのサイズ変更
-	player.w *= Scke;
-	player.h *= Scke;
+	player.w = 100;
+	player.h = 100;
 
 	//サイズの変更量の増加
 	Scke++;
@@ -245,25 +318,39 @@ void PlayerGrowth() {
 	Leve++;
 }
 
-//ゲージ
-void PlayerEat() {
+//食べた時の処理
+void PlayerEat(int* e) {
+
+	switch (*e) {
+	case 0:
+		if (em < 5) em++;
+		break;
+	case 1:
+		if (am < 5)am++;
+		break;
+	case 2:
+		if (im < 5)im++;
+		break;
+	}
 
 	//食べたものを量を増加させる
 	EatAmount++;
 
 	//食べたものの量が一定量に達したら処理を移す
-	if (EatAmount <= LeveUp) {
+	if (EatAmount == LeveUp) {
 		PlayerGrowth();
 	}
 }
 
-void Hit() {
+//餌とプレイヤーのあたり判定
+int Hit(Player* p, Eat* e) {
 
-	//魚に当たったら場合の処理
-	if (e_xs + 40 >= player.x && e_xs <= player.x + 30 &&
-		e_y + 40 >= player.y && e_y <= player.y + 30) {
-		feedImage[0] = 0;
-		PlayerEat();
+	//餌とのあたり判定判定
+	if (e->e_x + 40 >= p->x && e->e_x <= p->x + p->h &&
+		e->e_y + 40 >= p->y && e->e_y <= p->y + p->w) {
+		return TRUE;
 	}
+
+	return FALSE;
 
 }
