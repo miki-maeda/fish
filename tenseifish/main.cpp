@@ -168,8 +168,8 @@ void PlayerMove() {
 	act_index %= MAX_MOTION_INDEX;*/
 	int motion_index = anime[act_index];
 	/*DrawGraph(player.x, player.y, sakana[motion_index], TRUE);*/
-	//DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
-	DrawGraph(player.x, player.y, sakana[Leve - 1][motion_index], TRUE);
+	DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+	//DrawGraph(player.x, player.y, sakana[Leve - 1][motion_index], TRUE);
 	/*ScreenFlip();*/
 
 }
@@ -231,7 +231,7 @@ void EatMove() {
 	for (int i = 0; i < 10; i++) {
 		if (eat[i].flg == TRUE) {
 			//餌の表示
-			DrawGraph(eat[i].e_x, eat[i].e_y, eat[i].image, FALSE);
+			DrawGraph(eat[i].e_x, eat[i].e_y, eat[i].image, TRUE);
 
 			//真っすぐ左に移動
 			eat[i].e_x -= 10;
@@ -250,7 +250,7 @@ void EatMove() {
 	}
 
 	//餌の設定
-	if (Range / 5 % 10 == 0) {
+	if (Range / 5 % 50 == 0) {
 		EatImage();
 	}
 }
@@ -308,12 +308,12 @@ void MeterImage() {
 //成長
 void PlayerGrowth() {
 
-	//プレイヤーのサイズ変更
-	player.w = 100;
-	player.h = 100;
-
 	//サイズの変更量の増加
 	Scke++;
+
+	//プレイヤーのサイズ変更
+	player.w *= Scke;
+	player.h *= Scke;
 	//レベルを上げる
 	Leve++;
 }
@@ -345,12 +345,29 @@ void PlayerEat(int* e) {
 //餌とプレイヤーのあたり判定
 int Hit(Player* p, Eat* e) {
 
+	int px = p->x + 30 * Scke;
+	int py = p->y + 45 * Scke;
+	int ph = p->h - 40 * Scke;
+	int pw = p->w - 80 * Scke;
+	int ex = e->e_x;
+	int ey = e->e_y;
+	int et = e->type;
+
 	//餌とのあたり判定判定
-	if (e->e_x + 40 >= p->x && e->e_x <= p->x + p->h &&
-		e->e_y + 40 >= p->y && e->e_y <= p->y + p->w) {
-		return TRUE;
+	if (et == 0) {
+		if (ex + 40 >= px && ex <= px + ph &&
+			ey + 40 >= py && ey <= py + pw) {
+			e->flg = FALSE;
+			return TRUE;
+		}
+	}
+	else {
+		if (ex + 50 >= px && ex <= px + ph &&
+			ey + 50 >= py && ey <= py + pw) {
+			e->flg = FALSE;
+			return TRUE;
+		}
 	}
 
 	return FALSE;
-
 }

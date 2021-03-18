@@ -8,7 +8,7 @@ void PlayerEat(int *e);		//プレイヤーが餌を食べたとき
 
 //変数
 int Leve = 1;			//レベル
-float Scke = 1.5;			//大きくなる量
+float Scke = 1;			//大きくなる量
 int LeveUp = 10;			//レベルが上がるのに必要な量
 int EatAmount;		//食べたものの量(合計)
 int em, am, im;

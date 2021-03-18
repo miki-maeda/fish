@@ -1,1 +1,8 @@
-﻿  tenseifish.vcxproj -> C:\Users\崎濱秀人\Desktop\fish\tenseifish\Debug\tenseifish.exe
+﻿  main.cpp
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\main.cpp(315,18): warning C4244: '*=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\main.cpp(316,18): warning C4244: '*=': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\main.cpp(348,9): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\main.cpp(349,9): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\main.cpp(350,9): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\main.cpp(351,9): warning C4244: '初期化中': 'float' から 'int' への変換です。データが失われる可能性があります。
+  tenseifish.vcxproj -> C:\Users\崎濱秀人\Desktop\fish\tenseifish\Debug\tenseifish.exe
