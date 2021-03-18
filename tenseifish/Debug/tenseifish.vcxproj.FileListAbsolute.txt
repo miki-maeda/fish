@@ -1,0 +1,4 @@
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\Debug\tenseifish.exe
+C:\Users\崎濱秀人\Desktop\fish\tenseifish\Debug\tenseifish.pdb
+C:\Users\崎濱秀人\Desktop\FishS\Debug\tenseifish.exe
+C:\Users\崎濱秀人\Desktop\FishS\Debug\tenseifish.pdb
