@@ -191,7 +191,7 @@ void PlayerMove() {
 	//âÊñ Ç©ÇÁÇÕÇ›èoÇ≥Ç»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
 	if (player.x < 0)player.x = 0;
 	if (player.x > SCREEN_WIDTH - player.w)player.x = SCREEN_WIDTH - player.w;
-	if (player.y < player.h)player.y = player.h;
+	if (player.y < player.h/Scke)player.y = player.h/Scke;
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
 	/*act_index++;
@@ -296,13 +296,13 @@ int EatImage() {
 			eat[i].image = feedImage[eat[i].type];
 			switch (eat[i].type) {
 			case 0:
-				eat[i].e_y = (GetRand(1) + 4) * 100 + 100;
+				eat[i].e_y = (GetRand(1) + 4) * 100 + 150;
 				break;
 			case 1:
-				eat[i].e_y = GetRand(2) * 100 + 100;
+				eat[i].e_y = GetRand(2) * 100 + 150;
 				break;
 			case 2:
-				eat[i].e_y = GetRand(5) * 100 + 100;
+				eat[i].e_y = GetRand(5) * 100 + 150;
 				break;
 			}
 			return TRUE;
