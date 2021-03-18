@@ -209,7 +209,9 @@ int LoadImages() {
 	//魚レベル1
 	if ((LoadDivGraph("Image/sakana.png", 10, 10, 1, 30, 30, sakana[0])) == -1)return -1;
 	//魚レベル2
-	if ((LoadDivGraph("Image/sakana2.png", 9, 10, 1, 100, 100, sakana[1])) == -1)return-1;
+	/*if ((LoadDivGraph("Image/sakana2.png", 9, 10, 1, 100, 100, sakana[1])) == -1)return-1;*/
+	//魚レベル2
+	if ((LoadDivGraph("Image/sakana2.png", 3, 3, 1, 150, 150, sakana[1])) == -1)return-1;
 	//ステージ背景
 	if ((StageImage = LoadGraph("Image/Hikei.png")) == -1) return -1;
 	//手前の背景
