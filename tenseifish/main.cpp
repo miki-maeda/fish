@@ -131,14 +131,39 @@ void BackScrool()
 
 	//岩画像表示
 
-	////描画可能エリアを設定
-	//SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//描画可能エリアを設定
+	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	static int count = 0;
+	count = (count + 1) % 2541;
+	
 
-	//DrawGraph((ScroolSpeed * 2) % SCREEN_WIDTH, 40, Iwa, TRUE);
-	//DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * 2) % SCREEN_WIDTH), 40, Iwa, TRUE);
+	if (count > 0 && count < 139) {
+		DrawGraph((ScroolSpeed * 2) % SCREEN_WIDTH + 1410, 100, Iwa[0], TRUE);
+		DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * 2) % SCREEN_WIDTH) + 1410, 100, Iwa[0], TRUE);
+	}
+	if (count > 139 && count < 694 + 139) {
+		DrawGraph((ScroolSpeed * 2) % SCREEN_WIDTH, 100, Iwa[0], TRUE);
+		DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * 2) % SCREEN_WIDTH), 100, Iwa[0], TRUE);
+	}
+	if (count > 847 && count < 986) {
+		DrawGraph((ScroolSpeed * 2) % SCREEN_WIDTH + 1410, 100, Iwa[1], TRUE);
+		DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * 2) % SCREEN_WIDTH) + 1410, 100, Iwa[1], TRUE);
+	}
+	if (count > 986 && count < 1541 + 139) {
+		DrawGraph((ScroolSpeed * 2) % SCREEN_WIDTH, 100, Iwa[1], TRUE);
+		DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * 2) % SCREEN_WIDTH), 100, Iwa[1], TRUE);
+	}
+	if (count > 1694 && count < 1833) {
+		DrawGraph((ScroolSpeed * 2) % SCREEN_WIDTH + 1410, 100, Iwa[2], TRUE);
+		DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * 2) % SCREEN_WIDTH) + 1410, 100, Iwa[2], TRUE);
+	}
+	if (count > 1833 && count < 2388 + 139) {
+		DrawGraph((ScroolSpeed * 2) % SCREEN_WIDTH, 100, Iwa[2], TRUE);
+		DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * 2) % SCREEN_WIDTH), 100, Iwa[2], TRUE);
+	}
 
-	////エリアを戻す
-	//SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//エリアを戻す
+	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	//レベル表示
 	SetFontSize(60);
@@ -163,6 +188,11 @@ void PlayerMove() {
 		if (g_NowKey & PAD_INPUT_RIGHT)player.x += player.speed;
 	}
 
+	//画面からはみ出さないようにする
+	if (player.x < 0)player.x = 0;
+	if (player.x > SCREEN_WIDTH - player.w)player.x = SCREEN_WIDTH - player.w;
+	if (player.y < player.h)player.y = player.h;
+	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
 	/*act_index++;
 	act_index %= MAX_MOTION_INDEX;*/
@@ -183,7 +213,9 @@ int LoadImages() {
 	//ステージ背景
 	if ((StageImage = LoadGraph("Image/Hikei.png")) == -1) return -1;
 	//手前の背景
-	if ((Iwa = LoadGraph("Image/temae.png")) == -1) return -1;
+	if ((Iwa[0] = LoadGraph("Image/temae.png")) == -1) return -1;
+	if ((Iwa[1] = LoadGraph("Image/temae2.png")) == -1) return -1;
+	if ((Iwa[2] = LoadGraph("Image/temae3.png")) == -1) return -1;
 	//餌(食べれる生き物)画像
 	//エビ
 	if ((feedImage[0] = LoadGraph("Image/ebi.png")) == -1)return 0;
@@ -292,16 +324,16 @@ void LifeImage() {
 void MeterImage() {
 
 	//エビメーター
-	DrawGraph(m_x, m_y, Meter[0][em], TRUE);
+	DrawGraph(m_x-10, m_y, Meter[0][em], TRUE);
 	DrawGraph(0, 80, feedImage[0], TRUE);
 
 	//アジメーター
-	DrawGraph(m_x, m_y + 50, Meter[1][am], TRUE);
-	DrawGraph(0, 80 + 50, feedImage[1], TRUE);
+	DrawGraph(m_x+240 , m_y, Meter[1][am], TRUE);
+	DrawGraph(237, 75, feedImage[1], TRUE);
 
 	//イカメーター
-	DrawGraph(m_x, m_y + 100, Meter[2][im], TRUE);
-	DrawGraph(0, 80 + 100, feedImage[2], TRUE);
+	DrawGraph(m_x+480, m_y, Meter[2][im], TRUE);
+	DrawGraph(480, 65, feedImage[2], TRUE);
 
 }
 

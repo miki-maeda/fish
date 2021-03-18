@@ -1,6 +1,6 @@
 #pragma once
 int StageImage;
-int Iwa;
+int Iwa[3];//Žè‘O‚Ì”wŒi
 int Life;
 int Meter[3][6];
 int sakana[3][10] = { 0 };		//‹›‚Ì‰æ‘œ‚ðŠi”[‚·‚é”z—ñ
