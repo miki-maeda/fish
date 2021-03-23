@@ -3,6 +3,7 @@
 void PlayerMove();
 void LifeImage();
 void MeterImage();
+
 //自機の初期値
 int PLAYER_POS_X = 100;
 int PLAYER_POS_Y = 300;
@@ -33,6 +34,7 @@ struct Player//プレイヤー
 	int x = 0, y = 0, w = 0, h = 0;
 	int speed = 0;
 };
+void GameClearHit(Player* P);
 //自機
 struct Player player;
 

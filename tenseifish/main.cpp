@@ -18,6 +18,8 @@ int ScroolSpeed;
 void GameInit();		//ゲーム初期化処理
 void GameMain();		//ゲームメイン処理
 void BackScrool();         //背景画像スクロール処理
+void GameClear();		//ゲームクリア処理
+void Goal();
 
 int LoadImages();          //画像読み込み
 
@@ -55,6 +57,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			break;
 		case 1:
 			GameMain();		//ゲームメイン処理
+			break;
+		case 2:
+			GameClear();
 			break;
 		}
 		ScreenFlip();			// 裏画面の内容を表画面に反映
@@ -99,6 +104,9 @@ void GameMain() {
 	EatMove();
 	LifeImage();
 	MeterImage();
+	GameClearHit(&player);
+	
+	Goal();
 }
 /*************************************
  *背景画像スクロール処理
@@ -226,6 +234,9 @@ int LoadImages() {
 	//イカ
 	if ((feedImage[2] = LoadGraph("Image/ika.png")) == -1)return 0;
 
+	//ゲームクリア画像
+	if ((Gameclear = LoadGraph("Image/GameClear.png")) == -1)return -1;
+
 	//UI画像
 	//ライフ
 	if ((Life = LoadGraph("Image/Life.png")) == -1)return 0;
@@ -257,6 +268,8 @@ int LoadImages() {
 			if ((Meter[i][5] = LoadGraph("Image/MeterI5.png")) == -1)return 0;
 		}
 	}
+
+	
 
 	return 0;
 }
@@ -410,4 +423,31 @@ int Hit(Player* p, Eat* e) {
 	}
 
 	return FALSE;
+}
+void Goal() {
+	DrawBox(1200, 400, 1300, 500, GetColor(255, 212, 0), TRUE);
+}
+//ゲームクリア（当たったら）
+void GameClearHit(Player* p) {
+
+
+	int px = p->x;
+	int py = p->y;
+	int ph = p->h;
+	int pw = p->w;
+
+
+
+	if (1300 >= px && 1200 <= px + ph &&
+		500 >= py && 400 <= py + pw) {
+		GameState = 2;
+
+	}
+
+}
+
+void GameClear() {
+
+	DrawGraph(0,0, Gameclear, TRUE);
+
 }
