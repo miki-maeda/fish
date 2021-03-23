@@ -265,7 +265,7 @@ void EatMove() {
 	for (int i = 0; i < 10; i++) {
 		if (eat[i].flg == TRUE) {
 			//‰a‚Ì•\Ž¦
-			DrawGraph(eat[i].e_x, eat[i].e_y, eat[i].image, TRUE);
+			DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h,eat[i].image, TRUE);
 
 			//^‚Á‚·‚®¶‚ÉˆÚ“®
 			eat[i].e_x -= 10;
@@ -299,12 +299,18 @@ int EatImage() {
 			switch (eat[i].type) {
 			case 0:
 				eat[i].e_y = (GetRand(1) + 4) * 100 + 150;
+				eat[i].e_w = 40 * 1.5;
+				eat[i].e_h = 40 * 1.5;
 				break;
 			case 1:
 				eat[i].e_y = GetRand(2) * 100 + 150;
+				eat[i].e_w = 50 * 1.5;
+				eat[i].e_h = 50 * 1.5;
 				break;
 			case 2:
 				eat[i].e_y = GetRand(5) * 100 + 150;
+				eat[i].e_w = 50 * 1.5;
+				eat[i].e_h = 50 * 1.5;
 				break;
 			}
 			return TRUE;

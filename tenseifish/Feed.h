@@ -19,10 +19,11 @@ struct Eat {
 	int	type;			//ƒ^ƒCƒv
 	int image;			//•\¦‚·‚é‰a
 	int e_x, e_y;		//‰a‚ÌÀ•W
+	float e_w, e_h;		//‰¡•Ac•
 
 };
 
 struct Eat eat[10];				//‰a‚Ì•\¦‚·‚é”
-struct Eat eat0 = { TRUE,0,0,1410,0};
+struct Eat eat0 = { TRUE,0,0,1410,0,0,0};
 
 int Hit(Player* p, Eat* e);				//“G‚Æ‚Ì‚ ‚½‚è”»’è
