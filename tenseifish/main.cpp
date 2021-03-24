@@ -228,11 +228,11 @@ int LoadImages() {
 	if ((Iwa[2] = LoadGraph("Image/temae3.png")) == -1) return -1;
 	//餌(食べれる生き物)画像
 	//エビ
-	if ((feedImage[0] = LoadGraph("Image/ebi.png")) == -1)return 0;
+	if ((LoadDivGraph("Image/ebi.png", 3, 3, 1, 50, 50, feedImage[0])) == -1)return-1;
 	//アジ
-	if ((feedImage[1] = LoadGraph("Image/azi.png")) == -1)return 0;
+	if ((LoadDivGraph("Image/azi.png", 3, 3, 1, 60, 60, feedImage[1])) == -1)return-1;
 	//イカ
-	if ((feedImage[2] = LoadGraph("Image/ika.png")) == -1)return 0;
+	if ((LoadDivGraph("Image/ika.png", 3, 3, 1, 50, 50, feedImage[2])) == -1)return-1;
 
 	//ゲームクリア画像
 	if ((Gameclear = LoadGraph("Image/GameClear.png")) == -1)return -1;
@@ -293,6 +293,17 @@ void EatMove() {
 				PlayerEat(&eat[i].type);
 				eat[i].flg = FALSE;
 			}
+			//アニメーションを動かす
+			if (--MoveEat <= 0)
+			{
+				CountEat++;
+				MoveEat = MoveSpeed;
+				CountEat %= MAX_MOTION_INDEX;
+			}
+
+			int motion_index = anime[CountEat];
+			eat[i].image = feedImage[eat[i].type][motion_index];
+
 		}
 	}
 
@@ -308,7 +319,7 @@ int EatImage() {
 		if (eat[i].flg == FALSE) {
 			eat[i] = eat0;
 			eat[i].type = GetRand(2);
-			eat[i].image = feedImage[eat[i].type];
+			eat[i].image = feedImage[eat[i].type][0];
 			switch (eat[i].type) {
 			case 0:
 				eat[i].e_y = (GetRand(1) + 4) * 100 + 150;
@@ -346,15 +357,15 @@ void MeterImage() {
 
 	//エビメーター
 	DrawGraph(m_x-10, m_y, Meter[0][em], TRUE);
-	DrawGraph(0, 80, feedImage[0], TRUE);
+	DrawGraph(0, 80, feedImage[0][0], TRUE);
 
 	//アジメーター
 	DrawGraph(m_x+240 , m_y, Meter[1][am], TRUE);
-	DrawGraph(237, 75, feedImage[1], TRUE);
+	DrawGraph(237, 75, feedImage[1][0], TRUE);
 
 	//イカメーター
 	DrawGraph(m_x+480, m_y, Meter[2][im], TRUE);
-	DrawGraph(480, 65, feedImage[2], TRUE);
+	DrawGraph(480, 65, feedImage[2][0], TRUE);
 
 }
 
@@ -404,26 +415,19 @@ int Hit(Player* p, Eat* e) {
 	int pw = p->w - 80 * Scke;
 	int ex = e->e_x;
 	int ey = e->e_y;
-	int et = e->type;
+	int ew = e->e_w;
+	int eh = e->e_h;
 
 	//餌とのあたり判定判定
-	if (et == 0) {
-		if (ex + 40 >= px && ex <= px + ph &&
-			ey + 40 >= py && ey <= py + pw) {
-			e->flg = FALSE;
-			return TRUE;
-		}
-	}
-	else {
-		if (ex + 50 >= px && ex <= px + ph &&
-			ey + 50 >= py && ey <= py + pw) {
-			e->flg = FALSE;
-			return TRUE;
-		}
-	}
 
+	if (ex + ew >= px && ex <= px + pw &&
+		ey + eh >= py && ey <= py + ph) {
+		e->flg = FALSE;
+		return TRUE;
+	}
 	return FALSE;
 }
+
 void Goal() {
 	DrawBox(1200, 400, 1300, 500, GetColor(255, 212, 0), TRUE);
 }
