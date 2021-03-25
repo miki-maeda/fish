@@ -24,7 +24,7 @@ void Goal();
 
 int LoadImages();          //‰æ‘œ“Ç‚İ‚İ
 
-int Time = 600;
+int Time = 2400;
 //int hk = LoadGraph("Image/temae4.png");
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
