@@ -23,6 +23,9 @@ void Goal();
 
 int LoadImages();          //画像読み込み
 
+int Time = 600;
+//int hk = LoadGraph("Image/temae4.png");
+
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -43,6 +46,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 	//ゲームループ
 	while (ProcessMessage() == 0 && GetHitKeyStateAll(key) == 0 && GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
+
+		Time--;
 
 		//入力キー取得
 		g_OldKey = g_NowKey;
@@ -119,8 +124,9 @@ void BackScrool()
 	Range += player.speed;
 
 	if (GameState == 1) {
-		ScroolSpeed -= player.speed;
-
+		if (Time > 0) {
+			ScroolSpeed -= player.speed;
+		}
 	}
 
 	//ステージ画像表示
@@ -264,8 +270,9 @@ void EatMove() {
 	for (int i = 0; i < 10; i++) {
 		if (eat[i].flg == TRUE) {
 			//餌の表示
-			DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h,eat[i].image, TRUE);
-
+			if (Time > 0) {
+				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
+			}
 			//真っすぐ左に移動
 			eat[i].e_x -= 10;
 
@@ -395,27 +402,32 @@ void PlayerEat(int* e) {
 //餌とプレイヤーのあたり判定
 int Hit(Player* p, Eat* e) {
 
-	int px = p->x + 30 * Scke;
-	int py = p->y + 45 * Scke;
-	int ph = p->h - 40 * Scke;
-	int pw = p->w - 80 * Scke;
-	int ex = e->e_x;
-	int ey = e->e_y;
-	int ew = e->e_w;
-	int eh = e->e_h;
+	if (Time > 0) {
+		int px = p->x + 30 * Scke;
+		int py = p->y + 45 * Scke;
+		int ph = p->h - 40 * Scke;
+		int pw = p->w - 80 * Scke;
+		int ex = e->e_x;
+		int ey = e->e_y;
+		int ew = e->e_w;
+		int eh = e->e_h;
 
-	//餌とのあたり判定判定
+		//餌とのあたり判定判定
 
-	if (ex + ew >= px && ex <= px + pw &&
-		ey + eh >= py && ey <= py + ph) {
-		e->flg = FALSE;
-		return TRUE;
+		if (ex + ew >= px && ex <= px + pw &&
+			ey + eh >= py && ey <= py + ph) {
+			e->flg = FALSE;
+			return TRUE;
+		}
 	}
 	return FALSE;
 }
 
 void Goal() {
-	DrawBox(1200, 400, 1300, 500, GetColor(255, 212, 0), TRUE);
+	if (Time <= 0) {
+		DeleteGraph(Iwa[0]);
+		DrawBox(1200, 400, 1300, 500, GetColor(255, 212, 0), TRUE);
+	}
 }
 //ゲームクリア（当たったら）
 void GameClearHit(Player* p) {
@@ -427,11 +439,11 @@ void GameClearHit(Player* p) {
 	int pw = p->w;
 
 
-
-	if (1300 >= px && 1200 <= px + ph &&
-		500 >= py && 400 <= py + pw) {
-		GameState = 2;
-
+	if(Time <= 0){
+		if (1300 >= px && 1200 <= px + ph &&
+			500 >= py && 400 <= py + pw) {
+			GameState = 2;
+		}
 	}
 
 }
