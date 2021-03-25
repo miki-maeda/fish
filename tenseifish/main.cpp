@@ -2,6 +2,7 @@
 #include "player.h"
 #include "image.h"
 #include "Feed.h"
+#include "Boss.h"
 int	g_OldKey;				// 前回の入力キー
 int	g_NowKey;				// 今回の入力キー
 int	g_KeyFlg;				// 入力キー情報
@@ -66,6 +67,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		case 2:
 			GameClear();
 			break;
+		case 3:
+			BossInit();
+			break;
+		case 4:
+			BossStage();
+			break;
 		}
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 	}
@@ -91,6 +98,8 @@ void GameInit() {
 	player.w = PLAYER_WIDTH;
 	player.h = PLAYER_HEIGHT;
 	player.speed = PLAYER_SPEED;
+	player.life = 3;
+	player.muteki = 0;
 
 	//餌の初期化
 	for (int i = 0; i < 10; i++) {
@@ -109,9 +118,8 @@ void GameMain() {
 	EatMove();
 	LifeImage();
 	MeterImage();
-	GameClearHit(&player);
-	
-	Goal();
+	BossST(&player);
+
 }
 /*************************************
  *背景画像スクロール処理
@@ -192,16 +200,30 @@ void PlayerMove() {
 	if (Leve == 2) {
 		Umispeed = 2;
 		Iwaspeed -= 4;
+		player.speed = 7;
 	}
 
 	/*act_index++;
 	act_index %= MAX_MOTION_INDEX;*/
-	int motion_index = anime[act_index];
-	/*DrawGraph(player.x, player.y, sakana[motion_index], TRUE);*/
-	DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
 	//DrawGraph(player.x, player.y, sakana[Leve - 1][motion_index], TRUE);
-	/*ScreenFlip();*/
+	int motion_index = anime[act_index];
+	if (player.muteki == 0) {
+		DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+	}
+	if (player.muteki == 1) {
 
+		// ダメージが入ると５回のうち２回表示する。
+		static int count = 0;
+		count = (count + 1) % 60;
+		if (count % 2 == 0) {
+			//表示
+			DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+		}
+		if (count == 59 || player.life == 0) {
+			player.muteki = 0;
+
+		}
+	}
 }
 
 int LoadImages() {
@@ -225,7 +247,8 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/azi.png", 3, 3, 1, 60, 60, feedImage[1])) == -1)return-1;
 	//イカ
 	if ((LoadDivGraph("Image/ika.png", 3, 3, 1, 50, 50, feedImage[2])) == -1)return-1;
-
+	//Boss
+	if ((LoadDivGraph("Image/rasubosu.png", 6, 6, 1, 350, 350, Boss1)) == -1)return -1;
 	//ゲームクリア画像
 	if ((Gameclear = LoadGraph("Image/GameClear.png")) == -1)return -1;
 
@@ -340,9 +363,20 @@ int EatImage() {
 //ライフ
 void LifeImage() {
 
-	DrawGraph(LifeX, LIfeY, Life, TRUE);
-	DrawGraph(LifeX + 60, LIfeY, Life, TRUE);
-	DrawGraph(LifeX + 120, LIfeY, Life, TRUE);
+
+	if (player.life == 3) {
+		DrawGraph(LifeX, LIfeY, Life, TRUE);
+		DrawGraph(LifeX + 60, LIfeY, Life, TRUE);
+		DrawGraph(LifeX + 120, LIfeY, Life, TRUE);
+	}
+	if (player.life == 2) {
+		DrawGraph(LifeX, LIfeY, Life, TRUE);
+		DrawGraph(LifeX + 60, LIfeY, Life, TRUE);
+	}
+	if (player.life == 1) {
+		DrawGraph(LifeX, LIfeY, Life, TRUE);
+
+	}
 }
 
 //メーター表示
@@ -426,7 +460,7 @@ int Hit(Player* p, Eat* e) {
 void Goal() {
 	if (Time <= 0) {
 		DeleteGraph(Iwa[0]);
-		DrawBox(1200, 400, 1300, 500, GetColor(255, 212, 0), TRUE);
+		DrawBox(1200, 400, 1300, 500, GetColor(255, 212, 0), FALSE);
 	}
 }
 //ゲームクリア（当たったら）
@@ -452,4 +486,170 @@ void GameClear() {
 
 	DrawGraph(0,0, Gameclear, TRUE);
 
+}
+
+//ボスステージ移行（当たったら）
+void BossST(Player* p) {
+
+
+	int px = p->x;
+	int py = p->y;
+	int ph = p->h;
+	int pw = p->w;
+
+	if (Time <= 0) {
+		DeleteGraph(Iwa[0]);
+		DrawBox(1200, 400, 1300, 500, GetColor(255, 255, 255), FALSE);
+	}
+	if (1300 >= px && 1200 <= px + ph &&
+		500 >= py && 400 <= py + pw) {
+		GameState = 3;
+
+	}
+
+}
+
+void BossInit() {
+
+	//Bossの初期化
+	boss.flg = TRUE;
+	boss.bx = BOSS_POS_X;
+	boss.by = BOSS_POS_Y;
+	boss.bw = BOSS_WIDTH;
+	boss.bh = BOSS_HEIGHT;
+	boss.speed = BOSS_SPEED;
+
+	//playerの位置初期化
+	player.x = PLAYER_POS_X;
+	player.y = PLAYER_POS_Y;
+
+	//ゲームメインへ
+	GameState = 4;
+}
+
+void BossBackScrool() {
+	if (GameState == 4) {
+		ScroolSpeed -= player.speed;
+
+	}
+
+	//ステージ画像表示
+	//描画可能エリアを設定
+	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	DrawGraph((ScroolSpeed * Umispeed) % SCREEN_WIDTH, 0, StageImage, TRUE);
+	DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * Umispeed) % SCREEN_WIDTH), 0, StageImage, TRUE);
+	//エリアを戻す
+	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	//レベル表示
+	SetFontSize(60);
+	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
+}
+
+void BossMove() {
+	if (--BOSS_act_wait <= 0)
+	{
+		BOSS_act_index++;
+		BOSS_act_wait = BOSS_ACT_SPEED;
+		BOSS_act_index %= BOSS_MOTION_INDEX;
+	}
+
+
+	// ダメージが入ると５回のうち２回表示する。
+	static int count = 0;
+	count = (count + 1) % 500;
+	//DrawFormatString(100, 160, 0x000000, "%d", count);
+
+	if (count > 0) {
+		motion_index2 = BOSSanime[BOSS_act_index];
+	}
+	if (count > 100) {
+		motion_index2 = BOSSAttack[BOSS_act_index];
+		boss.bx -= 5;
+
+	}
+
+	if (count == 399) {
+		motion_index2 = BOSSanime[BOSS_act_index];
+		boss.bx = BOSS_POS_X;
+		boss.by = BOSS_POS_Y;
+		boss.bw = BOSS_WIDTH;
+		boss.bh = BOSS_HEIGHT;
+		count = 0;
+	}
+
+	if (player.muteki == 0) {
+		//当たり判定
+		if (HitBoxPlayer(&player, &boss) == TRUE) {
+
+			player.life -= 1;
+			player.muteki = 1;
+		}
+	}
+	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
+}
+
+void BossStage() {
+	
+	BossBackScrool();
+	BossMove();
+	PlayerMove();
+	LifeImage();
+	MeterImage(); 
+	GameClearHit(&player);
+	Goal();
+
+}
+/*************************************
+*自機と敵機の当たり判定（四角）
+* 引数：PLAYER　ポインタ
+* 戻り値：TRUE：あたり、FALSE：はずれ
+*************************************/
+int HitBoxPlayer(Player* p, Boss* b)
+{
+	if (Leve == 1) {
+		//x,yは中心座標とする
+		int px = p->x - (p->w - player.w + 10);
+		int py = p->y - (p->h - player.h - 20);
+		int ph = px + p->h;
+		int pw = py + p->w - 50;
+
+		int bx1 = b->bx - (b->bw - boss.bw - 50);
+		int by2 = b->by - (b->bh - boss.bh - 95);
+		int bh1 = bx1 + b->bh - 55;
+		int bw2 = by2 + b->bw - 185;
+
+		//判定確認用
+		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);*/
+
+		//短径が重なっていたら当たり
+		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+	if (Leve == 2) {
+		//x,yは中心座標とする
+		int px = p->x - (p->w - player.w - 30);
+		int py = p->y - (p->h - player.h - 70);
+		int ph = px + p->h - 70;
+		int pw = py + p->w - 145;
+
+		int bx1 = b->bx - (b->bw - boss.bw - 50);
+		int by2 = b->by - (b->bh - boss.bh - 95);
+		int bh1 = bx1 + b->bh - 55;
+		int bw2 = by2 + b->bw - 185;
+
+		//判定確認用
+		DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);
+
+		//短径が重なっていたら当たり
+		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {
+			return TRUE;
+		}
+
+		return FALSE;
+	}
 }

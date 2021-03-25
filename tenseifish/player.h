@@ -33,8 +33,11 @@ struct Player//プレイヤー
 	int flg = true;
 	int x = 0, y = 0, w = 0, h = 0;
 	int speed = 0;
+	int life = 0;
+	int muteki = 0;
 };
 void GameClearHit(Player* P);
+void BossST(Player* P);
 //自機
 struct Player player;
 
