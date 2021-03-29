@@ -23,6 +23,7 @@ int Range;
 //ライフ位置
 int LifeX = 150;
 int LIfeY = 10;
+int LifeMax = 3;
 
 //Lvメーター位置
 int m_x = 50;
