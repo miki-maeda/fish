@@ -143,8 +143,8 @@ void BackScrool()
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	//透過
 	/*SetDrawBlendMode(DX_BLENDMODE_ALPHA, 122);*/
-	DrawGraph((ScroolSpeed * Umispeed) % SCREEN_WIDTH, 0, StageImage, TRUE);
-	DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * Umispeed) % SCREEN_WIDTH), 0, StageImage, TRUE);
+	DrawGraph(Umispeed % SCREEN_WIDTH, 0, StageImage, TRUE);
+	DrawGraph(SCREEN_WIDTH + (Umispeed % SCREEN_WIDTH), 0, StageImage, TRUE);
 	//設定を元に戻す。
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -194,13 +194,13 @@ void PlayerMove() {
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
 	if (Leve == 1) {
-		Umispeed = 1;
-		Iwaspeed -= 2;
+		Umispeed -= 2;
+		Iwaspeed -= 5;
 	}
 	if (Leve == 2) {
-		Umispeed = 2;
-		Iwaspeed -= 4;
-		player.speed = 7;
+		Umispeed -= 4;
+		Iwaspeed -= 7;
+		player.speed = 8;
 	}
 
 	/*act_index++;
@@ -297,7 +297,12 @@ void EatMove() {
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 			//真っすぐ左に移動
-			eat[i].e_x -= 10;
+			if(Leve==1){
+			eat[i].e_x -= 5;
+            }
+			if (Leve == 2) {
+			eat[i].e_x -= 7;
+			}
 
 			if (eat[i].flg == FALSE)continue;
 
@@ -500,13 +505,13 @@ void BossST(Player* p) {
 	if (Time <= 0) {
 		DeleteGraph(Iwa[0]);
 		DrawBox(1200, 400, 1300, 500, GetColor(255, 255, 255), FALSE);
-	}
-	if (1300 >= px && 1200 <= px + ph &&
-		500 >= py && 400 <= py + pw) {
-		GameState = 3;
 
-	}
+		if (1300 >= px && 1200 <= px + ph &&
+			500 >= py && 400 <= py + pw) {
+			GameState = 3;
 
+		}
+	}
 }
 
 void BossInit() {
@@ -536,8 +541,8 @@ void BossBackScrool() {
 	//ステージ画像表示
 	//描画可能エリアを設定
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	DrawGraph((ScroolSpeed * Umispeed) % SCREEN_WIDTH, 0, StageImage, TRUE);
-	DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * Umispeed) % SCREEN_WIDTH), 0, StageImage, TRUE);
+	DrawGraph(Umispeed % SCREEN_WIDTH, 0, StageImage, TRUE);
+	DrawGraph(SCREEN_WIDTH + (Umispeed% SCREEN_WIDTH), 0, StageImage, TRUE);
 	//エリアを戻す
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	//レベル表示
@@ -642,8 +647,8 @@ int HitBoxPlayer(Player* p, Boss* b)
 		int bw2 = by2 + b->bw - 185;
 
 		//判定確認用
-		DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);
+		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);*/
 
 		//短径が重なっていたら当たり
 		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {
