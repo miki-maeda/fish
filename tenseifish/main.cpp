@@ -98,7 +98,7 @@ void GameInit() {
 	player.w = PLAYER_WIDTH;
 	player.h = PLAYER_HEIGHT;
 	player.speed = PLAYER_SPEED;
-	player.life = 3;
+	player.life = LifeMax;
 	player.muteki = 0;
 
 	//餌の初期化
@@ -143,8 +143,8 @@ void BackScrool()
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	//透過
 	/*SetDrawBlendMode(DX_BLENDMODE_ALPHA, 122);*/
-	DrawGraph((ScroolSpeed * Umispeed) % SCREEN_WIDTH, 0, StageImage, TRUE);
-	DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * Umispeed) % SCREEN_WIDTH), 0, StageImage, TRUE);
+	DrawGraph(Umispeed % SCREEN_WIDTH, 0, StageImage, TRUE);
+	DrawGraph(SCREEN_WIDTH + (Umispeed % SCREEN_WIDTH), 0, StageImage, TRUE);
 	//設定を元に戻す。
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
@@ -194,13 +194,13 @@ void PlayerMove() {
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
 	if (Leve == 1) {
-		Umispeed = 1;
-		Iwaspeed -= 2;
+		Umispeed -= 2;
+		Iwaspeed -= 5;
 	}
 	if (Leve == 2) {
-		Umispeed = 2;
-		Iwaspeed -= 4;
-		player.speed = 7;
+		Umispeed -= 4;
+		Iwaspeed -= 7;
+		player.speed = 8;
 	}
 
 	/*act_index++;
@@ -247,6 +247,13 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/azi.png", 3, 3, 1, 60, 60, feedImage[1])) == -1)return-1;
 	//イカ
 	if ((LoadDivGraph("Image/ika.png", 3, 3, 1, 50, 50, feedImage[2])) == -1)return-1;
+	
+	//敵
+	//クラゲ
+	if ((LoadDivGraph("Image/kurage.png", 3, 3, 1, 80, 80, EnemyImage[0])) == -1)return-1;
+	//ハリセンボン
+	if ((LoadDivGraph("Image/harisennbon.png", 3, 3, 1, 80, 80, EnemyImage[1])) == -1)return-1;
+	
 	//Boss
 	if ((LoadDivGraph("Image/rasubosu.png", 6, 6, 1, 350, 350, Boss1)) == -1)return -1;
 	//ゲームクリア画像
@@ -297,7 +304,12 @@ void EatMove() {
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 			//真っすぐ左に移動
-			eat[i].e_x -= 10;
+			if(Leve==1){
+			eat[i].e_x -= 5;
+            }
+			if (Leve == 2) {
+			eat[i].e_x -= 7;
+			}
 
 			if (eat[i].flg == FALSE)continue;
 
@@ -307,7 +319,6 @@ void EatMove() {
 			//魚に当たったら場合の処理
 			if (Hit(&player, &eat[i]) == TRUE) {
 				PlayerEat(&eat[i].type);
-				eat[i].flg = FALSE;
 			}
 			//アニメーションを動かす
 			if (--MoveEat <= 0)
@@ -318,7 +329,12 @@ void EatMove() {
 			}
 
 			int motion_index = anime[CountEat];
-			eat[i].image = feedImage[eat[i].type][motion_index];
+			if (eat[i].type <= 2) {
+				eat[i].image = feedImage[eat[i].type][motion_index];
+			}
+			else {
+				eat[i].image = EnemyImage[eat[i].type - 3][motion_index];
+			}
 
 		}
 	}
@@ -334,23 +350,40 @@ int EatImage() {
 	for (int i = 0; i < 10; i++) {
 		if (eat[i].flg == FALSE) {
 			eat[i] = eat0;
-			eat[i].type = GetRand(2);
-			eat[i].image = feedImage[eat[i].type][0];
+			eat[i].type = GetRand(4);
+			if (eat[i].type <= 2) {
+				eat[i].image = feedImage[eat[i].type][0];
+			}
+			else {
+				eat[i].image = EnemyImage[eat[i].type - 3][0];
+			}
 			switch (eat[i].type) {
 			case 0:
 				eat[i].e_y = (GetRand(1) + 4) * 100 + 150;
-				eat[i].e_w = 40 * 1.5;
-				eat[i].e_h = 40 * 1.5;
+				eat[i].e_w = 50 * 1.5;
+				eat[i].e_h = 50 * 1.5;
 				break;
 			case 1:
 				eat[i].e_y = GetRand(2) * 100 + 150;
-				eat[i].e_w = 50 * 1.5;
-				eat[i].e_h = 50 * 1.5;
+				eat[i].e_w = 60 * 1.5;
+				eat[i].e_h = 60 * 1.5;
 				break;
 			case 2:
 				eat[i].e_y = GetRand(5) * 100 + 150;
 				eat[i].e_w = 50 * 1.5;
 				eat[i].e_h = 50 * 1.5;
+				break;
+			case 3:
+				eat[i].e_y = GetRand(1) * 100 + 150;
+				eat[i].e_w = 50 * 1.5;
+				eat[i].e_h = 50 * 1.5;
+				eat[i].typeD = TRUE;
+				break;
+			case 4:
+				eat[i].e_y = GetRand(3) * 100 + 150;
+				eat[i].e_w = 50 * 1.5;
+				eat[i].e_h = 50 * 1.5;
+				eat[i].typeD = TRUE;
 				break;
 			}
 			return TRUE;
@@ -363,18 +396,9 @@ int EatImage() {
 //ライフ
 void LifeImage() {
 
-
-	if (player.life == 3) {
-		DrawGraph(LifeX, LIfeY, Life, TRUE);
-		DrawGraph(LifeX + 60, LIfeY, Life, TRUE);
-		DrawGraph(LifeX + 120, LIfeY, Life, TRUE);
-	}
-	if (player.life == 2) {
-		DrawGraph(LifeX, LIfeY, Life, TRUE);
-		DrawGraph(LifeX + 60, LIfeY, Life, TRUE);
-	}
-	if (player.life == 1) {
-		DrawGraph(LifeX, LIfeY, Life, TRUE);
+	for (int i = 0; i < player.life; i++)
+	{
+		DrawGraph(LifeX+(60*i), LIfeY, Life, TRUE);
 
 	}
 }
@@ -407,6 +431,7 @@ void PlayerGrowth() {
 	player.h *= Scke;
 	//レベルを上げる
 	Leve++;
+	LifeMax++;
 }
 
 //食べた時の処理
@@ -424,8 +449,11 @@ void PlayerEat(int* e) {
 		break;
 	}
 
-	//食べたものを量を増加させる
-	EatAmount++;
+	if (*e <= 2) {
+		//食べたものを量を増加させる
+		EatAmount++;
+		if (player.life < LifeMax) player.life++;
+	}
 
 	//食べたものの量が一定量に達したら処理を移す
 	if (EatAmount == LeveUp) {
@@ -445,13 +473,23 @@ int Hit(Player* p, Eat* e) {
 		int ey = e->e_y;
 		int ew = e->e_w;
 		int eh = e->e_h;
+		int etypeD = e->typeD;
 
-		//餌とのあたり判定判定
-
-		if (ex + ew >= px && ex <= px + pw &&
-			ey + eh >= py && ey <= py + ph) {
-			e->flg = FALSE;
-			return TRUE;
+		//餌とのあたり判定
+		if (etypeD == FALSE) {
+			if (ex + ew >= px && ex <= px + pw &&
+				ey + eh >= py && ey <= py + ph) {
+				e->flg = FALSE;
+				return TRUE;
+			}
+		}
+		else {
+			if (ex + ew >= px && ex <= px + pw &&
+				ey + eh >= py && ey <= py + ph) {
+				player.life--;
+				e->flg = FALSE;
+				return TRUE;
+			}
 		}
 	}
 	return FALSE;
@@ -500,13 +538,13 @@ void BossST(Player* p) {
 	if (Time <= 0) {
 		DeleteGraph(Iwa[0]);
 		DrawBox(1200, 400, 1300, 500, GetColor(255, 255, 255), FALSE);
-	}
-	if (1300 >= px && 1200 <= px + ph &&
-		500 >= py && 400 <= py + pw) {
-		GameState = 3;
 
-	}
+		if (1300 >= px && 1200 <= px + ph &&
+			500 >= py && 400 <= py + pw) {
+			GameState = 3;
 
+		}
+	}
 }
 
 void BossInit() {
@@ -536,8 +574,8 @@ void BossBackScrool() {
 	//ステージ画像表示
 	//描画可能エリアを設定
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	DrawGraph((ScroolSpeed * Umispeed) % SCREEN_WIDTH, 0, StageImage, TRUE);
-	DrawGraph(SCREEN_WIDTH + ((ScroolSpeed * Umispeed) % SCREEN_WIDTH), 0, StageImage, TRUE);
+	DrawGraph(Umispeed % SCREEN_WIDTH, 0, StageImage, TRUE);
+	DrawGraph(SCREEN_WIDTH + (Umispeed% SCREEN_WIDTH), 0, StageImage, TRUE);
 	//エリアを戻す
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	//レベル表示
@@ -642,8 +680,8 @@ int HitBoxPlayer(Player* p, Boss* b)
 		int bw2 = by2 + b->bw - 185;
 
 		//判定確認用
-		DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);
+		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);*/
 
 		//短径が重なっていたら当たり
 		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {

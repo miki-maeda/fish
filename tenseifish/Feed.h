@@ -8,7 +8,7 @@ void PlayerEat(int* e);		//プレイヤーが餌を食べたとき
 
 //変数
 int Leve = 1;			//レベル
-float Scke = 1;			//大きくなる量
+int Scke = 1;			//大きくなる量
 int LeveUp = 10;			//レベルが上がるのに必要な量
 int EatAmount;		//食べたものの量(合計)
 int em, am, im;
@@ -23,10 +23,10 @@ struct Eat {
 	int image;			//表示する餌
 	int e_x, e_y;		//餌の座標
 	float e_w, e_h;		//横幅、縦幅
-
+	int typeD;			//出現させる種類(FALSE:餌,TRUE:敵)
 };
 
 struct Eat eat[10];				//餌の表示する数
-struct Eat eat0 = { TRUE,0,0,1410,0,0,0 };
+struct Eat eat0 = { TRUE,0,0,1410,0,0,0,FALSE };
 
 int Hit(Player* p, Eat* e);				//敵とのあたり判定

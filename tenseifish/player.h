@@ -9,7 +9,7 @@ int PLAYER_POS_X = 100;
 int PLAYER_POS_Y = 300;
 int PLAYER_WIDTH = 100;
 int PLAYER_HEIGHT = 100;
-int PLAYER_SPEED = 5;
+int PLAYER_SPEED = 6;
 
 //int ACT_SPEED = 20;
 int ACT_SPEED = 3;
@@ -23,6 +23,7 @@ int Range;
 //ライフ位置
 int LifeX = 150;
 int LIfeY = 10;
+int LifeMax = 3;
 
 //Lvメーター位置
 int m_x = 50;
