@@ -167,7 +167,6 @@ void BackScrool()
 	//レベル表示
 	SetFontSize(60);
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
-	/*DrawFormatString(100, 160, 0x000000, "Scke = %f", Scke);*/
 }
 
 void PlayerMove() {
@@ -202,6 +201,8 @@ void PlayerMove() {
 		Iwaspeed -= 7;
 		player.speed = 8;
 	}
+	
+
 
 	/*act_index++;
 	act_index %= MAX_MOTION_INDEX;*/
@@ -426,6 +427,8 @@ void PlayerGrowth() {
 	//サイズの変更量の増加
 	Scke++;
 
+	LeveUp *= 10;
+
 	//プレイヤーのサイズ変更
 	player.w *= Scke;
 	player.h *= Scke;
@@ -456,7 +459,7 @@ void PlayerEat(int* e) {
 	}
 
 	//食べたものの量が一定量に達したら処理を移す
-	if (EatAmount == LeveUp) {
+	if (EatAmount >= LeveUp) {
 		PlayerGrowth();
 	}
 }
