@@ -3,6 +3,7 @@
 #include "image.h"
 #include "Feed.h"
 #include "Boss.h"
+#include "CollisionDetiction.h"
 int	g_OldKey;				// 前回の入力キー
 int	g_NowKey;				// 今回の入力キー
 int	g_KeyFlg;				// 入力キー情報
@@ -189,7 +190,7 @@ void PlayerMove() {
 	//画面からはみ出さないようにする
 	if (player.x < 0)player.x = 0;
 	if (player.x > SCREEN_WIDTH - player.w)player.x = SCREEN_WIDTH - player.w;
-	if (player.y < player.h/Scke)player.y = player.h/Scke;
+	if (player.y < player.h / Scke)player.y = player.h / Scke;
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
 	if (Leve == 1) {
@@ -201,7 +202,7 @@ void PlayerMove() {
 		Iwaspeed -= 7;
 		player.speed = 8;
 	}
-	
+
 
 
 	/*act_index++;
@@ -225,6 +226,21 @@ void PlayerMove() {
 
 		}
 	}
+	int ColorCheck(int x, int y);
+	ColorCheck(player.x + player.w, player.y + (Scke * Scke * 30));						//右上
+	ColorCheck(player.x + (player.w / 2), player.y + (Scke * Scke * 15));				//上部中央
+	ColorCheck(player.x, player.y + player.h - (Scke * Scke * 30));						//左下
+	ColorCheck(player.x + player.w, player.y + player.h - (Scke * Scke * 30));			//右下
+	ColorCheck(player.x + (player.w / 2), player.y + player.h - (Scke * 15));	//下部中央
+
+	//当たり判定確認用BOX
+	DrawBox(player.x - 2, player.y + (Scke * Scke * 30) - 2, player.x + 2, player.y + (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
+	DrawBox(player.x + player.w - 2, player.y + (Scke * Scke * 30) - 2, player.x + player.w + 2, player.y + (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
+	DrawBox(player.x + (player.w / 2) - 2, player.y + (Scke * Scke * 15) - 2, player.x + (player.w / 2) + 2, player.y + (Scke * Scke * 15) + 2, GetColor(255, 255, 255), TRUE);
+	DrawBox(player.x - 2, player.y + player.h - (Scke * Scke * 30) - 2, player.x + 2, player.y + player.h - (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
+	DrawBox(player.x + player.w - 2, player.y + player.h - (Scke * Scke * 30) - 2, player.x + player.w + 2, player.y + player.h - (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
+	DrawBox(player.x + (player.w / 2) - 2, player.y + player.h - (Scke * Scke * 15) - 2, player.x + (player.w / 2) + 2, player.y + player.h - (Scke * Scke * 15) + 2, GetColor(255, 255, 255), TRUE);
+
 }
 
 int LoadImages() {
@@ -248,13 +264,13 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/azi.png", 3, 3, 1, 60, 60, feedImage[1])) == -1)return-1;
 	//イカ
 	if ((LoadDivGraph("Image/ika.png", 3, 3, 1, 50, 50, feedImage[2])) == -1)return-1;
-	
+
 	//敵
 	//クラゲ
 	if ((LoadDivGraph("Image/kurage.png", 3, 3, 1, 80, 80, EnemyImage[0])) == -1)return-1;
 	//ハリセンボン
 	if ((LoadDivGraph("Image/harisennbon.png", 3, 3, 1, 80, 80, EnemyImage[1])) == -1)return-1;
-	
+
 	//Boss
 	if ((LoadDivGraph("Image/rasubosu.png", 6, 6, 1, 350, 350, Boss1)) == -1)return -1;
 	//ゲームクリア画像
@@ -292,7 +308,7 @@ int LoadImages() {
 		}
 	}
 
-	
+
 
 	return 0;
 }
@@ -305,11 +321,11 @@ void EatMove() {
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 			//真っすぐ左に移動
-			if(Leve==1){
-			eat[i].e_x -= 5;
-            }
+			if (Leve == 1) {
+				eat[i].e_x -= 5;
+			}
 			if (Leve == 2) {
-			eat[i].e_x -= 7;
+				eat[i].e_x -= 7;
 			}
 
 			if (eat[i].flg == FALSE)continue;
@@ -399,7 +415,7 @@ void LifeImage() {
 
 	for (int i = 0; i < player.life; i++)
 	{
-		DrawGraph(LifeX+(60*i), LIfeY, Life, TRUE);
+		DrawGraph(LifeX + (60 * i), LIfeY, Life, TRUE);
 
 	}
 }
@@ -408,15 +424,15 @@ void LifeImage() {
 void MeterImage() {
 
 	//エビメーター
-	DrawGraph(m_x-10, m_y, Meter[0][em], TRUE);
+	DrawGraph(m_x - 10, m_y, Meter[0][em], TRUE);
 	DrawGraph(0, 80, feedImage[0][0], TRUE);
 
 	//アジメーター
-	DrawGraph(m_x+240 , m_y, Meter[1][am], TRUE);
+	DrawGraph(m_x + 240, m_y, Meter[1][am], TRUE);
 	DrawGraph(237, 75, feedImage[1][0], TRUE);
 
 	//イカメーター
-	DrawGraph(m_x+480, m_y, Meter[2][im], TRUE);
+	DrawGraph(m_x + 480, m_y, Meter[2][im], TRUE);
 	DrawGraph(480, 65, feedImage[2][0], TRUE);
 
 }
@@ -514,7 +530,7 @@ void GameClearHit(Player* p) {
 	int pw = p->w;
 
 
-	if(Time <= 0){
+	if (Time <= 0) {
 		if (1300 >= px && 1200 <= px + ph &&
 			500 >= py && 400 <= py + pw) {
 			GameState = 2;
@@ -525,7 +541,7 @@ void GameClearHit(Player* p) {
 
 void GameClear() {
 
-	DrawGraph(0,0, Gameclear, TRUE);
+	DrawGraph(0, 0, Gameclear, TRUE);
 
 }
 
@@ -578,7 +594,7 @@ void BossBackScrool() {
 	//描画可能エリアを設定
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	DrawGraph(Umispeed % SCREEN_WIDTH, 0, StageImage, TRUE);
-	DrawGraph(SCREEN_WIDTH + (Umispeed% SCREEN_WIDTH), 0, StageImage, TRUE);
+	DrawGraph(SCREEN_WIDTH + (Umispeed % SCREEN_WIDTH), 0, StageImage, TRUE);
 	//エリアを戻す
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 	//レベル表示
@@ -630,12 +646,12 @@ void BossMove() {
 }
 
 void BossStage() {
-	
+
 	BossBackScrool();
 	BossMove();
 	PlayerMove();
 	LifeImage();
-	MeterImage(); 
+	MeterImage();
 	GameClearHit(&player);
 	Goal();
 
@@ -693,4 +709,27 @@ int HitBoxPlayer(Player* p, Boss* b)
 
 		return FALSE;
 	}
+}
+
+int ColorCheck(int x, int y) {
+	/*x = player.x;
+	y = player.y;*/
+	Cr1 = GetPixel(x, y);
+	GetColor2(Cr1, &r, &g, &b);
+	//colorsum = r + g + b;
+
+	/*if ((colorsum > 287) && (colorsum < 289) && (ColorFlg < 1) && player.muteki == 0) {
+		ColorFlg = 1;
+		player.life -= 1;
+		player.muteki = 1;
+
+	}*/
+	if ((r == 98) && (g == 96) && (b == 94) && (ColorFlg < 1) && player.muteki == 0) {
+		ColorFlg = 1;
+		player.life -= 1;
+		player.muteki = 1;
+	}
+
+	if ((player.muteki == 1) && (ColorFlg == 1)) ColorFlg = 0;
+	return colorsum;
 }
