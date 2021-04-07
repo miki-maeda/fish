@@ -17,6 +17,8 @@ const int SCREEN_HEIGHT = 800;
 
 int ScroolSpeed;
 
+
+void GameTitle();
 void GameInit();		//ゲーム初期化処理
 void GameMain();		//ゲームメイン処理
 void BackScrool();         //背景画像スクロール処理
@@ -26,7 +28,7 @@ void Goal();
 int LoadImages();          //画像読み込み
 
 int Time = 2400;
-//int hk = LoadGraph("Image/temae4.png");
+
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPSTR lpCmdLine, _In_ int nCmdShow)
@@ -60,18 +62,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 		switch (GameState) {
 		case 0:
-			GameInit();		//ゲーム初期処理
+			GameTitle();
 			break;
 		case 1:
-			GameMain();		//ゲームメイン処理
+			GameInit();		//ゲーム初期処理
 			break;
 		case 2:
-			GameClear();
+			GameMain();		//ゲームメイン処理
 			break;
 		case 3:
-			BossInit();
+			GameClear();
 			break;
 		case 4:
+			BossInit();
+			break;
+		case 5:
 			BossStage();
 			break;
 		}
@@ -80,6 +85,26 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 	DxLib_End();	// DXライブラリ使用の終了処理
 	return 0;	// ソフトの終了
+}
+
+void GameTitle() {
+
+
+	DrawGraph(0, 0, Gametitle, TRUE);
+	
+
+
+	while (0) {
+
+
+
+
+
+		if (CheckHitKey(KEY_INPUT_SPACE) == 1) {
+			GameState = 1;
+			break;
+		}
+	}
 }
 /***********************************************
  * ゲーム初期処理
@@ -107,7 +132,7 @@ void GameInit() {
 		eat[i].flg = FALSE;
 	}
 	//ゲームメインへ
-	GameState = 1;
+	GameState = 2;
 }
 
 /***********************************************
@@ -132,7 +157,7 @@ void BackScrool()
 
 	Range += player.speed;
 
-	if (GameState == 1) {
+	if (GameState == 2) {
 		if (Time > 0) {
 			ScroolSpeed -= player.speed;
 		}
@@ -244,6 +269,9 @@ void PlayerMove() {
 }
 
 int LoadImages() {
+	//タイトル画像
+	if ((Gametitle = LoadGraph("Image/Title.png")) == -1)return -1;
+	
 	//プレイヤー画像
 	//魚レベル1
 	if ((LoadDivGraph("Image/sakana.png", 10, 10, 1, 30, 30, sakana[0])) == -1)return -1;
@@ -533,7 +561,7 @@ void GameClearHit(Player* p) {
 	if (Time <= 0) {
 		if (1300 >= px && 1200 <= px + ph &&
 			500 >= py && 400 <= py + pw) {
-			GameState = 2;
+			GameState = 3;
 		}
 	}
 
@@ -560,7 +588,7 @@ void BossST(Player* p) {
 
 		if (1300 >= px && 1200 <= px + ph &&
 			500 >= py && 400 <= py + pw) {
-			GameState = 3;
+			GameState = 4;
 
 		}
 	}
@@ -581,11 +609,11 @@ void BossInit() {
 	player.y = PLAYER_POS_Y;
 
 	//ゲームメインへ
-	GameState = 4;
+	GameState = 5;
 }
 
 void BossBackScrool() {
-	if (GameState == 4) {
+	if (GameState == 5) {
 		ScroolSpeed -= player.speed;
 
 	}

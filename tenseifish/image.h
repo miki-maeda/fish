@@ -1,4 +1,5 @@
 #pragma once
+int Gametitle;
 int StageImage;
 int Iwa[3];//è‘O‚Ì”wŒi
 int IwaHaba = 7732;//è‘O‚Ì”wŒi‚Ì•	
