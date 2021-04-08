@@ -92,15 +92,17 @@ void GameTitle() {
 
 	DrawGraph(0, 0, Gametitle, TRUE);
 	// メニューカーソルの描画
-	DrawRotaGraph(570, 500 + MenuNo * 145, 0.3f, 0, Corsol, TRUE);
+	DrawRotaGraph(590, 385 + MenuNo * 108, 0.3f, 0, Corsol, TRUE);
 
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_DOWN) {
-		if (++MenuNo > 1)MenuNo = 0;
+		if (++MenuNo > 2)MenuNo = 0;
 	}
 	if (g_KeyFlg & PAD_INPUT_UP) {
-		if (--MenuNo < 0)MenuNo = 1;
+		if (--MenuNo < 0)MenuNo = 2;
 	}
+	
+	
 
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_1) {
@@ -111,6 +113,14 @@ void GameTitle() {
 		if (MenuNo == 0) {
 			push = 0;
 			GameState = 1;
+		}
+		else if (MenuNo == 1) {
+			push = 0;
+
+		}
+		else {
+			push = 0;
+			DxLib_End();
 		}
 	}
 }
@@ -279,7 +289,7 @@ void PlayerMove() {
 
 int LoadImages() {
 	//タイトル画像
-	if ((Gametitle = LoadGraph("Image/Title.png")) == -1)return -1;
+	if ((Gametitle = LoadGraph("Image/umi.png")) == -1)return -1;
 	// カーソル画像
 	if ((Corsol = LoadGraph("Image/coursol.png")) == -1)return -1;
 	//プレイヤー画像
