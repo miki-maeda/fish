@@ -136,6 +136,10 @@ void GameInit() {
 	am = 0;
 	im = 0;
 	EatAmount = 0;
+	Leve = 1;
+	Scke = 1;
+	LeveUp = 10;
+
 	//ƒvƒŒƒCƒ„[‚Ì‰Šú‰»
 	player.flg = TRUE;
 	player.x = PLAYER_POS_X;
@@ -143,8 +147,11 @@ void GameInit() {
 	player.w = PLAYER_WIDTH;
 	player.h = PLAYER_HEIGHT;
 	player.speed = PLAYER_SPEED;
+	LifeMax = 3;
 	player.life = LifeMax;
 	player.muteki = 0;
+	Umispeed = 0;
+	Time = 2400;
 
 	//‰a‚Ì‰Šú‰»
 	for (int i = 0; i < 10; i++) {
@@ -538,9 +545,9 @@ void PlayerEat(int* e) {
 int Hit(Player* p, Eat* e) {
 
 	if (Time > 0) {
-		int px = p->x + 30 * Scke;
+		int px = p->x + 80 * Scke;
 		int py = p->y + 45 * Scke;
-		int ph = p->h - 40 * Scke;
+		int ph = p->h - 80 * Scke;
 		int pw = p->w - 80 * Scke;
 		int ex = e->e_x;
 		int ey = e->e_y;
@@ -636,7 +643,6 @@ void BossST(Player* p) {
 	int pw = p->w;
 
 	if (Time <= 0) {
-		DeleteGraph(Iwa[0]);
 		DrawBox(1200, 400, 1300, 500, GetColor(255, 255, 255), FALSE);
 
 		if (1300 >= px && 1200 <= px + ph &&
