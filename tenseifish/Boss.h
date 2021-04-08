@@ -38,10 +38,10 @@ int SHIP_act_index = 0;
 int SHIP_MOTION_INDEX = 4;
 
 //–Ô
-int netanime[] = { 0,1,2,3,4,5 };
-int net1[6] = { 0 };
+int netanime[] = { 0,1,2,3,4,5,6 };
+int net1[7] = { 0 };
 int motion_index4;
-int NET_MOTION_INDEX = 6;
+int NET_MOTION_INDEX = 7;
 int NET_ANI_SPEED = 20;
 int NET_act_wait = NET_ANI_SPEED;
 int NET_act_index = 0;

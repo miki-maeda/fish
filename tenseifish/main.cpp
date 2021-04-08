@@ -324,7 +324,7 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/船.png", 9, 3, 1, 400, 700, ship1)) == -1)return -1;
 
 	//網
-	if ((LoadDivGraph("Image/網.png", 6, 6, 1, 400, 400, net1)) == -1)return -1;
+	if ((LoadDivGraph("Image/網.png", 7, 7, 1, 400, 400, net1)) == -1)return -1;
 	//Boss
 	if ((LoadDivGraph("Image/rasubosu.png", 6, 6, 1, 350, 350, Boss1)) == -1)return -1;
 	//ゲームクリア画像
