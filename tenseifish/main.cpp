@@ -299,6 +299,12 @@ int LoadImages() {
 	//ハリセンボン
 	if ((LoadDivGraph("Image/harisennbon.png", 3, 3, 1, 80, 80, EnemyImage[1])) == -1)return-1;
 
+
+	//船
+	if ((LoadDivGraph("Image/船.png", 9, 3, 1, 400, 700, ship1)) == -1)return -1;
+
+	//網
+	if ((LoadDivGraph("Image/網.png", 6, 6, 1, 400, 400, net1)) == -1)return -1;
 	//Boss
 	if ((LoadDivGraph("Image/rasubosu.png", 6, 6, 1, 350, 350, Boss1)) == -1)return -1;
 	//ゲームクリア画像
@@ -672,6 +678,40 @@ void BossMove() {
 	}
 	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
 }
+//船アニメーション
+void Ship() {
+	if (--SHIP_act_wait <= 0)
+	{
+		SHIP_act_index++;
+		SHIP_act_wait = SHIP_ANI_SPEED;
+		SHIP_act_index %= SHIP_MOTION_INDEX;
+	}
+
+	motion_index3 = shipanime[SHIP_act_index];
+
+	DrawExtendGraph(SHIP_X, SHIP_Y, SHIP_X + SHIP_W, SHIP_Y + SHIP_H, ship1[motion_index3], TRUE);
+}
+
+//網アニメーション
+void Ami() {
+
+	net.nx = 850;
+	net.ny = 100;
+	net.nw = 350;
+	net.nh = 350;
+	net.speed = 15;
+
+	if (--NET_act_wait <= 0)
+	{
+		NET_act_index++;
+		NET_act_wait = NET_ANI_SPEED;
+		NET_act_index %= NET_MOTION_INDEX;
+	}
+
+	motion_index4 = netanime[NET_act_index];
+
+	DrawExtendGraph(net.nx, net.ny, net.nx + net.nw, net.ny + net.nh, net1[motion_index4], TRUE);
+}
 
 void BossStage() {
 
@@ -682,7 +722,8 @@ void BossStage() {
 	MeterImage();
 	GameClearHit(&player);
 	Goal();
-
+	Ami();
+	Ship();
 }
 /*************************************
 *自機と敵機の当たり判定（四角）
