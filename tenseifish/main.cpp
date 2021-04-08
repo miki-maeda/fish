@@ -565,9 +565,9 @@ int Hit(Player* p, Eat* e) {
 		}
 		else {
 			if (ex + ew >= px && ex <= px + pw &&
-				ey + eh >= py && ey <= py + ph) {
+				ey + eh >= py && ey <= py + ph && player.muteki == 0) {
 				player.life--;
-				e->flg = FALSE;
+				player.muteki = 1;
 				return TRUE;
 			}
 		}
@@ -577,7 +577,6 @@ int Hit(Player* p, Eat* e) {
 
 void Goal() {
 	if (Time <= 0) {
-		DeleteGraph(Iwa[0]);
 		DrawBox(1200, 400, 1300, 500, GetColor(255, 212, 0), FALSE);
 	}
 }
