@@ -333,7 +333,8 @@ int LoadImages() {
 	//網
 	if ((LoadDivGraph("Image/網.png", 7, 7, 1, 400, 400, net1)) == -1)return -1;
 	//Boss
-	if ((LoadDivGraph("Image/rasubosu.png", 6, 6, 1, 350, 350, Boss1)) == -1)return -1;
+	if ((LoadDivGraph("Image/maguro.png", 12, 12, 1, 350, 350, Boss1)) == -1)return -1;
+	//if ((LoadDivGraph("Image/rasubosu2.png", 6, 6, 1, 500, 350, Boss2)) == -1)return -1;
 	//ゲームクリア画像
 	if ((Gameclear = LoadGraph("Image/GameClear.png")) == -1)return -1;
 
@@ -661,6 +662,7 @@ void BossInit() {
 	boss.bw = BOSS_WIDTH;
 	boss.bh = BOSS_HEIGHT;
 	boss.speed = BOSS_SPEED;
+	BOSS_PATTREN = 2;
 
 	//playerの位置初期化
 	player.x = PLAYER_POS_X;
@@ -687,38 +689,25 @@ void BossBackScrool() {
 	SetFontSize(60);
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
 }
-
 void BossMove() {
 	if (--BOSS_act_wait <= 0)
 	{
 		BOSS_act_index++;
 		BOSS_act_wait = BOSS_ACT_SPEED;
 		BOSS_act_index %= BOSS_MOTION_INDEX;
+		//BOSS_act_index3%= BOSSB_MOTION_INDEX;
 	}
 
-
-	// ダメージが入ると５回のうち２回表示する。
-	static int count = 0;
-	count = (count + 1) % 500;
-	//DrawFormatString(100, 160, 0x000000, "%d", count);
-
-	if (count > 0) {
-		motion_index2 = BOSSanime[BOSS_act_index];
+	if (BOSS_PATTREN == 1) {
+		BossMove1();
 	}
-	if (count > 100) {
-		motion_index2 = BOSSAttack[BOSS_act_index];
-		boss.bx -= 5;
-
+	if (BOSS_PATTREN == 2) {
+		BossMove2();
+	}
+	if (BOSS_PATTREN == 3) {
+		//BossMove3();
 	}
 
-	if (count == 399) {
-		motion_index2 = BOSSanime[BOSS_act_index];
-		boss.bx = BOSS_POS_X;
-		boss.by = BOSS_POS_Y;
-		boss.bw = BOSS_WIDTH;
-		boss.bh = BOSS_HEIGHT;
-		count = 0;
-	}
 
 	if (player.muteki == 0) {
 		//当たり判定
@@ -728,8 +717,110 @@ void BossMove() {
 			player.muteki = 1;
 		}
 	}
+
+}
+void BossMove1() {
+
+	static int count = 0;
+	count = (count + 1) % 500;
+	DrawFormatString(100, 160, 0x000000, "%d", count);
+
+	if (count > 0) {
+		motion_index2 = BOSSAnime[BOSS_act_index];
+	}
+
+	if (count > 100) {
+		motion_index2 = BOSSAttack[BOSS_act_index];
+		boss.bx -= BOSS_SPEED;
+
+	}
+
+	if (count == 398) {
+		boss.bx = 1400;
+
+	}
+
+	if (count > 399) {
+		motion_index2 = BOSSAnime[BOSS_act_index];
+		if (boss.bx == 1000) {
+
+			BOSS_SPEED = 0;
+		}
+		boss.by = BOSS_POS_Y;
+		boss.bw = BOSS_WIDTH;
+		boss.bh = BOSS_HEIGHT;
+
+	}
+
+	if (count == 499) {
+		count = 0;
+		BOSS_SPEED = 5;
+		BOSS_PATTREN = 2;
+	}
+
 	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
 }
+
+void BossMove2() {
+	static int count = 0;
+	count = (count + 1) % 500;
+	DrawFormatString(100, 160, 0x000000, "%d", count);
+
+	if (count > 0 && count < 100) {
+		motion_index2 = BOSSDown[BOSS_act_index];
+		boss.bx -= BOSS_SPEED;
+		boss.by += 5;
+	}
+
+	if (count > 100 && count < 399) {
+		motion_index2 = BOSSUp[BOSS_act_index];
+		BOSS_SPEED = 0;
+		boss.by -= 5;
+	}
+
+	if (count == 399) {
+		boss.bx = 1400;
+	}
+
+	if (count > 399 && count < 499) {
+		BOSS_SPEED = 5;
+		boss.bx -= BOSS_SPEED;
+		motion_index2 = BOSSAnime[BOSS_act_index];
+		if (boss.bx == 1000) {
+
+			BOSS_SPEED = 0;
+		}
+		boss.by = BOSS_POS_Y;
+		boss.bw = BOSS_WIDTH;
+		boss.bh = BOSS_HEIGHT;
+
+	}
+
+	if (count == 499) {
+		count = 0;
+		BOSS_SPEED = 5;
+		BOSS_PATTREN = 1;
+
+	}
+
+	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
+
+}
+
+//void BossMove3() {
+//	static int count = 0;
+//	count = (count + 1) % 500;
+//	DrawFormatString(100, 160, 0x000000, "%d", count);
+//
+//	if (count > 0) {
+//		motion_index2 = BOSSBoom[BOSS_act_index3];
+//
+//	}
+//	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index2], TRUE);
+//
+//
+//}
+
 //船アニメーション
 void Ship() {
 	if (--SHIP_act_wait <= 0)

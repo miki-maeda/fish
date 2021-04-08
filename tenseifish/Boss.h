@@ -1,6 +1,9 @@
 #pragma once
 void BossInit();
 void BossMove();
+void BossMove1();
+void BossMove2();
+//void BossMove3();
 void BossStage();
 void BossBackScrool();
 
@@ -11,20 +14,27 @@ int BOSS_WIDTH = 350;
 int BOSS_HEIGHT = 350;
 int BOSS_SPEED = 5;
 
-int Boss1[6] = { 0 };		//ボスの画像を格納する配列
-int BOSSanime[] = { 0,1,0,2 };		//泳ぐときのアニメーションの番号 
+int Boss1[13] = { 0 };		//ボスの画像を格納する配列
+int Boss2[7] = { 0 };		//ボスの画像を格納する配列
+
+int BOSSBoom[] = { 5,4,3,2,1,0 };		//泳ぐときのアニメーションの番号 
+
+int BOSSAnime[] = { 0,1,0,2 };		//泳ぐときのアニメーションの番号 
 int BOSSAttack[] = { 3,4,3,5 };		//突進するときのアニメーションの番号 
+int BOSSDown[] = { 6,7,6,8 };         //下降するときのアニメーションの番号 
+int BOSSUp[] = { 9,10,9,11 };         //上昇するときのアニメーションの番号 
 
 int BOSS_ACT_SPEED = 3;
 int BOSS_act_wait = BOSS_ACT_SPEED;
 
 int BOSS_act_index = 0;
-
 int motion_index2;
+int BOSS_act_index3;
+int BOSS_PATTREN;
 
 int BOSS_MOTION_INDEX = 4;	// 0,1,2,1 の4種類 
-int BOSSA_MOTION_INDEX = 4;	// 3,4,3,5 の4種類 
-//船
+int BOSSB_MOTION_INDEX = 6;	// 5,4,3,2,1,0 の6種類 
+
 int shipanime[] = { 0,1,0,2 };      //船のアニメーション
 int ship1[9]{ 0 };
 int motion_index3;
