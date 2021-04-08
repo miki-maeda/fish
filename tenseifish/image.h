@@ -1,10 +1,12 @@
 #pragma once
 int Gametitle;
+int Corsol;	// カーソル画像変数
 int StageImage;
 int Iwa[3];//手前の背景
 int IwaHaba = 7732;//手前の背景の幅	
 int Iwaspeed = 0;//手前のスピード
 int Umispeed = 0;//海のスピード
+int MenuNo = 0;	// カーソルの番号
 int Life;
 int Gameclear;
 int Meter[3][6];

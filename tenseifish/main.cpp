@@ -88,24 +88,33 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 }
 
 void GameTitle() {
-
+	static bool push = 0;	// 押されたかどうか確認する関数
 
 	DrawGraph(0, 0, Gametitle, TRUE);
-	
+	// メニューカーソルの描画
+	DrawRotaGraph(570, 500 + MenuNo * 145, 0.3f, 0, Corsol, TRUE);
 
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_DOWN) {
+		if (++MenuNo > 1)MenuNo = 0;
+	}
+	if (g_KeyFlg & PAD_INPUT_UP) {
+		if (--MenuNo < 0)MenuNo = 1;
+	}
 
-	while (0) {
-
-
-
-
-
-		if (CheckHitKey(KEY_INPUT_SPACE) == 1) {
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_1) {
+		if (push == 0) {
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
 			GameState = 1;
-			break;
 		}
 	}
 }
+
 /***********************************************
  * ゲーム初期処理
  ***********************************************/
@@ -271,7 +280,8 @@ void PlayerMove() {
 int LoadImages() {
 	//タイトル画像
 	if ((Gametitle = LoadGraph("Image/Title.png")) == -1)return -1;
-	
+	// カーソル画像
+	if ((Corsol = LoadGraph("Image/coursol.png")) == -1)return -1;
 	//プレイヤー画像
 	//魚レベル1
 	if ((LoadDivGraph("Image/sakana.png", 10, 10, 1, 30, 30, sakana[0])) == -1)return -1;
@@ -574,9 +584,36 @@ void GameClearHit(Player* p) {
 }
 
 void GameClear() {
-
+	static bool push = 0; // 押されたかどうか確認する関数
 	DrawGraph(0, 0, Gameclear, TRUE);
 
+	// メニューカーソルの描画
+	DrawRotaGraph(420 + MenuNo * 300, 750, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (++MenuNo > 1)MenuNo = 0;
+	}
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (--MenuNo < 0)MenuNo = 1;
+	}
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_1) {
+		if (push == 0) {
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+			GameState = 1;
+		}
+		else if (MenuNo == 1) {
+			push = 0;
+			GameState = 0;
+			MenuNo = 0;
+		}
+	}
 }
 
 //ボスステージ移行（当たったら）
