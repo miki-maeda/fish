@@ -24,6 +24,7 @@ void GameMain();		//ゲームメイン処理
 void BackScrool();         //背景画像スクロール処理
 void GameClear();		//ゲームクリア処理
 void Goal();
+void Pouse();
 
 int LoadImages();          //画像読み込み
 
@@ -51,7 +52,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	//ゲームループ
 	while (ProcessMessage() == 0 && GetHitKeyStateAll(key) == 0 && GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
 
-		Time--;
+		if (key1 < 1) {
+			Time--;
+		}
 
 		//入力キー取得
 		g_OldKey = g_NowKey;
@@ -171,7 +174,7 @@ void GameMain() {
 	LifeImage();
 	MeterImage();
 	BossST(&player);
-
+	Pouse();
 }
 /*************************************
  *背景画像スクロール処理
@@ -225,9 +228,11 @@ void PlayerMove() {
 
 	if (--act_wait <= 0)
 	{
-		act_index++;
-		act_wait = ACT_SPEED;
-		act_index %= MAX_MOTION_INDEX;
+		if (key1 < 1) {
+			act_index++;
+			act_wait = ACT_SPEED;
+			act_index %= MAX_MOTION_INDEX;
+		}
 	}
 
 	//上下左右移動
@@ -244,11 +249,11 @@ void PlayerMove() {
 	if (player.y < player.h / Scke)player.y = player.h / Scke;
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
-	if (Leve == 1) {
+	if (Leve == 1 && key1 != 1) {
 		Umispeed -= 2;
 		Iwaspeed -= 5;
 	}
-	if (Leve == 2) {
+	if (Leve == 2 && key1 != 1) {
 		Umispeed -= 4;
 		Iwaspeed -= 7;
 		player.speed = 8;
@@ -264,17 +269,22 @@ void PlayerMove() {
 		DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
 	}
 	if (player.muteki == 1) {
+		if (key1 < 1) {
 
-		// ダメージが入ると５回のうち２回表示する。
-		static int count = 0;
-		count = (count + 1) % 60;
-		if (count % 2 == 0) {
-			//表示
-			DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+			// ダメージが入ると５回のうち２回表示する。
+			static int count = 0;
+			count = (count + 1) % 60;
+			if (count % 2 == 0) {
+				//表示
+				DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+			}
+			if (count == 59 || player.life == 0) {
+				player.muteki = 0;
+
+			}
 		}
-		if (count == 59 || player.life == 0) {
-			player.muteki = 0;
-
+		else {
+			DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
 		}
 	}
 	int ColorCheck(int x, int y);
@@ -297,6 +307,8 @@ void PlayerMove() {
 int LoadImages() {
 	//タイトル画像
 	if ((Gametitle = LoadGraph("Image/umi.png")) == -1)return -1;
+	//ポーズ画像
+	if ((pauseImage = LoadGraph("Image/pause.png")) == -1)return-1;
 	// カーソル画像
 	if ((Corsol = LoadGraph("Image/coursol.png")) == -1)return -1;
 	//プレイヤー画像
@@ -383,10 +395,10 @@ void EatMove() {
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 			//真っすぐ左に移動
-			if (Leve == 1) {
+			if (Leve == 1 && key1 != 1) {
 				eat[i].e_x -= 5;
 			}
-			if (Leve == 2) {
+			if (Leve == 2 && key1 != 1) {
 				eat[i].e_x -= 7;
 			}
 
@@ -400,26 +412,28 @@ void EatMove() {
 				PlayerEat(&eat[i].type);
 			}
 			//アニメーションを動かす
-			if (--MoveEat <= 0)
-			{
-				CountEat++;
-				MoveEat = MoveSpeed;
-				CountEat %= MAX_MOTION_INDEX;
-			}
+			if (key1 < 1) {
+				if (--MoveEat <= 0)
+				{
+					CountEat++;
+					MoveEat = MoveSpeed;
+					CountEat %= MAX_MOTION_INDEX;
+				}
 
-			int motion_index = anime[CountEat];
-			if (eat[i].type <= 2) {
-				eat[i].image = feedImage[eat[i].type][motion_index];
-			}
-			else {
-				eat[i].image = EnemyImage[eat[i].type - 3][motion_index];
-			}
+				int motion_index = anime[CountEat];
+				if (eat[i].type <= 2) {
+					eat[i].image = feedImage[eat[i].type][motion_index];
+				}
+				else {
+					eat[i].image = EnemyImage[eat[i].type - 3][motion_index];
+				}
 
+			}
 		}
 	}
 
 	//餌の設定
-	if (Range / 5 % 50 == 0) {
+	if (Range / 5 % 50 == 0 && key1 < 1) {
 		EatImage();
 	}
 }
@@ -673,7 +687,7 @@ void BossInit() {
 }
 
 void BossBackScrool() {
-	if (GameState == 5) {
+	if (GameState == 5 && key1 < 1) {
 		ScroolSpeed -= player.speed;
 
 	}
@@ -690,119 +704,125 @@ void BossBackScrool() {
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
 }
 void BossMove() {
+	
 	if (--BOSS_act_wait <= 0)
 	{
-		BOSS_act_index++;
-		BOSS_act_wait = BOSS_ACT_SPEED;
-		BOSS_act_index %= BOSS_MOTION_INDEX;
-		//BOSS_act_index3%= BOSSB_MOTION_INDEX;
-	}
-
-	if (BOSS_PATTREN == 1) {
-		BossMove1();
-	}
-	if (BOSS_PATTREN == 2) {
-		BossMove2();
-	}
-	if (BOSS_PATTREN == 3) {
-		//BossMove3();
-	}
-
-
-	if (player.muteki == 0) {
-		//当たり判定
-		if (HitBoxPlayer(&player, &boss) == TRUE) {
-
-			player.life -= 1;
-			player.muteki = 1;
+		if (key1 < 1) {
+			BOSS_act_index++;
+			BOSS_act_wait = BOSS_ACT_SPEED;
+			BOSS_act_index %= BOSS_MOTION_INDEX;
+			//BOSS_act_index3%= BOSSB_MOTION_INDEX;
 		}
 	}
 
+		if (BOSS_PATTREN == 1) {
+			BossMove1();
+		}
+		if (BOSS_PATTREN == 2) {
+			BossMove2();
+		}
+		if (BOSS_PATTREN == 3) {
+			//BossMove3();
+		}
+
+		if(key1 < 1){
+			if (player.muteki == 0) {
+				//当たり判定
+				if (HitBoxPlayer(&player, &boss) == TRUE) {
+
+					player.life -= 1;
+					player.muteki = 1;
+				}
+			}
+		
+	}
 }
 void BossMove1() {
 
-	static int count = 0;
-	count = (count + 1) % 500;
-	DrawFormatString(100, 160, 0x000000, "%d", count);
+	if (key1 < 1) {
+		static int count = 0;
+		count = (count + 1) % 500;
+		DrawFormatString(100, 160, 0x000000, "%d", count);
 
-	if (count > 0) {
-		motion_index2 = BOSSAnime[BOSS_act_index];
-	}
-
-	if (count > 100) {
-		motion_index2 = BOSSAttack[BOSS_act_index];
-		boss.bx -= BOSS_SPEED;
-
-	}
-
-	if (count == 398) {
-		boss.bx = 1400;
-
-	}
-
-	if (count > 399) {
-		motion_index2 = BOSSAnime[BOSS_act_index];
-		if (boss.bx == 1000) {
-
-			BOSS_SPEED = 0;
+		if (count > 0) {
+			motion_index2 = BOSSAnime[BOSS_act_index];
 		}
-		boss.by = BOSS_POS_Y;
-		boss.bw = BOSS_WIDTH;
-		boss.bh = BOSS_HEIGHT;
 
+		if (count > 100) {
+			motion_index2 = BOSSAttack[BOSS_act_index];
+			boss.bx -= BOSS_SPEED;
+
+		}
+
+		if (count == 398) {
+			boss.bx = 1400;
+
+		}
+
+		if (count > 399) {
+			motion_index2 = BOSSAnime[BOSS_act_index];
+			if (boss.bx == 1000) {
+
+				BOSS_SPEED = 0;
+			}
+			boss.by = BOSS_POS_Y;
+			boss.bw = BOSS_WIDTH;
+			boss.bh = BOSS_HEIGHT;
+
+		}
+
+		if (count == 499) {
+			count = 0;
+			BOSS_SPEED = 5;
+			BOSS_PATTREN = 2;
+		}
 	}
-
-	if (count == 499) {
-		count = 0;
-		BOSS_SPEED = 5;
-		BOSS_PATTREN = 2;
-	}
-
 	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
 }
 
 void BossMove2() {
-	static int count = 0;
-	count = (count + 1) % 500;
-	DrawFormatString(100, 160, 0x000000, "%d", count);
+	if (key1 < 1) {
+		static int count = 0;
+		count = (count + 1) % 500;
+		DrawFormatString(100, 160, 0x000000, "%d", count);
 
-	if (count > 0 && count < 100) {
-		motion_index2 = BOSSDown[BOSS_act_index];
-		boss.bx -= BOSS_SPEED;
-		boss.by += 5;
-	}
-
-	if (count > 100 && count < 399) {
-		motion_index2 = BOSSUp[BOSS_act_index];
-		BOSS_SPEED = 0;
-		boss.by -= 5;
-	}
-
-	if (count == 399) {
-		boss.bx = 1400;
-	}
-
-	if (count > 399 && count < 499) {
-		BOSS_SPEED = 5;
-		boss.bx -= BOSS_SPEED;
-		motion_index2 = BOSSAnime[BOSS_act_index];
-		if (boss.bx == 1000) {
-
-			BOSS_SPEED = 0;
+		if (count > 0 && count < 100) {
+			motion_index2 = BOSSDown[BOSS_act_index];
+			boss.bx -= BOSS_SPEED;
+			boss.by += 5;
 		}
-		boss.by = BOSS_POS_Y;
-		boss.bw = BOSS_WIDTH;
-		boss.bh = BOSS_HEIGHT;
 
+		if (count > 100 && count < 399) {
+			motion_index2 = BOSSUp[BOSS_act_index];
+			BOSS_SPEED = 0;
+			boss.by -= 5;
+		}
+
+		if (count == 399) {
+			boss.bx = 1400;
+		}
+
+		if (count > 399 && count < 499) {
+			BOSS_SPEED = 5;
+			boss.bx -= BOSS_SPEED;
+			motion_index2 = BOSSAnime[BOSS_act_index];
+			if (boss.bx == 1000) {
+
+				BOSS_SPEED = 0;
+			}
+			boss.by = BOSS_POS_Y;
+			boss.bw = BOSS_WIDTH;
+			boss.bh = BOSS_HEIGHT;
+
+		}
+
+		if (count == 499) {
+			count = 0;
+			BOSS_SPEED = 5;
+			BOSS_PATTREN = 1;
+
+		}
 	}
-
-	if (count == 499) {
-		count = 0;
-		BOSS_SPEED = 5;
-		BOSS_PATTREN = 1;
-
-	}
-
 	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
 
 }
@@ -825,13 +845,14 @@ void BossMove2() {
 void Ship() {
 	if (--SHIP_act_wait <= 0)
 	{
-		SHIP_act_index++;
-		SHIP_act_wait = SHIP_ANI_SPEED;
-		SHIP_act_index %= SHIP_MOTION_INDEX;
+		if (key1 < 1) {
+			SHIP_act_index++;
+			SHIP_act_wait = SHIP_ANI_SPEED;
+			SHIP_act_index %= SHIP_MOTION_INDEX;
+		}
+
+		motion_index3 = shipanime[SHIP_act_index];
 	}
-
-	motion_index3 = shipanime[SHIP_act_index];
-
 	DrawExtendGraph(SHIP_X, SHIP_Y, SHIP_X + SHIP_W, SHIP_Y + SHIP_H, ship1[motion_index3], TRUE);
 }
 
@@ -846,13 +867,14 @@ void Ami() {
 
 	if (--NET_act_wait <= 0)
 	{
-		NET_act_index++;
-		NET_act_wait = NET_ANI_SPEED;
-		NET_act_index %= NET_MOTION_INDEX;
+		if (key1 < 1) {
+			NET_act_index++;
+			NET_act_wait = NET_ANI_SPEED;
+			NET_act_index %= NET_MOTION_INDEX;
+		}
+
+		motion_index4 = netanime[NET_act_index];
 	}
-
-	motion_index4 = netanime[NET_act_index];
-
 	DrawExtendGraph(net.nx, net.ny, net.nx + net.nw, net.ny + net.nh, net1[motion_index4], TRUE);
 }
 
@@ -867,6 +889,7 @@ void BossStage() {
 	Goal();
 	Ami();
 	Ship();
+	Pouse();
 }
 /*************************************
 *自機と敵機の当たり判定（四角）
@@ -944,4 +967,34 @@ int ColorCheck(int x, int y) {
 
 	if ((player.muteki == 1) && (ColorFlg == 1)) ColorFlg = 0;
 	return colorsum;
+}
+void Pouse() {
+	int SavePointX = player.x;
+	int SaveSpeed = player.speed;
+	int SaveIwa = Iwaspeed;
+	int SaveUmi = Umispeed;
+
+	if (g_KeyFlg & PAD_INPUT_A && key1 < 1) {
+		key1 = 1;
+		Umispeed = SaveUmi;
+		Iwaspeed = SaveIwa;
+		//player.speed = 0;
+		player.flg = FALSE;
+		boss.flg = FALSE;
+		boss.speed = FALSE;
+
+		//boss.speed = 0;
+	}
+	else if (key1 > 0 && g_KeyFlg & PAD_INPUT_A) {
+		//PLAYER_SPEED = 5;
+		player.speed = SaveSpeed;
+		player.flg = TRUE;
+		boss.flg = TRUE;
+		boss.speed = TRUE;
+		key1 = 0;
+	}
+
+	if (key1 > 0) {
+		DrawGraph(355, 100, pauseImage, TRUE);
+	}
 }

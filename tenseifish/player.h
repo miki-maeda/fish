@@ -19,6 +19,7 @@ int act_index = 0;
 int MAX_MOTION_INDEX = 4;	// 0,1,2,1 ‚Ì4Ží—Þ 
 
 int Range;
+int key1;
 
 //ƒ‰ƒCƒtˆÊ’u
 int LifeX = 150;

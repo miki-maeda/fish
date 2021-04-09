@@ -1,5 +1,6 @@
 #pragma once
 int Gametitle;
+int pauseImage;
 int Corsol;	// カーソル画像変数
 int StageImage;
 int Iwa[3];//手前の背景
