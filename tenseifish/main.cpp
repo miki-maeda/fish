@@ -3,6 +3,7 @@
 #include "image.h"
 #include "Feed.h"
 #include "Boss.h"
+#include "Sound.h"
 #include "CollisionDetiction.h"
 int	g_OldKey;				// 前回の入力キー
 int	g_NowKey;				// 今回の入力キー
@@ -27,6 +28,7 @@ void Goal();
 void Pouse();
 
 int LoadImages();          //画像読み込み
+int LoadSound();		// 音楽読込み
 
 int Time = 2400;
 
@@ -48,6 +50,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	SetDrawScreen(DX_SCREEN_BACK);	// 描画先画面を裏にする
 
 	if (LoadImages() == -1)return -1; //画像呼び出し
+
+	if (LoadSound() == -1)return -1;	// 音楽の読み込み
 
 	//ゲームループ
 	while (ProcessMessage() == 0 && GetHitKeyStateAll(key) == 0 && GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
@@ -100,9 +104,11 @@ void GameTitle() {
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_DOWN) {
 		if (++MenuNo > 2)MenuNo = 0;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	if (g_KeyFlg & PAD_INPUT_UP) {
 		if (--MenuNo < 0)MenuNo = 2;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	
 	
@@ -110,6 +116,7 @@ void GameTitle() {
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_1) {
 		if (push == 0) {
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -162,6 +169,9 @@ void GameInit() {
 	}
 	//ゲームメインへ
 	GameState = 2;
+
+	StopSoundMem(TitleSound);
+	PlaySoundMem(MainSound, DX_PLAYTYPE_BACK, TRUE);
 }
 
 /***********************************************
@@ -387,6 +397,34 @@ int LoadImages() {
 	return 0;
 }
 
+/******************************************************************
+* BGMの読み込み
+*******************************************************************/
+int LoadSound() {
+	// BGM
+	if ((MainSound = LoadSoundMem("Sound/神秘の泉_-_8bit.mp3")) == -1)return -1;
+	if ((TitleSound = LoadSoundMem("Sound/おさかなシャトル_-_8bit.mp3")) == -1)return -1;
+	if ((BossSound = LoadSoundMem("Sound/よぞらのなみだ.mp3")) == -1)return -1;
+
+	// SE
+	if ((ClearSE = LoadSoundMem("Sound/bgm_fanfare_1.mp3")) == -1)return -1;
+	if ((CarsolSE = LoadSoundMem("Sound/select09.mp3")) == -1)return -1;
+	if ((DesitionSE = LoadSoundMem("Sound/button67.mp3")) == -1)return -1;
+	if ((EatSE = LoadSoundMem("Sound/nc78521.mp3")) == -1)return -1;
+	if ((DamegeSE = LoadSoundMem("Sound/se_dosun_2.mp3")) == -1)return -1;
+
+	//音量調整
+	ChangeVolumeSoundMem(125, MainSound);
+	ChangeVolumeSoundMem(125, TitleSound);
+	ChangeVolumeSoundMem(200, EatSE);
+	ChangeVolumeSoundMem(200, CarsolSE);
+	ChangeVolumeSoundMem(200, DesitionSE);
+	ChangeVolumeSoundMem(225, DamegeSE);
+	ChangeVolumeSoundMem(225, BossSound);
+	return 0;
+}
+
+
 void EatMove() {
 	for (int i = 0; i < 10; i++) {
 		if (eat[i].flg == TRUE) {
@@ -575,6 +613,7 @@ int Hit(Player* p, Eat* e) {
 			if (ex + ew >= px && ex <= px + pw &&
 				ey + eh >= py && ey <= py + ph) {
 				e->flg = FALSE;
+				PlaySoundMem(EatSE, DX_PLAYTYPE_BACK, TRUE);
 				return TRUE;
 			}
 		}
@@ -583,6 +622,7 @@ int Hit(Player* p, Eat* e) {
 				ey + eh >= py && ey <= py + ph && player.muteki == 0) {
 				player.life--;
 				player.muteki = 1;
+				PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
 				return TRUE;
 			}
 		}
@@ -609,6 +649,8 @@ void GameClearHit(Player* p) {
 		if (1300 >= px && 1200 <= px + ph &&
 			500 >= py && 400 <= py + pw) {
 			GameState = 3;
+			StopSoundMem(BossSound);
+			PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
 		}
 	}
 
@@ -624,25 +666,32 @@ void GameClear() {
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
 		if (++MenuNo > 1)MenuNo = 0;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
 		if (--MenuNo < 0)MenuNo = 1;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_1) {
 		if (push == 0) {
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 			push = 1;
 		}
 		// sceneStageに行く処理
 		if (MenuNo == 0) {
 			push = 0;
 			GameState = 1;
+			StopSoundMem(ClearSE);
+			PlaySoundMem(MainSound, DX_PLAYTYPE_LOOP, TRUE);
 		}
 		else if (MenuNo == 1) {
 			push = 0;
 			GameState = 0;
 			MenuNo = 0;
+			StopSoundMem(ClearSE);
+			PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
 		}
 	}
 }
@@ -662,7 +711,8 @@ void BossST(Player* p) {
 		if (1300 >= px && 1200 <= px + ph &&
 			500 >= py && 400 <= py + pw) {
 			GameState = 4;
-
+			StopSoundMem(MainSound);
+			PlaySoundMem(BossSound, DX_PLAYTYPE_LOOP, TRUE);
 		}
 	}
 }
@@ -732,6 +782,7 @@ void BossMove() {
 
 					player.life -= 1;
 					player.muteki = 1;
+					PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
 				}
 			}
 		
