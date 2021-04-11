@@ -1,5 +1,6 @@
 #pragma once
 int Gametitle;
+int Gamehelp;
 int pauseImage;
 int Corsol;	// ƒJ[ƒ\ƒ‹‰æ‘œ•Ï”
 int StageImage;

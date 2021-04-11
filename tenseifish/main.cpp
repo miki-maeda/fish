@@ -22,6 +22,7 @@ int ScroolSpeed;
 void GameTitle();
 void GameInit();		//ゲーム初期化処理
 void GameMain();		//ゲームメイン処理
+void GameHelp();		//ゲームヘルプ処理
 void BackScrool();         //背景画像スクロール処理
 void GameClear();		//ゲームクリア処理
 void Goal();
@@ -86,6 +87,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		case 5:
 			BossStage();
 			break;
+		case 6:
+			GameHelp();
+			break;
 		}
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 	}
@@ -96,6 +100,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 void GameTitle() {
 	static bool push = 0;	// 押されたかどうか確認する関数
+
+	StopSoundMem(HelpSound);
 
 	DrawGraph(0, 0, Gametitle, TRUE);
 	// メニューカーソルの描画
@@ -126,11 +132,57 @@ void GameTitle() {
 		}
 		else if (MenuNo == 1) {
 			push = 0;
-
+			GameState = 6;
+			MenuNo = 0;
+			PlaySoundMem(HelpSound, DX_PLAYTYPE_LOOP, TRUE);
 		}
 		else {
 			push = 0;
 			DxLib_End();
+		}
+	}
+}
+
+void GameHelp()
+{
+	static bool push = 0;	// 押されたかどうか確認する関数
+	DrawGraph(0, 0, Gamehelp, TRUE);
+
+	StopSoundMem(TitleSound);
+
+	// メニューカーソルの描画
+	DrawRotaGraph(480, 300 + MenuNo * 185, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_DOWN) {
+		if (++MenuNo > 2)MenuNo = 0;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+	if (g_KeyFlg & PAD_INPUT_UP) {
+		if (--MenuNo < 0)MenuNo = 2;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+
+
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_1) {
+		if (push == 0) {
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+		}
+		else if (MenuNo == 1) {
+			push = 0;
+		}
+		else {
+			push = 0;
+			GameState = 0;
+			MenuNo = 0;
+			PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
 		}
 	}
 }
@@ -317,6 +369,8 @@ void PlayerMove() {
 int LoadImages() {
 	//タイトル画像
 	if ((Gametitle = LoadGraph("Image/umi.png")) == -1)return -1;
+	//ゲームヘルプ画像
+	if ((Gamehelp = LoadGraph("Image/GameHelp.png")) == -1)return -1;
 	//ポーズ画像
 	if ((pauseImage = LoadGraph("Image/pause.png")) == -1)return-1;
 	// カーソル画像
@@ -405,6 +459,7 @@ int LoadSound() {
 	if ((MainSound = LoadSoundMem("Sound/神秘の泉_-_8bit.mp3")) == -1)return -1;
 	if ((TitleSound = LoadSoundMem("Sound/おさかなシャトル_-_8bit.mp3")) == -1)return -1;
 	if ((BossSound = LoadSoundMem("Sound/よぞらのなみだ.mp3")) == -1)return -1;
+	if ((HelpSound = LoadSoundMem("Sound/かえるのピアノ.mp3")) == -1)return -1;
 
 	// SE
 	if ((ClearSE = LoadSoundMem("Sound/bgm_fanfare_1.mp3")) == -1)return -1;
@@ -412,6 +467,7 @@ int LoadSound() {
 	if ((DesitionSE = LoadSoundMem("Sound/button67.mp3")) == -1)return -1;
 	if ((EatSE = LoadSoundMem("Sound/nc78521.mp3")) == -1)return -1;
 	if ((DamegeSE = LoadSoundMem("Sound/se_dosun_2.mp3")) == -1)return -1;
+	if ((WallSE = LoadSoundMem("Sound/se_wall_1.mp3")) == -1)return -1;
 
 	//音量調整
 	ChangeVolumeSoundMem(125, MainSound);
@@ -419,6 +475,7 @@ int LoadSound() {
 	ChangeVolumeSoundMem(200, EatSE);
 	ChangeVolumeSoundMem(200, CarsolSE);
 	ChangeVolumeSoundMem(200, DesitionSE);
+	ChangeVolumeSoundMem(200, HelpSound);
 	ChangeVolumeSoundMem(225, DamegeSE);
 	ChangeVolumeSoundMem(225, BossSound);
 	return 0;
@@ -1014,6 +1071,7 @@ int ColorCheck(int x, int y) {
 		ColorFlg = 1;
 		player.life -= 1;
 		player.muteki = 1;
+		PlaySoundMem(WallSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 
 	if ((player.muteki == 1) && (ColorFlg == 1)) ColorFlg = 0;

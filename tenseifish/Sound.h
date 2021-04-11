@@ -3,6 +3,7 @@
 int MainSound;
 int TitleSound;
 int BossSound;
+int HelpSound;
 
 // SE
 int ClearSE;
