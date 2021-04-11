@@ -375,6 +375,8 @@ int LoadImages() {
 	if ((pauseImage = LoadGraph("Image/pause.png")) == -1)return-1;
 	// カーソル画像
 	if ((Corsol = LoadGraph("Image/coursol.png")) == -1)return -1;
+	//ポーズ画面のカーソル画像
+	if ((Corsol2 = LoadGraph("Image/coursol2.png")) == -1)return -1;
 	//プレイヤー画像
 	//魚レベル1
 	if ((LoadDivGraph("Image/sakana.png", 10, 10, 1, 30, 30, sakana[0])) == -1)return -1;
@@ -1082,6 +1084,7 @@ void Pouse() {
 	int SaveSpeed = player.speed;
 	int SaveIwa = Iwaspeed;
 	int SaveUmi = Umispeed;
+	static bool push = 0;
 
 	if (g_KeyFlg & PAD_INPUT_A && key1 < 1) {
 		key1 = 1;
@@ -1091,8 +1094,7 @@ void Pouse() {
 		player.flg = FALSE;
 		boss.flg = FALSE;
 		boss.speed = FALSE;
-
-		//boss.speed = 0;
+		PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	else if (key1 > 0 && g_KeyFlg & PAD_INPUT_A) {
 		//PLAYER_SPEED = 5;
@@ -1105,5 +1107,38 @@ void Pouse() {
 
 	if (key1 > 0) {
 		DrawGraph(355, 100, pauseImage, TRUE);
+		//player.flg = FALSE;
+		// メニューカーソルの描画
+		DrawRotaGraph(570, 390 + MenuNo * 80, 0.3f, 0, Corsol2, TRUE);
+
+		// メニューカーソル移動処理
+		if (g_KeyFlg & PAD_INPUT_DOWN) {
+			if (++MenuNo > 2)MenuNo = 0;
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+		if (g_KeyFlg & PAD_INPUT_UP) {
+			if (--MenuNo < 0)MenuNo = 2;
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+
+	}if (g_KeyFlg & PAD_INPUT_A) {
+		if (push == 0) {
+			push = 1;
+		}
+		if (MenuNo == 1) {
+			push = 0;
+			MenuNo = 0;
+			StopSoundMem(MainSound);
+			StopSoundMem(BossSound);
+			//key1 = 0;
+			GameState = 1;
+		}
+		else if (MenuNo == 2) {
+			push = 0;
+			MenuNo = 0;
+			StopSoundMem(MainSound);
+			StopSoundMem(BossSound);
+			GameState = 0;
+		}
 	}
 }

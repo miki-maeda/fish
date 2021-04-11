@@ -3,6 +3,7 @@ int Gametitle;
 int Gamehelp;
 int pauseImage;
 int Corsol;	// ƒJ[ƒ\ƒ‹‰æ‘œ•Ï”
+int Corsol2;
 int StageImage;
 int Iwa[3];//è‘O‚Ì”wŒi
 int IwaHaba = 7732;//è‘O‚Ì”wŒi‚Ì•	
