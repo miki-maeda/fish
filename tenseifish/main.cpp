@@ -101,8 +101,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 void GameTitle() {
 	static bool push = 0;	// 押されたかどうか確認する関数
 
+	if (CheckSoundMem(TitleSound) == 0) {
+		PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
+	}
 	StopSoundMem(HelpSound);
-
+	
 	DrawGraph(0, 0, Gametitle, TRUE);
 	// メニューカーソルの描画
 	DrawRotaGraph(590, 385 + MenuNo * 108, 0.3f, 0, Corsol, TRUE);
@@ -116,8 +119,8 @@ void GameTitle() {
 		if (--MenuNo < 0)MenuNo = 2;
 		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 	}
-	
-	
+
+
 
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_1) {
@@ -657,10 +660,14 @@ void PlayerEat(int* e) {
 int Hit(Player* p, Eat* e) {
 
 	if (Time > 0) {
-		int px = p->x + 80 * Scke;
-		int py = p->y + 45 * Scke;
-		int ph = p->h - 80 * Scke;
-		int pw = p->w - 80 * Scke;
+		int px = player.x + 10 * Scke;
+		int py = player.y + 25 * Scke;
+		int ph = player.h - 50 * Scke;
+		int pw = player.w - 10 * Scke;
+		int phx = player.x + 45 * Scke;
+		int phy = player.y + 45 * Scke;
+		int phh = player.h - 90 * Scke;
+		int phw = player.w - 90 * Scke;
 		int ex = e->e_x;
 		int ey = e->e_y;
 		int ew = e->e_w;
@@ -677,8 +684,8 @@ int Hit(Player* p, Eat* e) {
 			}
 		}
 		else {
-			if (ex + ew >= px && ex <= px + pw &&
-				ey + eh >= py && ey <= py + ph && player.muteki == 0) {
+			if (ex + ew >= phx && ex <= phx + phw &&
+				ey + eh >= phy && ey <= phy + phh && player.muteki == 0) {
 				player.life--;
 				player.muteki = 1;
 				PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
@@ -813,7 +820,7 @@ void BossBackScrool() {
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
 }
 void BossMove() {
-	
+
 	if (--BOSS_act_wait <= 0)
 	{
 		if (key1 < 1) {
@@ -824,27 +831,27 @@ void BossMove() {
 		}
 	}
 
-		if (BOSS_PATTREN == 1) {
-			BossMove1();
-		}
-		if (BOSS_PATTREN == 2) {
-			BossMove2();
-		}
-		if (BOSS_PATTREN == 3) {
-			//BossMove3();
-		}
+	if (BOSS_PATTREN == 1) {
+		BossMove1();
+	}
+	if (BOSS_PATTREN == 2) {
+		BossMove2();
+	}
+	if (BOSS_PATTREN == 3) {
+		//BossMove3();
+	}
 
-		if(key1 < 1){
-			if (player.muteki == 0) {
-				//当たり判定
-				if (HitBoxPlayer(&player, &boss) == TRUE) {
+	if (key1 < 1) {
+		if (player.muteki == 0) {
+			//当たり判定
+			if (HitBoxPlayer(&player, &boss) == TRUE) {
 
-					player.life -= 1;
-					player.muteki = 1;
-					PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
-				}
+				player.life -= 1;
+				player.muteki = 1;
+				PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
 			}
-		
+		}
+
 	}
 }
 void BossMove1() {
