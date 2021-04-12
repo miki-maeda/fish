@@ -12,9 +12,13 @@ int Scke = 1;			//大きくなる量
 int LeveUp = 10;			//レベルが上がるのに必要な量
 int EatAmount;		//食べたものの量(合計)
 int em, am, im;
-int MoveSpeed = 15;		//アニメーションが変わるスピード
+int MoveSpeed = 50;		//アニメーションが変わるスピード
 int MoveEat = MoveSpeed;	//アニメーションが変わるまでの時間
 int CountEat = 0;		//カウントする
+int Eatflg = 0;
+int EatCont = 0;
+int er = 0, eg = 0, eb = 0;
+
 
 struct Eat {
 
@@ -30,3 +34,4 @@ struct Eat eat[10];				//餌の表示する数
 struct Eat eat0 = { TRUE,0,0,1410,0,0,0,FALSE };
 
 int Hit(Player* p, Eat* e);				//敵とのあたり判定
+int EatCheck(int x, int y);
