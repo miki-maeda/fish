@@ -12,3 +12,4 @@ int DesitionSE;
 int WallSE;
 int DamegeSE;
 int EatSE;
+int EvoSE;

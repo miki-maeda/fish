@@ -483,10 +483,12 @@ int LoadSound() {
 	if ((EatSE = LoadSoundMem("Sound/nc78521.mp3")) == -1)return -1;
 	if ((DamegeSE = LoadSoundMem("Sound/se_dosun_2.mp3")) == -1)return -1;
 	if ((WallSE = LoadSoundMem("Sound/se_wall_1.mp3")) == -1)return -1;
+	if ((EvoSE = LoadSoundMem("Sound/powerup10.mp3")) == -1)return -1;
 
 	//‰¹—Ê’²®
 	ChangeVolumeSoundMem(125, MainSound);
 	ChangeVolumeSoundMem(125, TitleSound);
+	ChangeVolumeSoundMem(150, GameOverSound);
 	ChangeVolumeSoundMem(200, EatSE);
 	ChangeVolumeSoundMem(200, CarsolSE);
 	ChangeVolumeSoundMem(200, DesitionSE);
@@ -688,6 +690,7 @@ void PlayerEat(int* e) {
 	//H‚×‚½‚à‚Ì‚Ì—Ê‚ªˆê’è—Ê‚É’B‚µ‚½‚çˆ—‚ðˆÚ‚·
 	if ((EatAmount >= LeveUp)&&(Leve <2)) {
 		PlayerGrowth();
+		PlaySoundMem(EvoSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 }
 
