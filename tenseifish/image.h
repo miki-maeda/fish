@@ -12,6 +12,7 @@ int Umispeed = 0;//海のスピード
 int MenuNo = 0;	// カーソルの番号
 int Life;
 int Gameclear;
+int Gameover;
 int Meter[3][6];
 int sakana[3][10] = { 0 };		//魚の画像を格納する配列
 int anime[] = { 0,1,0,2 };		//泳ぐときのアニメーションの番号 尾びれが真ん中、上、真ん中、下

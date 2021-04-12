@@ -25,6 +25,7 @@ void GameMain();		//ゲームメイン処理
 void GameHelp();		//ゲームヘルプ処理
 void BackScrool();         //背景画像スクロール処理
 void GameClear();		//ゲームクリア処理
+void GameOver();
 void Goal();
 void Pouse();
 
@@ -89,6 +90,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			break;
 		case 6:
 			GameHelp();
+			break;
+		case 7:
+			GameOver();
 			break;
 		}
 		ScreenFlip();			// 裏画面の内容を表画面に反映
@@ -418,6 +422,8 @@ int LoadImages() {
 	//if ((LoadDivGraph("Image/rasubosu2.png", 6, 6, 1, 500, 350, Boss2)) == -1)return -1;
 	//ゲームクリア画像
 	if ((Gameclear = LoadGraph("Image/GameClear.png")) == -1)return -1;
+	//ゲームオーバー画像
+	if ((Gameover = LoadGraph("Image/GameOver.png")) == -1)return -1;
 
 	//UI画像
 	//ライフ
@@ -593,6 +599,11 @@ void LifeImage() {
 	{
 		DrawGraph(LifeX + (60 * i), LIfeY, Life, TRUE);
 
+	}
+	if (player.life < 1) {
+		StopSoundMem(MainSound);
+		StopSoundMem(BossSound);
+		GameState = 7;
 	}
 }
 
@@ -1146,6 +1157,51 @@ void Pouse() {
 			StopSoundMem(MainSound);
 			StopSoundMem(BossSound);
 			GameState = 0;
+		}
+	}
+}
+void GameOver() {
+	static bool push = 0; // 押されたかどうか確認する関数
+	DrawGraph(0, 0, Gameover, TRUE);
+	
+
+	// メニューカーソルの描画
+	if (MenuNo != 1) {
+		DrawRotaGraph(80 + MenuNo * 450, 743, 0.3f, 0, Corsol, TRUE);
+	}
+	else {
+		DrawRotaGraph(560, 743, 0.3f, 0, Corsol, TRUE);
+	}
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (++MenuNo > 2)MenuNo = 0;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (--MenuNo < 0)MenuNo = 2;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_1) {
+		if (push == 0) {
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+			GameState = 1;
+		}
+		else if (MenuNo == 1) {
+			push = 0;
+			GameState = 0;
+			MenuNo = 0;
+		}
+		else {
+			push = 0;
+			DxLib_End();
 		}
 	}
 }
