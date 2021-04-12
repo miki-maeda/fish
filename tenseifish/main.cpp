@@ -291,6 +291,7 @@ void BackScrool()
 	//レベル表示
 	SetFontSize(60);
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
+	DrawFormatString(0, 100, 0x000000, "er.%d, eg.%d, eb.%d", er, eg, eb);
 }
 
 void PlayerMove() {
@@ -388,9 +389,9 @@ int LoadImages() {
 	//魚レベル1
 	if ((LoadDivGraph("Image/sakana.png", 10, 10, 1, 30, 30, sakana[0])) == -1)return -1;
 	//魚レベル2
-	/*if ((LoadDivGraph("Image/sakana2.png", 9, 10, 1, 100, 100, sakana[1])) == -1)return-1;*/
-	//魚レベル2
 	if ((LoadDivGraph("Image/sakana2.png", 3, 3, 1, 150, 150, sakana[1])) == -1)return-1;
+	//魚レベル3
+	if ((LoadDivGraph("Image/sakana3.png", 3, 3, 1, 225, 225, sakana[2])) == -1)return-1;
 	//ステージ背景
 	if ((StageImage = LoadGraph("Image/Hikei.png")) == -1) return -1;
 	//手前の背景
@@ -408,8 +409,8 @@ int LoadImages() {
 	//敵
 	//クラゲ
 	if ((LoadDivGraph("Image/kurage.png", 3, 3, 1, 80, 80, EnemyImage[0])) == -1)return-1;
-	//ハリセンボン
-	if ((LoadDivGraph("Image/harisennbon.png", 3, 3, 1, 80, 80, EnemyImage[1])) == -1)return-1;
+	//ミノカサゴ
+	if ((LoadDivGraph("Image/minokasago.png", 3, 3, 1, 120,120, EnemyImage[1])) == -1)return-1;
 
 
 	//船
@@ -421,7 +422,9 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/maguro.png", 12, 12, 1, 350, 350, Boss1)) == -1)return -1;
 	//if ((LoadDivGraph("Image/rasubosu2.png", 6, 6, 1, 500, 350, Boss2)) == -1)return -1;
 	//ゲームクリア画像
-	if ((Gameclear = LoadGraph("Image/GameClear.png")) == -1)return -1;
+	if ((Gameclear[0] = LoadGraph("Image/GameClear.png")) == -1)return -1;
+	if ((Gameclear[1] = LoadGraph("Image/GameClear(NoEat).png")) == -1)return -1;
+	if ((Gameclear[2] = LoadGraph("Image/GameClear(MaxEat).png")) == -1)return -1;
 	//ゲームオーバー画像
 	if ((Gameover = LoadGraph("Image/GameOver.png")) == -1)return -1;
 
@@ -484,7 +487,6 @@ int LoadSound() {
 	//音量調整
 	ChangeVolumeSoundMem(125, MainSound);
 	ChangeVolumeSoundMem(125, TitleSound);
-	ChangeVolumeSoundMem(200, GameOverSound);
 	ChangeVolumeSoundMem(200, EatSE);
 	ChangeVolumeSoundMem(200, CarsolSE);
 	ChangeVolumeSoundMem(200, DesitionSE);
@@ -500,6 +502,8 @@ void EatMove() {
 		if (eat[i].flg == TRUE) {
 			//餌の表示
 			if (Time > 0) {
+				DrawBox(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, 0xFFFFFF, FALSE);
+				
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 			//真っすぐ左に移動
@@ -509,6 +513,28 @@ void EatMove() {
 			if (Leve == 2 && key1 != 1) {
 				eat[i].e_x -= 7;
 			}
+
+			if (Leve == 1) {
+				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2)+2) 
+					EatCheck(eat[i].e_x + (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
+			}
+			if (Leve == 2) {
+				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2)+2) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 7, eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w+5) EatCheck(eat[i].e_x + eat[i].e_w - 7, eat[i].e_y + eat[i].e_h);
+			}
+
+			if (EatCont >= 1)
+			{
+				EatCont = 0;
+				eat[i] = eat0;
+			}
+
+			DrawBox(eat[i].e_x - eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].e_x - eat[i].e_w + 2, eat[i].e_y + eat[i].e_h + 2, 0xFFFFFF, FALSE);
+			DrawBox(eat[i].e_x - (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h, eat[i].e_x - (eat[i].e_w / 2) + 2, eat[i].e_y + eat[i].e_h + 2, 0xFFFFFF, FALSE);
+			DrawBox(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h, eat[i].e_x - 1 + 2, eat[i].e_y + eat[i].e_h + 2, 0xFFFFFF, FALSE);
+			DrawBox(eat[i].e_x + (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h + 1, eat[i].e_x + (eat[i].e_w / 2) + 2, eat[i].e_y + eat[i].e_h + 1, 0xFFFFFF, FALSE);
+			DrawBox(eat[i].e_x, eat[i].e_y + eat[i].e_h + 1, eat[i].e_x + 2, eat[i].e_y + eat[i].e_h + 1, 0xFFFFFF, FALSE);
 
 			if (eat[i].flg == FALSE)continue;
 
@@ -551,7 +577,7 @@ int EatImage() {
 	for (int i = 0; i < 10; i++) {
 		if (eat[i].flg == FALSE) {
 			eat[i] = eat0;
-			eat[i].type = GetRand(4);
+			eat[i].type = GetRand(7)%5;
 			if (eat[i].type <= 2) {
 				eat[i].image = feedImage[eat[i].type][0];
 			}
@@ -561,32 +587,26 @@ int EatImage() {
 			switch (eat[i].type) {
 			case 0:
 				eat[i].e_y = (GetRand(1) + 4) * 100 + 150;
-				eat[i].e_w = 50 * 1.5;
-				eat[i].e_h = 50 * 1.5;
 				break;
 			case 1:
 				eat[i].e_y = GetRand(2) * 100 + 150;
-				eat[i].e_w = 60 * 1.5;
-				eat[i].e_h = 60 * 1.5;
 				break;
 			case 2:
 				eat[i].e_y = GetRand(5) * 100 + 150;
-				eat[i].e_w = 50 * 1.5;
-				eat[i].e_h = 50 * 1.5;
 				break;
 			case 3:
 				eat[i].e_y = GetRand(1) * 100 + 150;
-				eat[i].e_w = 50 * 1.5;
-				eat[i].e_h = 50 * 1.5;
 				eat[i].typeD = TRUE;
 				break;
 			case 4:
 				eat[i].e_y = GetRand(3) * 100 + 150;
-				eat[i].e_w = 50 * 1.5;
-				eat[i].e_h = 50 * 1.5;
 				eat[i].typeD = TRUE;
 				break;
 			}
+
+			eat[i].e_w = 50 * 1.5;
+			eat[i].e_h = 50 * 1.5;
+
 			return TRUE;
 		}
 	}
@@ -631,9 +651,10 @@ void MeterImage() {
 void PlayerGrowth() {
 
 	//サイズの変更量の増加
-	Scke++;
+	if (Leve == 1)Scke = 2;
+	else if (Leve == 2)Scke = 1.5;
 
-	LeveUp *= 10;
+	LeveUp *= 2;
 
 	//プレイヤーのサイズ変更
 	player.w *= Scke;
@@ -665,7 +686,7 @@ void PlayerEat(int* e) {
 	}
 
 	//食べたものの量が一定量に達したら処理を移す
-	if (EatAmount >= LeveUp) {
+	if ((EatAmount >= LeveUp)&&(Leve <2)) {
 		PlayerGrowth();
 	}
 }
@@ -738,7 +759,16 @@ void GameClearHit(Player* p) {
 
 void GameClear() {
 	static bool push = 0; // 押されたかどうか確認する関数
-	DrawGraph(0, 0, Gameclear, TRUE);
+	//エンディング判定
+	if (EatAmount == 0) {
+		DrawGraph(0, 0, Gameclear[1], TRUE);
+	}
+	else if ((em >= 5) && (im >= 5) && (am >= 5)) {
+		DrawGraph(0, 0, Gameclear[2], TRUE);
+	}
+	else {
+		DrawGraph(0, 0, Gameclear[0], TRUE);
+	}
 
 	// メニューカーソルの描画
 	DrawRotaGraph(420 + MenuNo * 300, 750, 0.3f, 0, Corsol, TRUE);
@@ -1100,6 +1130,20 @@ int ColorCheck(int x, int y) {
 	if ((player.muteki == 1) && (ColorFlg == 1)) ColorFlg = 0;
 	return colorsum;
 }
+
+int EatCheck(int x, int y) {
+	Cr1 = GetPixel(x, y);
+	GetColor2(Cr1, &er, &eg, &eb);
+
+	if ((er == 98) && (eg == 96) && (eb == 94) && (Eatflg < 1)) {
+		Eatflg = 1;
+		EatCont++;
+	}
+
+	if (Eatflg == 1) Eatflg = 0;
+	return colorsum;
+}
+
 void Pouse() {
 	int SavePointX = player.x;
 	int SaveSpeed = player.speed;
@@ -1166,7 +1210,7 @@ void Pouse() {
 void GameOver() {
 	static bool push = 0; // 押されたかどうか確認する関数
 	DrawGraph(0, 0, Gameover, TRUE);
-	
+
 
 	// メニューカーソルの描画
 	if (MenuNo != 1) {

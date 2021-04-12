@@ -11,7 +11,7 @@ int Iwaspeed = 0;//手前のスピード
 int Umispeed = 0;//海のスピード
 int MenuNo = 0;	// カーソルの番号
 int Life;
-int Gameclear;
+int Gameclear[3];
 int Gameover;
 int Meter[3][6];
 int sakana[3][10] = { 0 };		//魚の画像を格納する配列
