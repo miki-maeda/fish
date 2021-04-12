@@ -809,17 +809,23 @@ void GameClear() {
 //ボスステージ移行（当たったら）
 void BossST(Player* p) {
 
-
+	SetFontSize(150);
+	DrawFormatString(1200, 150, GetColor(255, 0, 0), "→");
+	SetFontSize(50);
+	DrawFormatString(1200, 100, GetColor(255, 0, 0), "ボス戦へ");
 	int px = p->x;
 	int py = p->y;
 	int ph = p->h;
 	int pw = p->w;
 
 	if (Time <= 0) {
-		DrawBox(1200, 400, 1300, 500, GetColor(255, 255, 255), FALSE);
-
-		if (1300 >= px && 1200 <= px + ph &&
-			500 >= py && 400 <= py + pw) {
+		DrawLine(1410, 0, 1410, 800, GetColor(255, 255, 255), FALSE);
+		SetFontSize(150);
+		DrawFormatString(1200, 150, GetColor(255, 0, 0), "→");
+		SetFontSize(50);
+		DrawFormatString(1200, 100, GetColor(255, 0, 0), "ボス戦へ");
+		if (1410 >= px && 1410 <= px + ph &&
+			800 >= py && 0 <= py + pw) {
 			GameState = 4;
 			StopSoundMem(MainSound);
 			PlaySoundMem(BossSound, DX_PLAYTYPE_LOOP, TRUE);
