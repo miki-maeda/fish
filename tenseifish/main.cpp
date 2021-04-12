@@ -809,10 +809,7 @@ void GameClear() {
 //ボスステージ移行（当たったら）
 void BossST(Player* p) {
 
-	SetFontSize(150);
-	DrawFormatString(1200, 150, GetColor(255, 0, 0), "→");
-	SetFontSize(50);
-	DrawFormatString(1200, 100, GetColor(255, 0, 0), "ボス戦へ");
+
 	int px = p->x;
 	int py = p->y;
 	int ph = p->h;
