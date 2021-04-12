@@ -127,7 +127,7 @@ void GameTitle() {
 
 
 	// Zキーでメニュー選択
-	if (g_KeyFlg & PAD_INPUT_1) {
+	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
 			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 			push = 1;
@@ -173,7 +173,7 @@ void GameHelp()
 
 
 	// Zキーでメニュー選択
-	if (g_KeyFlg & PAD_INPUT_1) {
+	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
 			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 			push = 1;
@@ -316,7 +316,7 @@ void PlayerMove() {
 	//画面からはみ出さないようにする
 	if (player.x < 0)player.x = 0;
 	if (player.x > SCREEN_WIDTH - player.w)player.x = SCREEN_WIDTH - player.w;
-	if (player.y < player.h / Scke)player.y = player.h / Scke;
+	if (player.y < player.h / Scke+50)player.y = player.h / Scke+50;
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
 	if (Leve == 1 && key1 != 1) {
@@ -784,7 +784,7 @@ void GameClear() {
 	}
 
 	// Zキーでメニュー選択
-	if (g_KeyFlg & PAD_INPUT_1) {
+	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
 			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 			push = 1;
@@ -1154,7 +1154,7 @@ void Pouse() {
 	int SaveUmi = Umispeed;
 	static bool push = 0;
 
-	if (g_KeyFlg & PAD_INPUT_A && key1 < 1) {
+	if (g_KeyFlg & PAD_INPUT_8 && key1 < 1) {
 		key1 = 1;
 		Umispeed = SaveUmi;
 		Iwaspeed = SaveIwa;
@@ -1164,7 +1164,7 @@ void Pouse() {
 		boss.speed = FALSE;
 		PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 	}
-	else if (key1 > 0 && g_KeyFlg & PAD_INPUT_A) {
+	else if (key1 > 0 && g_KeyFlg & PAD_INPUT_2) {
 		//PLAYER_SPEED = 5;
 		player.speed = SaveSpeed;
 		player.flg = TRUE;
@@ -1189,7 +1189,7 @@ void Pouse() {
 			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 		}
 
-	}if (g_KeyFlg & PAD_INPUT_A) {
+	}if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
 			push = 1;
 		}
@@ -1234,7 +1234,7 @@ void GameOver() {
 	}
 
 	// Zキーでメニュー選択
-	if (g_KeyFlg & PAD_INPUT_1) {
+	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
 			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 			push = 1;
