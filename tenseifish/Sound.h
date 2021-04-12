@@ -4,7 +4,7 @@ int MainSound;
 int TitleSound;
 int BossSound;
 int HelpSound;
-
+int GameOverSound;
 // SE
 int ClearSE;
 int CarsolSE;

@@ -471,6 +471,7 @@ int LoadSound() {
 	if ((TitleSound = LoadSoundMem("Sound/おさかなシャトル_-_8bit.mp3")) == -1)return -1;
 	if ((BossSound = LoadSoundMem("Sound/よぞらのなみだ.mp3")) == -1)return -1;
 	if ((HelpSound = LoadSoundMem("Sound/かえるのピアノ.mp3")) == -1)return -1;
+	if ((GameOverSound = LoadSoundMem("Sound/不穏_-_8bit.mp3")) == -1)return -1;
 
 	// SE
 	if ((ClearSE = LoadSoundMem("Sound/bgm_fanfare_1.mp3")) == -1)return -1;
@@ -483,6 +484,7 @@ int LoadSound() {
 	//音量調整
 	ChangeVolumeSoundMem(125, MainSound);
 	ChangeVolumeSoundMem(125, TitleSound);
+	ChangeVolumeSoundMem(200, GameOverSound);
 	ChangeVolumeSoundMem(200, EatSE);
 	ChangeVolumeSoundMem(200, CarsolSE);
 	ChangeVolumeSoundMem(200, DesitionSE);
@@ -604,6 +606,7 @@ void LifeImage() {
 		StopSoundMem(MainSound);
 		StopSoundMem(BossSound);
 		GameState = 7;
+		PlaySoundMem(GameOverSound, DX_PLAYTYPE_LOOP, TRUE);
 	}
 }
 
@@ -1193,11 +1196,15 @@ void GameOver() {
 		if (MenuNo == 0) {
 			push = 0;
 			GameState = 1;
+			StopSoundMem(GameOverSound);
+			PlaySoundMem(MainSound, DX_PLAYTYPE_BACK, TRUE);
 		}
 		else if (MenuNo == 1) {
 			push = 0;
 			GameState = 0;
 			MenuNo = 0;
+			StopSoundMem(GameOverSound);
+			PlaySoundMem(TitleSound, DX_PLAYTYPE_BACK, TRUE);
 		}
 		else {
 			push = 0;
