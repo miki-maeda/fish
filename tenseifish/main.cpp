@@ -207,7 +207,7 @@ void GameInit() {
 	EatAmount = 0;
 	Leve = 1;
 	Scke = 1;
-	LeveUp = 10;
+	LeveUp = 1;
 
 	//プレイヤーの初期化
 	player.flg = TRUE;
@@ -221,6 +221,7 @@ void GameInit() {
 	player.muteki = 0;
 	Umispeed = 0;
 	Time = 2400;
+	Iwaspeed = 0;
 
 	//餌の初期化
 	for (int i = 0; i < 10; i++) {
@@ -316,7 +317,15 @@ void PlayerMove() {
 	//画面からはみ出さないようにする
 	if (player.x < 0)player.x = 0;
 	if (player.x > SCREEN_WIDTH - player.w)player.x = SCREEN_WIDTH - player.w;
-	if (player.y < player.h / Scke+50)player.y = player.h / Scke+50;
+	if (Leve == 1) {
+		if (player.y < player.h / Scke + 50)player.y = player.h / Scke + 50;
+	}
+	if (Leve == 2) {
+		if (player.y < player.h / Scke)player.y = player.h / Scke;
+	}
+	if (Leve == 3) {
+		if (player.y < player.h / Scke-100)player.y = player.h / Scke-100;
+	}
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
 	if (Leve == 1 && key1 != 1) {
@@ -327,6 +336,11 @@ void PlayerMove() {
 		Umispeed -= 4;
 		Iwaspeed -= 7;
 		player.speed = 8;
+	}
+	if (Leve == 3 && key1 != 1) {
+		Umispeed -= 6;
+		Iwaspeed -= 9;
+		player.speed = 9;
 	}
 
 
@@ -363,7 +377,7 @@ void PlayerMove() {
 	ColorCheck(player.x, player.y + player.h - (Scke * Scke * 30));						//左下
 	ColorCheck(player.x + player.w, player.y + player.h - (Scke * Scke * 30));			//右下
 	ColorCheck(player.x + (player.w / 2), player.y + player.h - (Scke * 15));	//下部中央
-
+	
 	//当たり判定確認用BOX
 	DrawBox(player.x - 2, player.y + (Scke * Scke * 30) - 2, player.x + 2, player.y + (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
 	DrawBox(player.x + player.w - 2, player.y + (Scke * Scke * 30) - 2, player.x + player.w + 2, player.y + (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
@@ -411,7 +425,6 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/kurage.png", 3, 3, 1, 80, 80, EnemyImage[0])) == -1)return-1;
 	//ミノカサゴ
 	if ((LoadDivGraph("Image/minokasago.png", 3, 3, 1, 120,120, EnemyImage[1])) == -1)return-1;
-
 
 	//船
 	if ((LoadDivGraph("Image/船.png", 9, 3, 1, 400, 700, ship1)) == -1)return -1;
@@ -505,7 +518,6 @@ void EatMove() {
 			//餌の表示
 			if (Time > 0) {
 				DrawBox(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, 0xFFFFFF, FALSE);
-				
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 			//真っすぐ左に移動
@@ -515,13 +527,15 @@ void EatMove() {
 			if (Leve == 2 && key1 != 1) {
 				eat[i].e_x -= 7;
 			}
+			if (Leve == 3 && key1 != 1) {
+				eat[i].e_x -= 9;
+			}
 
 			if (Leve == 1) {
-				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2)+2) 
-					EatCheck(eat[i].e_x + (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2)+2) EatCheck(eat[i].e_x + (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
 			}
-			if (Leve == 2) {
+			if (Leve >= 2) {
 				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2)+2) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 7, eat[i].e_y + eat[i].e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w+5) EatCheck(eat[i].e_x + eat[i].e_w - 7, eat[i].e_y + eat[i].e_h);
 			}
@@ -532,11 +546,11 @@ void EatMove() {
 				eat[i] = eat0;
 			}
 
-			DrawBox(eat[i].e_x - eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].e_x - eat[i].e_w + 2, eat[i].e_y + eat[i].e_h + 2, 0xFFFFFF, FALSE);
-			DrawBox(eat[i].e_x - (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h, eat[i].e_x - (eat[i].e_w / 2) + 2, eat[i].e_y + eat[i].e_h + 2, 0xFFFFFF, FALSE);
-			DrawBox(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h, eat[i].e_x - 1 + 2, eat[i].e_y + eat[i].e_h + 2, 0xFFFFFF, FALSE);
-			DrawBox(eat[i].e_x + (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h + 1, eat[i].e_x + (eat[i].e_w / 2) + 2, eat[i].e_y + eat[i].e_h + 1, 0xFFFFFF, FALSE);
-			DrawBox(eat[i].e_x, eat[i].e_y + eat[i].e_h + 1, eat[i].e_x + 2, eat[i].e_y + eat[i].e_h + 1, 0xFFFFFF, FALSE);
+			/*DrawBox(eat[i].e_x - eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].e_x - eat[i].e_w + 2, eat[i].e_y + eat[i].e_h + 2, 0x000000, FALSE);
+			DrawBox(eat[i].e_x - (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h, eat[i].e_x - (eat[i].e_w / 2) + 2, eat[i].e_y + eat[i].e_h + 2, 0x000000, FALSE);
+			DrawBox(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h, eat[i].e_x - 1 + 2, eat[i].e_y + eat[i].e_h + 2, 0x000000, FALSE);
+			DrawBox(eat[i].e_x + (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h + 1, eat[i].e_x + (eat[i].e_w / 2) + 2, eat[i].e_y + eat[i].e_h + 1, 0x000000, FALSE);
+			DrawBox(eat[i].e_x, eat[i].e_y + eat[i].e_h + 1, eat[i].e_x + 2, eat[i].e_y + eat[i].e_h + 1, 0x000000, FALSE);*/
 
 			if (eat[i].flg == FALSE)continue;
 
@@ -688,7 +702,7 @@ void PlayerEat(int* e) {
 	}
 
 	//食べたものの量が一定量に達したら処理を移す
-	if ((EatAmount >= LeveUp)&&(Leve <2)) {
+	if ((EatAmount >= LeveUp)&&(Leve <3)) {
 		PlayerGrowth();
 		PlaySoundMem(EvoSE, DX_PLAYTYPE_BACK, TRUE);
 	}
@@ -698,19 +712,50 @@ void PlayerEat(int* e) {
 int Hit(Player* p, Eat* e) {
 
 	if (Time > 0) {
-		int px = player.x + 10 * Scke;
-		int py = player.y + 25 * Scke;
-		int ph = player.h - 50 * Scke;
-		int pw = player.w - 10 * Scke;
-		int phx = player.x + 45 * Scke;
-		int phy = player.y + 45 * Scke;
-		int phh = player.h - 90 * Scke;
-		int phw = player.w - 90 * Scke;
+		int px = player.x;
+		int py = player.y;
+		int ph = player.h;
+		int pw = player.w;
+		int phx = player.x;
+		int phy = player.y;
+		int phh = player.h;
+		int phw = player.w;
 		int ex = e->e_x;
 		int ey = e->e_y;
 		int ew = e->e_w;
 		int eh = e->e_h;
 		int etypeD = e->typeD;
+
+		if (Leve == 1) {
+			px += 10;
+			py += 25;
+			pw -= 10;
+			ph -= 50;
+			phx += 45;
+			phy += 45;
+			phw -= 90;
+			phh -= 90;
+		}
+		else if (Leve == 2) {
+			px += 50;
+			py += 70;
+			pw -= 80;
+			ph -= 140;
+			phx += 95;
+			phy += 95;
+			phw -= 190;
+			phh -= 190;
+		}
+		else if (Leve == 3) {
+			px += 40;
+			py += 60;
+			pw -= 50;
+			ph -= 120;
+			phx += 95;
+			phy += 95;
+			phw -= 150;
+			phh -= 180;
+		}
 
 		//餌とのあたり判定
 		if (etypeD == FALSE) {
@@ -741,7 +786,6 @@ void Goal() {
 }
 //ゲームクリア（当たったら）
 void GameClearHit(Player* p) {
-
 
 	int px = p->x;
 	int py = p->y;
@@ -811,7 +855,6 @@ void GameClear() {
 
 //ボスステージ移行（当たったら）
 void BossST(Player* p) {
-
 
 	int px = p->x;
 	int py = p->y;
