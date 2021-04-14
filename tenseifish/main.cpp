@@ -1294,7 +1294,7 @@ void BossMove1() {
 	if (key1 < 1) {
 
 		count = (count + 1) % 500;
-		DrawFormatString(100, 160, 0x000000, "%d", count);
+		//DrawFormatString(100, 160, 0x000000, "%d", count);
 
 		if (count > 0 && count < 100) {
 			motion_index2 = BOSSAnime[BOSS_act_index];
