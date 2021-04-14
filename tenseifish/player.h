@@ -20,6 +20,7 @@ int MAX_MOTION_INDEX = 4;	// 0,1,2,1 の4種類
 
 int Range;
 int key1;
+int key2;
 
 //ライフ位置
 int LifeX = 150;
@@ -45,3 +46,15 @@ struct Player player;
 
 //キー取得用配列
 extern char key[256];
+
+int deianime[] = { 0,1,2,3,4,5,6 };
+int dei1[7] = { 0 };
+int dei2[7] = { 0 };
+int dei3[7] = { 0 };
+int DEI_ANI_SPEED = 5;
+int DEI_act_wait = DEI_ANI_SPEED;
+int DEI_MOTION_INDEX = 7;
+int DEI_act_index = 0;
+int motion_index7;
+
+
