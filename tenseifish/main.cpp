@@ -427,7 +427,7 @@ void GameInit() {
 	EatAmount = 0;
 	Leve = 1;
 	Scke = 1;
-	LeveUp = 1;
+	LeveUp = 10;
 
 	//プレイヤーの初期化
 	player.flg = TRUE;
@@ -513,7 +513,6 @@ void BackScrool()
 	//レベル表示
 	SetFontSize(60);
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
-	DrawFormatString(0, 100, 0x000000, "er.%d, eg.%d, eb.%d", er, eg, eb);
 }
 
 void PlayerMove() {
@@ -757,7 +756,6 @@ void EatMove() {
 		if (eat[i].flg == TRUE) {
 			//餌の表示
 			if (Time > 0) {
-				DrawBox(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, 0xFFFFFF, FALSE);
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 			//真っすぐ左に移動
@@ -772,25 +770,29 @@ void EatMove() {
 			}
 
 			if (Leve == 1) {
-				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2)+2) EatCheck(eat[i].e_x + (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - 5)EatCheck(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) + 3) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
 			}
-			if (Leve >= 2) {
-				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2)+2) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 7, eat[i].e_y + eat[i].e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w+5) EatCheck(eat[i].e_x + eat[i].e_w - 7, eat[i].e_y + eat[i].e_h);
+			if (Leve == 2) {
+				if (eat[i].e_x == SCREEN_WIDTH - 7) EatCheck(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) - 5) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w - 2) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
 			}
+			if (Leve == 3) {
+				if (eat[i].e_x == SCREEN_WIDTH - 9) EatCheck(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) - 8) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w - 6) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
+
+			}
+
+
 
 			if (EatCont >= 1)
 			{
 				EatCont = 0;
 				eat[i] = eat0;
 			}
-
-			/*DrawBox(eat[i].e_x - eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].e_x - eat[i].e_w + 2, eat[i].e_y + eat[i].e_h + 2, 0x000000, FALSE);
-			DrawBox(eat[i].e_x - (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h, eat[i].e_x - (eat[i].e_w / 2) + 2, eat[i].e_y + eat[i].e_h + 2, 0x000000, FALSE);
-			DrawBox(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h, eat[i].e_x - 1 + 2, eat[i].e_y + eat[i].e_h + 2, 0x000000, FALSE);
-			DrawBox(eat[i].e_x + (eat[i].e_w / 2), eat[i].e_y + eat[i].e_h + 1, eat[i].e_x + (eat[i].e_w / 2) + 2, eat[i].e_y + eat[i].e_h + 1, 0x000000, FALSE);
-			DrawBox(eat[i].e_x, eat[i].e_y + eat[i].e_h + 1, eat[i].e_x + 2, eat[i].e_y + eat[i].e_h + 1, 0x000000, FALSE);*/
 
 			if (eat[i].flg == FALSE)continue;
 
