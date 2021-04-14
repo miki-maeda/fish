@@ -641,9 +641,9 @@ void PlayerMove() {
 	}
 	
 	//当たり判定の範囲確認用BOX
-	if (Leve == 1) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 + CollYadd, GetColor(255, 0, 0), TRUE);		//右下
-	if (Leve == 2) DrawBox(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4, player.x + player.w / 2 + CollXadd, player.y + player.h / 2 + CollYadd + 2, GetColor(0, 255, 0), TRUE);		//右下
-	if (Leve == 3) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2, GetColor(0, 0, 255), TRUE);		//右下
+	//if (Leve == 1) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 + CollYadd, GetColor(255, 0, 0), TRUE);		//右下
+	//if (Leve == 2) DrawBox(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4, player.x + player.w / 2 + CollXadd, player.y + player.h / 2 + CollYadd + 2, GetColor(0, 255, 0), TRUE);		//右下
+	//if (Leve == 3) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2, GetColor(0, 0, 255), TRUE);		//右下
 }
 
 int LoadImages() {
@@ -1188,8 +1188,9 @@ void BossInit() {
 	boss.bw = BOSS_WIDTH;
 	boss.bh = BOSS_HEIGHT;
 	boss.speed = BOSS_SPEED;
-	BOSS_PATTREN = 1;
 	count = 0;
+	BOSS_PATTREN = 1;
+
 
 	soni.sx = SONIC_POS_X;
 	soni.sy = SONIC_POS_Y;
@@ -1255,12 +1256,15 @@ void BossMove() {
 	}
 
 	if (BOSS_PATTREN == 1) {
+	
 		BossMove1();
 	}
 	if (BOSS_PATTREN == 2) {
+	
 		BossMove2();
 	}
 	if (BOSS_PATTREN == 3) {
+	
 		BossMove3();
 	}
 	if (player.muteki == 0) {
@@ -1300,21 +1304,21 @@ void BossMove1() {
 			motion_index2 = BOSSAttack[BOSS_act_index];
 			boss.by = player.y - 100;
 		}
-		if (count > 150) {
+		if (count > 150 && count < 350) {
 			boss.bx -= BOSS_SPEED;
 			motion_index2 = BOSSAttack[BOSS_act_index];
 		}
-		if (count == 398) {
-			boss.bx = 1400;
-
+		if (count == 351) {
+			boss.bx = 1400; 
 		}
 
-		if (count > 399) {
+		if (count > 352 && count < 499){
 			motion_index2 = BOSSAnime[BOSS_act_index];
 			if (boss.bx < 1000) {
 
 				BOSS_SPEED = 0;
 			}
+			boss.bx -= BOSS_SPEED;
 			boss.by = BOSS_POS_Y;
 			boss.bw = BOSS_WIDTH;
 			boss.bh = BOSS_HEIGHT;
@@ -1323,7 +1327,7 @@ void BossMove1() {
 
 		if (count == 499) {
 			count = 0;
-			BOSS_SPEED = 10;
+			BOSS_SPEED = 20;
 			BOSS_PATTREN = 2;
 		}
 	}
@@ -1476,94 +1480,100 @@ void BossMove3() {
 
 //船アニメーション
 void Ship() {
-	SHIP_COUNT += sc;
-	SHIP_COUNT2 = 4000 - SHIP_COUNT;
-	if (SHIP_COUNT2 == 0) {
-		sc = 0;
-	}
-	if (SHIP_COUNT2 != 0) {
-		SetFontSize(50);
-		DrawFormatString(700, 30, 0x000000, "船が来るまで%d秒", SHIP_COUNT2 / 100);
-	}
-	if (SHIP_COUNT2 == 0)
-	{
-		SHIP_X -= SHIP_SPEED;
-	}
-	if (SHIP_X == 1200)
-	{
-		SHIP_SPEED = 0;
-		SetFontSize(50);
-		DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
-		if (cr == 0) {
-			NET = 1;
+	if (key1 < 1) {
+		SHIP_COUNT += sc;
+		SHIP_COUNT2 = 4000 - SHIP_COUNT;
+		if (SHIP_COUNT2 == 0) {
+			sc = 0;
 		}
-	}
-	if (--SHIP_act_wait <= 0)
-	{
-		if (key1 < 1) {
-			SHIP_act_index++;
-			SHIP_act_wait = SHIP_ANI_SPEED;
-			SHIP_act_index %= SHIP_MOTION_INDEX;
+		if (SHIP_COUNT2 != 0) {
+			SetFontSize(50);
+			DrawFormatString(700, 30, 0x000000, "船が来るまで%d秒", SHIP_COUNT2 / 100);
 		}
+		if (SHIP_COUNT2 == 0)
+		{
+			SHIP_X -= SHIP_SPEED;
+		}
+		if (SHIP_X == 1200)
+		{
+			SHIP_SPEED = 0;
+			SetFontSize(50);
+			DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
+			if (cr == 0) {
+				NET = 1;
+			}
+		}
+		if (--SHIP_act_wait <= 0)
+		{
+			if (key1 < 1) {
+				SHIP_act_index++;
+				SHIP_act_wait = SHIP_ANI_SPEED;
+				SHIP_act_index %= SHIP_MOTION_INDEX;
+			}
 
-		motion_index3 = shipanime[SHIP_act_index];
+			motion_index3 = shipanime[SHIP_act_index];
+		}
+		DrawExtendGraph(SHIP_X, SHIP_Y, SHIP_X + SHIP_W, SHIP_Y + SHIP_H, ship1[motion_index3], TRUE);
 	}
-	DrawExtendGraph(SHIP_X, SHIP_Y, SHIP_X + SHIP_W, SHIP_Y + SHIP_H, ship1[motion_index3], TRUE);
 }
 
 //網アニメーション
 void Ami() {
-	if (cr == 0) {
-		if (--NET_act_wait <= 0)
-		{
-			if (key1 < 1) {
-				NET_act_index++;
-				NET_act_wait = NET_ANI_SPEED;
-				NET_act_index %= NET_MOTION_INDEX;
-			}
+	if (key1 < 1) {
+		if (cr == 0) {
+			if (--NET_act_wait <= 0)
+			{
+				if (key1 < 1) {
+					NET_act_index++;
+					NET_act_wait = NET_ANI_SPEED;
+					NET_act_index %= NET_MOTION_INDEX;
+				}
 
-			motion_index4 = netanime[NET_act_index];
-		}
-		if (motion_index4 == 4) {
-			//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-			if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
-				250 >= boss.by && 270 <= boss.by + boss.bw) {
-				cr = 1;
+				motion_index4 = netanime[NET_act_index];
 			}
-		}
-		if (motion_index4 == 5) {
-			//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-			if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
-				310 >= boss.by && 330 <= boss.by + boss.bw) {
-				cr = 1;
+			if (motion_index4 == 4) {
+				//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+				if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
+					250 >= boss.by && 270 <= boss.by + boss.bw) {
+					cr = 1;
+				}
+			}
+			if (motion_index4 == 5) {
+				//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+				if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
+					310 >= boss.by && 330 <= boss.by + boss.bw) {
+					cr = 1;
 
+				}
 			}
-		}
-		if (motion_index4 == 6) {
-			//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-			if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
-				360 >= boss.by && 380 <= boss.by + boss.bw) {
-				cr = 1;
+			if (motion_index4 == 6) {
+				//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+				if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
+					360 >= boss.by && 380 <= boss.by + boss.bw) {
+					cr = 1;
+				}
 			}
+			DrawExtendGraph(net.nx, net.ny, net.nx + net.nw, net.ny + net.nh, net1[motion_index4], TRUE);
 		}
-		DrawExtendGraph(net.nx, net.ny, net.nx + net.nw, net.ny + net.nh, net1[motion_index4], TRUE);
 	}
 }
 void BHA() {
-	if (--HOKAKU_act_wait <= 0)
-	{
-		if (key1 < 1) {
-			HOKAKU_act_index++;
-			HOKAKU_act_wait = HOKAKU_SPEED;
-			HOKAKU_act_index %= HOKAKU_MOTION_INDEX;
+	if (key1 < 1) {
+		if (--HOKAKU_act_wait <= 0)
+		{
+			if (key1 < 1) {
+				HOKAKU_act_index++;
+				HOKAKU_act_wait = HOKAKU_SPEED;
+				HOKAKU_act_index %= HOKAKU_MOTION_INDEX;
+			}
+			motion_index8 = BossHokaku[HOKAKU_act_index];
 		}
-		motion_index8 = BossHokaku[HOKAKU_act_index];
-	}
-	if (motion_index8 == 3) {
-		cr2 = 1;
-	}
+		if (motion_index8 == 3) {
+			cr2 = 1;
+		}
 
-	DrawGraph(1000, 50, Hokaku[motion_index8], TRUE);
+		DrawGraph(1000, 50, Hokaku[motion_index8], TRUE);
+	}
 }
 void BossStage() {
 
@@ -1729,8 +1739,8 @@ int HitBoxPlayer2(Player* p, Soni* s)
 		int sw2 = sy2 + s->sw - 200;
 
 		////判定確認用
-		//DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		//DrawBox(sx1, sy2, sh1, sw2, 0xFFFFFF, FALSE);
+		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		DrawBox(sx1, sy2, sh1, sw2, 0xFFFFFF, FALSE);*/
 
 		//短径が重なっていたら当たり
 		if (px < sh1 && sx1 < ph && py < sw2 && sy2 < pw) {
@@ -1740,6 +1750,8 @@ int HitBoxPlayer2(Player* p, Soni* s)
 		return FALSE;
 	}
 }
+
+
 int ColorCheck(int x, int y) {
 	
 	Cr1 = GetPixel(x, y);

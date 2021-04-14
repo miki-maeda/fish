@@ -11,8 +11,7 @@ int PLAYER_WIDTH = 100;
 int PLAYER_HEIGHT = 100;
 int PLAYER_SPEED = 6;
 
-//int ACT_SPEED = 20;
-int ACT_SPEED = 3;
+int ACT_SPEED = 5;
 int act_wait = ACT_SPEED;
 
 int act_index = 0;
