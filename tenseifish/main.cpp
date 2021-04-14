@@ -429,6 +429,10 @@ void GameInit() {
 	Scke = 1;
 	LeveUp = 10;
 
+	//当たり判定用変数の初期化
+	CollXadd = 0;
+	CollYadd = 0;
+
 	//プレイヤーの初期化
 	player.flg = TRUE;
 	player.x = PLAYER_POS_X;
@@ -549,22 +553,64 @@ void PlayerMove() {
 	}
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
-	if (Leve == 1 && key1 != 1 && Leve == 1 && key2 != 1) {
-		Umispeed -= 2;
-		Iwaspeed -= 5;
-	}
-	if (Leve == 2 && key1 != 1 && key2 != 1) {
-		Umispeed -= 4;
-		Iwaspeed -= 7;
-		player.speed = 8;
-	}
-	if (Leve == 3 && key1 != 1 && key2 != 1) {
-		Umispeed -= 6;
-		Iwaspeed -= 9;
-		player.speed = 9;
+	if (Damege != 1) {
+		if (Leve == 1 && key1 != 1 && Leve == 1 && key2 != 1) {
+			Umispeed -= 2;
+			Iwaspeed -= 5;
+		}
+		if (Leve == 2 && key1 != 1 && key2 != 1) {
+			Umispeed -= 4;
+			Iwaspeed -= 7;
+			player.speed = 8;
+		}
+		if (Leve == 3 && key1 != 1 && key2 != 1) {
+			Umispeed -= 6;
+			Iwaspeed -= 9;
+			player.speed = 9;
+		}
 	}
 
+	if (Leve != 2) {
+		CollXadd = 10;
+		if (Leve < 2) CollYadd = 7;
+		if (Leve > 2) CollYadd = 10;
+	}
+	else if (Leve == 2) {
+		CollXadd = 40;
+		CollYadd = 10;
+	}
 
+	int ColorCheck(int x, int y);
+	if (Leve == 1) {
+		ColorCheck(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd);		//左上
+		ColorCheck(player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 - CollYadd);	//右上
+		ColorCheck(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 + CollYadd);		//左下
+		ColorCheck(player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 + CollYadd);	//右下
+	}
+	else if (Leve == 2) {
+		//if (Leve == 2) DrawBox(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4, player.x + player.w / 2 + CollXadd, player.y + player.h / 2 + CollYadd + 2, GetColor(0, 255, 0), TRUE);
+
+		ColorCheck(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4);		//左上
+		ColorCheck(player.x + player.w / 2 + CollXadd, player.y + player.h / 2 + CollYadd + 2);		//右上
+		ColorCheck(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4);		//左下
+		ColorCheck(player.x + player.w / 2 + CollXadd, player.y + player.h / 2 + CollYadd + 2);		//右下
+	}
+	else if (Leve == 3) {
+		ColorCheck(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd);		//左上
+		ColorCheck(player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2);		//右上
+		ColorCheck(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd);		//左下
+		ColorCheck(player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2);		//右下
+	}
+
+	if (player.muteki != 0 && Damege != 0) {
+		player.flg = FALSE;
+		player.x -= 1;
+		player.y -= 2;
+	}
+	else {
+		Damege = 0;
+		player.flg = TRUE;
+	}
 
 	/*act_index++;
 	act_index %= MAX_MOTION_INDEX;*/
@@ -593,21 +639,11 @@ void PlayerMove() {
 		}
 		
 	}
-	int ColorCheck(int x, int y);
-	ColorCheck(player.x + player.w, player.y + (Scke * Scke * 30));						//右上
-	ColorCheck(player.x + (player.w / 2), player.y + (Scke * Scke * 15));				//上部中央
-	ColorCheck(player.x, player.y + player.h - (Scke * Scke * 30));						//左下
-	ColorCheck(player.x + player.w, player.y + player.h - (Scke * Scke * 30));			//右下
-	ColorCheck(player.x + (player.w / 2), player.y + player.h - (Scke * 15));	//下部中央
 	
-	//当たり判定確認用BOX
-	DrawBox(player.x - 2, player.y + (Scke * Scke * 30) - 2, player.x + 2, player.y + (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
-	DrawBox(player.x + player.w - 2, player.y + (Scke * Scke * 30) - 2, player.x + player.w + 2, player.y + (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
-	DrawBox(player.x + (player.w / 2) - 2, player.y + (Scke * Scke * 15) - 2, player.x + (player.w / 2) + 2, player.y + (Scke * Scke * 15) + 2, GetColor(255, 255, 255), TRUE);
-	DrawBox(player.x - 2, player.y + player.h - (Scke * Scke * 30) - 2, player.x + 2, player.y + player.h - (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
-	DrawBox(player.x + player.w - 2, player.y + player.h - (Scke * Scke * 30) - 2, player.x + player.w + 2, player.y + player.h - (Scke * Scke * 30) + 2, GetColor(255, 255, 255), TRUE);
-	DrawBox(player.x + (player.w / 2) - 2, player.y + player.h - (Scke * Scke * 15) - 2, player.x + (player.w / 2) + 2, player.y + player.h - (Scke * Scke * 15) + 2, GetColor(255, 255, 255), TRUE);
-
+	//当たり判定の範囲確認用BOX
+	if (Leve == 1) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 + CollYadd, GetColor(255, 0, 0), TRUE);		//右下
+	if (Leve == 2) DrawBox(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4, player.x + player.w / 2 + CollXadd, player.y + player.h / 2 + CollYadd + 2, GetColor(0, 255, 0), TRUE);		//右下
+	if (Leve == 3) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2, GetColor(0, 0, 255), TRUE);		//右下
 }
 
 int LoadImages() {
@@ -763,15 +799,18 @@ void EatMove() {
 			if (Time > 0) {
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
-			//真っすぐ左に移動
-			if (Leve == 1 && key1 != 1 && Leve == 1 && key2 != 1) {
-				eat[i].e_x -= 5;
-			}
-			if (Leve == 2 && key1 != 1 && key2 != 1) {
-				eat[i].e_x -= 7;
-			}
-			if (Leve == 3 && key1 != 1 && key2 != 1) {
-				eat[i].e_x -= 9;
+
+			if (Damege != 1) {
+				//真っすぐ左に移動
+				if (Leve == 1 && key1 != 1 && Leve == 1 && key2 != 1) {
+					eat[i].e_x -= 5;
+				}
+				if (Leve == 2 && key1 != 1 && key2 != 1) {
+					eat[i].e_x -= 7;
+				}
+				if (Leve == 3 && key1 != 1 && key2 != 1) {
+					eat[i].e_x -= 9;
+				}
 			}
 
 			if (Leve == 1) {
@@ -1702,26 +1741,18 @@ int HitBoxPlayer2(Player* p, Soni* s)
 	}
 }
 int ColorCheck(int x, int y) {
-	/*x = player.x;
-	y = player.y;*/
+	
 	Cr1 = GetPixel(x, y);
 	GetColor2(Cr1, &r, &g, &b);
-	//colorsum = r + g + b;
-
-	/*if ((colorsum > 287) && (colorsum < 289) && (ColorFlg < 1) && player.muteki == 0) {
-		ColorFlg = 1;
-		player.life -= 1;
-		player.muteki = 1;
-
-	}*/
-	if ((r == 98) && (g == 96) && (b == 94) && (ColorFlg < 1) && player.muteki == 0) {
-		ColorFlg = 1;
-		player.life -= 1;
-		player.muteki = 1;
-		PlaySoundMem(WallSE, DX_PLAYTYPE_BACK, TRUE);
+	if (r == 98 && g == 96 && b == 94) {
+		if (player.muteki == 0) {
+			Damege = 1;
+			player.life -= 1;
+			player.muteki = 1;
+			PlaySoundMem(WallSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
-
-	if ((player.muteki == 1) && (ColorFlg == 1)) ColorFlg = 0;
+	
 	return colorsum;
 }
 
@@ -1739,25 +1770,16 @@ int EatCheck(int x, int y) {
 }
 
 void Pouse() {
-	int SavePointX = player.x;
-	int SaveSpeed = player.speed;
-	int SaveIwa = Iwaspeed;
-	int SaveUmi = Umispeed;
 	static bool push = 0;
 
 	if (g_KeyFlg & PAD_INPUT_8 && key1 < 1) {
 		key1 = 1;
-		Umispeed = SaveUmi;
-		Iwaspeed = SaveIwa;
-		//player.speed = 0;
 		player.flg = FALSE;
 		boss.flg = FALSE;
 		boss.speed = FALSE;
 		PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	else if (key1 > 0 && g_KeyFlg & PAD_INPUT_2) {
-		//PLAYER_SPEED = 5;
-		player.speed = SaveSpeed;
 		player.flg = TRUE;
 		boss.flg = TRUE;
 		boss.speed = TRUE;
