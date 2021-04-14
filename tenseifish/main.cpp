@@ -444,7 +444,7 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time =2400;
+	Time = 2400;
 	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
@@ -711,6 +711,12 @@ int LoadImages() {
 	if ((Gameclear[0] = LoadGraph("Image/GameClear.png")) == -1)return -1;
 	if ((Gameclear[1] = LoadGraph("Image/GameClear(NoEat).png")) == -1)return -1;
 	if ((Gameclear[2] = LoadGraph("Image/GameClear(MaxEat).png")) == -1)return -1;
+	if ((Gameclear[3] = LoadGraph("Image/GameClear(ikaMax).png")) == -1)return -1;
+	if ((Gameclear[4] = LoadGraph("Image/GameClear(aziMax).png")) == -1)return -1;
+	if ((Gameclear[5] = LoadGraph("Image/GameClear(ebiMax).png")) == -1)return -1;
+	if ((Gameclear[6] = LoadGraph("Image/GameClear(レベル1).png")) == -1)return -1;
+	if ((Gameclear[7] = LoadGraph("Image/GameClear(レベル2).png")) == -1)return -1;
+	if ((Gameclear[8] = LoadGraph("Image/GameClear(レベル3).png")) == -1)return -1;
 	//ゲームオーバー時のアニメーション
 	if ((LoadDivGraph("Image/FishDie.png", 7, 7, 1, 30, 30, fishdie[0])) == -1)return -1;
 	if ((LoadDivGraph("Image/FishDie Level2.png", 7, 7, 1, 150, 150, fishdie[1])) == -1)return -1;
@@ -870,7 +876,7 @@ void EatMove() {
 	}
 
 	//餌の設定
-	if (Range / 5 % 50 == 0 && key1 < 1) {
+	if (Range / 5 % 50 == 0 && key1 < 1	&&Damege != 1) {
 		EatImage();
 	}
 }
@@ -889,7 +895,7 @@ int EatImage() {
 			}
 			switch (eat[i].type) {
 			case 0:
-				eat[i].e_y = (GetRand(1) + 4) * 100 + 150;
+				eat[i].e_y = (GetRand(2) + 3) * 100 + 150;
 				break;
 			case 1:
 				eat[i].e_y = GetRand(2) * 100 + 150;
@@ -979,6 +985,8 @@ void MeterImage() {
 	//イカメーター
 	DrawGraph(m_x + 480, m_y, Meter[2][im], TRUE);
 	DrawGraph(480, 65, feedImage[2][0], TRUE);
+
+	DrawFormatString(0, 100, 0x000000, "em.%d,am.%d,im.%d", em,am,im);
 
 }
 
@@ -1114,16 +1122,46 @@ void GameClearHit() {
 
 void GameClear() {
 	static bool push = 0; // 押されたかどうか確認する関数
+
+	//エンディング分岐変数
+	int EndBranch = 0;
+
 	//エンディング判定
+	//何も食べなかった場合
 	if (EatAmount == 0) {
-		DrawGraph(0, 0, Gameclear[1], TRUE);
+		EndBranch = 1;
 	}
-	else if ((em >= 5) && (im >= 5) && (am >= 5)) {
-		DrawGraph(0, 0, Gameclear[2], TRUE);
+	//全てが平均的な場合
+	else if (em == im == am) {
+		EndBranch = 2;
 	}
-	else {
-		DrawGraph(0, 0, Gameclear[0], TRUE);
+	//イカが一番多い時
+	else if (im >= am && im >= em && im > 4) {
+		EndBranch = 3;
 	}
+	//アジが一番多い場合
+	else if (am >= em && am > im&&am>4) {
+		EndBranch = 4;
+	}
+	//エビが一番多い場合
+	else if (em > am && em > im&&em>4) {
+		EndBranch = 5;
+	}
+	//レベルが1の状態で餌が平均、MAXじゃない場合
+	else if (Leve == 1 && em < 5 && am < 5 && im < 5) {
+		EndBranch = 6;
+	}
+	//レベルが2の状態で餌が平均、MAXじゃない場合
+	else if (Leve == 2 && em < 5 && am < 5 && im < 5) {
+		EndBranch = 7;
+	}
+	//レベルが3の状態で餌が平均、MAXじゃない場合
+	else if (Leve == 3 && em < 5 && am < 5 && im < 5) {
+		EndBranch = 8;
+	}
+
+	//エンディング表示
+	DrawGraph(0, 0, Gameclear[EndBranch], TRUE);
 
 	// メニューカーソルの描画
 	DrawRotaGraph(420 + MenuNo * 300, 750, 0.3f, 0, Corsol, TRUE);
@@ -1484,7 +1522,8 @@ void BossMove3() {
 void Ship() {
 	if (key1 < 1) {
 		SHIP_COUNT += sc;
-		SHIP_COUNT2 = 4000 - SHIP_COUNT;
+	/*	SHIP_COUNT2 = 4000 - SHIP_COUNT;*/
+		SHIP_COUNT2 = 100 - SHIP_COUNT;
 		if (SHIP_COUNT2 == 0) {
 			sc = 0;
 		}
