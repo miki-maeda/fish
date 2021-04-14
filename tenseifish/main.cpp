@@ -680,6 +680,9 @@ int LoadImages() {
 	//ゲームオーバー画像
 	if ((Gameover = LoadGraph("Image/GameOver.png")) == -1)return -1;
 
+	//ボスへの道
+	if ((BOSSROAD = LoadGraph("Image/ボスへの道.png")) == -1)return -1;
+
 	//UI画像
 	//ライフ
 	if ((Life = LoadGraph("Image/Life.png")) == -1)return 0;
@@ -1132,11 +1135,7 @@ void BossST(Player* p) {
 	int pw = p->w;
 
 	if (Time <= 0) {
-		DrawLine(1410, 0, 1410, 800, GetColor(255, 255, 255), FALSE);
-		SetFontSize(150);
-		DrawFormatString(1200, 150, GetColor(255, 0, 0), "→");
-		SetFontSize(50);
-		DrawFormatString(1200, 100, GetColor(255, 0, 0), "ボス戦へ");
+		DrawGraph(500, 500, BOSSROAD, TRUE);
 		if (1410 >= px && 1410 <= px + ph &&
 			800 >= py && 0 <= py + pw) {
 			GameState = 4;
