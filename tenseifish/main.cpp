@@ -739,6 +739,7 @@ int LoadSound() {
 	if ((DamegeSE = LoadSoundMem("Sound/se_dosun_2.mp3")) == -1)return -1;
 	if ((WallSE = LoadSoundMem("Sound/se_wall_1.mp3")) == -1)return -1;
 	if ((EvoSE = LoadSoundMem("Sound/powerup10.mp3")) == -1)return -1;
+	if ((DieSE = LoadSoundMem("Sound/NES-General01-10(Pitch).mp3")) == -1)return -1;
 
 	//音量調整
 	ChangeVolumeSoundMem(125, MainSound);
@@ -911,7 +912,11 @@ void dieam() {
 
 	StopSoundMem(MainSound);
 	StopSoundMem(BossSound);
-	PlaySoundMem(GameOverSound, DX_PLAYTYPE_LOOP, TRUE);
+	StopSoundMem(WallSE);
+	StopSoundMem(DamegeSE);
+	if (CheckSoundMem(DieSE) == 0) {
+		PlaySoundMem(DieSE, DX_PLAYTYPE_BACK, TRUE);
+	}
 
 	if (motion_index7 > 5) {
 		key2 = 0;
@@ -1702,6 +1707,10 @@ void Pouse() {
 void GameOver() {
 	static bool push = 0; // 押されたかどうか確認する関数
 	DrawGraph(0, 0, Gameover, TRUE);
+
+	if (CheckSoundMem(GameOverSound) == 0) {
+		PlaySoundMem(GameOverSound, DX_PLAYTYPE_BACK, TRUE);
+	}
 
 
 	// メニューカーソルの描画
