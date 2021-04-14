@@ -28,6 +28,11 @@ void GameClear();		//ゲームクリア処理
 void GameOver();
 void Goal();
 void Pouse();
+void GameGiyo();
+void GameGiyo2();
+void GameGiyo3();
+void GameRule();
+void GameRule2();
 
 int LoadImages();          //画像読み込み
 int LoadSound();		// 音楽読込み
@@ -93,6 +98,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			break;
 		case 7:
 			GameOver();
+			break;
+		case 8:
+			GameGiyo();
+			break;
+		case 9:
+			GameGiyo2();
+			break;
+		case 10:
+			GameGiyo3();
+			break;
+		case 11:
+			GameRule();
+			break;
+		case 12:
+			GameRule2();
 			break;
 		}
 		ScreenFlip();			// 裏画面の内容を表画面に反映
@@ -181,15 +201,214 @@ void GameHelp()
 		// sceneStageに行く処理
 		if (MenuNo == 0) {
 			push = 0;
+			GameState = 8;
 		}
 		else if (MenuNo == 1) {
 			push = 0;
+			GameState = 11;
+			MenuNo = 0;
 		}
 		else {
 			push = 0;
 			GameState = 0;
 			MenuNo = 0;
 			PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
+		}
+	}
+}
+
+void GameGiyo()
+{
+	static bool push = 0;	// 押されたかどうか確認する関数
+	DrawGraph(0, 0, Gamegiyo, TRUE);
+
+	// メニューカーソルの描画
+	DrawRotaGraph(455 + MenuNo * 325, 760, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (++MenuNo > 1)MenuNo = 0;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (--MenuNo < 0)MenuNo = 1;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+
+
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_2) {
+		if (push == 0) {
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+			GameState = 9;
+		}
+		else {
+			push = 0;
+			GameState = 6;
+			MenuNo = 0;
+		}
+	}
+}
+
+void GameGiyo2()
+{
+	static bool push = 0;	// 押されたかどうか確認する関数
+	DrawGraph(0, 0, Gamegiyo2, TRUE);
+
+	// メニューカーソルの描画
+	DrawRotaGraph(460 + MenuNo * 360, 755, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (++MenuNo > 1)MenuNo = 0;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (--MenuNo < 0)MenuNo = 1;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+
+
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_2) {
+		if (push == 0) {
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+			GameState = 10;
+		}
+		else {
+			push = 0;
+			GameState = 8;
+			MenuNo = 0;
+		}
+	}
+}
+
+void GameGiyo3()
+{
+	static bool push = 0;	// 押されたかどうか確認する関数
+	DrawGraph(0, 0, Gamegiyo3, TRUE);
+
+	// メニューカーソルの描画
+	DrawRotaGraph(400 + MenuNo * 320, 775, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (++MenuNo > 1)MenuNo = 0;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (--MenuNo < 0)MenuNo = 1;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+
+
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_2) {
+		if (push == 0) {
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+			GameState = 6;
+		}
+		else {
+			push = 0;
+			GameState = 0;
+			MenuNo = 0;
+			StopSoundMem(HelpSound);
+		}
+	}
+}
+
+void GameRule()
+{
+	static bool push = 0;	// 押されたかどうか確認する関数
+	DrawGraph(0, 0, Gamerule, TRUE);
+
+	// メニューカーソルの描画
+	DrawRotaGraph(365 + MenuNo * 380, 770, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (++MenuNo > 1)MenuNo = 0;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (--MenuNo < 0)MenuNo = 1;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+
+
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_2) {
+		if (push == 0) {
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+			GameState = 12;
+		}
+		else {
+			push = 0;
+			GameState = 6;
+			MenuNo = 0;
+		}
+	}
+}
+
+void GameRule2()
+{
+	static bool push = 0;	// 押されたかどうか確認する関数
+	DrawGraph(0, 0, Gamerule2, TRUE);
+
+	// メニューカーソルの描画
+	DrawRotaGraph(345 + MenuNo * 460, 755, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (++MenuNo > 1)MenuNo = 0;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (--MenuNo < 0)MenuNo = 1;
+		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	}
+
+
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_2) {
+		if (push == 0) {
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+			GameState = 6;
+		}
+		else {
+			push = 0;
+			GameState = 0;
+			MenuNo = 0;
 		}
 	}
 }
@@ -393,6 +612,16 @@ int LoadImages() {
 	if ((Gametitle = LoadGraph("Image/umi.png")) == -1)return -1;
 	//ゲームヘルプ画像
 	if ((Gamehelp = LoadGraph("Image/GameHelp.png")) == -1)return -1;
+	//ゲーム概要画像
+	if ((Gamegiyo = LoadGraph("Image/ゲーム概要.png")) == -1)return -1;
+	//ゲーム概要画像2
+	if ((Gamegiyo2 = LoadGraph("Image/ゲーム概要2.png")) == -1)return -1;
+	//ゲーム概要画像3
+	if ((Gamegiyo3 = LoadGraph("Image/ゲーム概要3.png")) == -1)return -1;
+	// ゲームルール画像
+	if ((Gamerule = LoadGraph("Image/ゲームルール1.png")) == -1)return -1;
+	// ゲームルール2画像
+	if ((Gamerule2 = LoadGraph("Image/ゲームルール2.png")) == -1)return -1;
 	//ポーズ画像
 	if ((pauseImage = LoadGraph("Image/pause.png")) == -1)return-1;
 	// カーソル画像
