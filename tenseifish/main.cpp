@@ -521,7 +521,7 @@ void BackScrool()
 }
 
 void PlayerMove() {
-
+	
 	if (--act_wait <= 0)
 	{
 		if (key1 < 1) {
@@ -530,13 +530,14 @@ void PlayerMove() {
 			act_index %= MAX_MOTION_INDEX;
 		}
 	}
-
-	//ã‰º¶‰EˆÚ“®
-	if (player.flg == TRUE) {
-		if (g_NowKey & PAD_INPUT_UP)player.y -= player.speed;
-		if (g_NowKey & PAD_INPUT_DOWN)player.y += player.speed;
-		if (g_NowKey & PAD_INPUT_LEFT)player.x -= player.speed;
-		if (g_NowKey & PAD_INPUT_RIGHT)player.x += player.speed;
+	if (key1 < 1) {
+		//ã‰º¶‰EˆÚ“®
+		if (player.flg == TRUE) {
+			if (g_NowKey & PAD_INPUT_UP)player.y -= player.speed;
+			if (g_NowKey & PAD_INPUT_DOWN)player.y += player.speed;
+			if (g_NowKey & PAD_INPUT_LEFT)player.x -= player.speed;
+			if (g_NowKey & PAD_INPUT_RIGHT)player.x += player.speed;
+		}
 	}
 
 	//‰æ–Ê‚©‚ç‚Í‚Ýo‚³‚È‚¢‚æ‚¤‚É‚·‚é
@@ -1293,20 +1294,21 @@ void BossMove1() {
 	if (key1 < 1) {
 
 		count = (count + 1) % 500;
-		//DrawFormatString(100, 160, 0x000000, "%d", count);
+		DrawFormatString(100, 160, 0x000000, "%d", count);
 
 		if (count > 0 && count < 100) {
 			motion_index2 = BOSSAnime[BOSS_act_index];
 			boss.by = player.y - 100;
 		}
 
-		if (count > 100 && count < 150) {
+		if (count > 101&& count < 150) {
 			motion_index2 = BOSSAttack[BOSS_act_index];
 			boss.by = player.y - 100;
+			BOSS_SPEED = 20;
 		}
-		if (count > 150 && count < 350) {
-			boss.bx -= BOSS_SPEED;
+		if (count > 151 && count < 350) {
 			motion_index2 = BOSSAttack[BOSS_act_index];
+			boss.bx -= BOSS_SPEED;
 		}
 		if (count == 351) {
 			boss.bx = 1400; 
