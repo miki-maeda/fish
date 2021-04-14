@@ -39,7 +39,7 @@ struct Player//プレイヤー
 	int life = 0;
 	int muteki = 0;
 };
-void GameClearHit(Player* P);
+void GameClearHit();
 void BossST(Player* P);
 //自機
 struct Player player;

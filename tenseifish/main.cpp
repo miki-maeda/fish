@@ -669,6 +669,8 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/maguro2.png", 6, 6, 1, 350, 350, Boss2)) == -1)return -1;
 	//Boss必殺技
 	if ((LoadDivGraph("Image/Sonic.png", 2, 2, 1, 450, 450, Sonic)) == -1)return -1;
+	//Boss捕獲
+	if ((LoadDivGraph("Image/Hokaku.png", 4, 4, 1, 350, 500, Hokaku)) == -1)return -1;
 	//ゲームクリア画像
 	if ((Gameclear[0] = LoadGraph("Image/GameClear.png")) == -1)return -1;
 	if ((Gameclear[1] = LoadGraph("Image/GameClear(NoEat).png")) == -1)return -1;
@@ -1063,22 +1065,11 @@ void Goal() {
 	}*/
 }
 //ゲームクリア（当たったら）
-void GameClearHit(Player* p) {
+void GameClearHit() {
 
-	/*int px = p->x;
-	int py = p->y;
-	int ph = p->h;
-	int pw = p->w;
-
-
-	if (Time <= 0) {
-		if (1300 >= px && 1200 <= px + ph &&
-			500 >= py && 400 <= py + pw) {
-			GameState = 3;
-			StopSoundMem(BossSound);
-			PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
-		}
-	}*/
+	GameState = 3;
+	StopSoundMem(BossSound);
+	PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
 
 }
 
@@ -1176,6 +1167,10 @@ void BossInit() {
 	SHIP_COUNT = 0;
 	NET = 0;
 	motion_index4 = 0;
+	motion_index8 = 0;
+	sc = 2;
+	cr = 0;
+	cr2 = 0;
 
 	net.nx = 1100;
 	net.ny = 50;
@@ -1290,7 +1285,7 @@ void BossMove1() {
 
 		if (count == 499) {
 			count = 0;
-			BOSS_SPEED = 8;
+			BOSS_SPEED = 10;
 			BOSS_PATTREN = 2;
 		}
 	}
@@ -1344,12 +1339,13 @@ void BossMove2() {
 }
 
 void BossMove3() {
-	if (--BOSS_act_wait <= 0)
+	if (--BOSS_act_wait2 <= 0)
 	{
 
 		if (key1 < 1) {
 			if (MS == 1) {
 				BOSS_act_index2++;
+				BOSS_act_wait2 = BOSS_ACT_SPEED2;
 				BOSS_act_index2 %= BOSSB_MOTION_INDEX;
 			}
 		}
@@ -1402,15 +1398,15 @@ void BossMove3() {
 			}
 			boss.by += BOSS_SPEED;
 		}
-		if (count > 500 && count < 600) {
+		if (count > 500 && count < 550) {
 			MS = 1;
 			motion_index5 = BOSSBoom[BOSS_act_index2];
 		}
-		if (count == 599) {
+		if (count == 549) {
 			soni.sx = 890;
 			soni.sy = 470;
 		}
-		if (count > 600 && count < 800) {
+		if (count > 550 && count < 800) {
 			BOSS_act_index2 = 0;
 			MS = 0;
 			BOSS_SPEED = 10;
@@ -1423,7 +1419,7 @@ void BossMove3() {
 		}
 
 		if (count > 100 && count < 300 || count > 350 && count < 550 ||
-			count > 600 && count < 800) {
+			count > 550 && count < 800) {
 			motion_index6 = BossSonic[BOSS_act_index3];
 			soni.sx -= SONIC_SPEED;
 			DrawExtendGraph(soni.sx, soni.sy, soni.sx + soni.sw, soni.sy + soni.sh, Sonic[motion_index6], TRUE);
@@ -1442,15 +1438,27 @@ void BossMove3() {
 
 //船アニメーション
 void Ship() {
-	SHIP_COUNT = (SHIP_COUNT + 1) % 4100;
-	if (SHIP_COUNT > 4000 && SHIP_COUNT < 4100)
+	SHIP_COUNT += sc;
+	SHIP_COUNT2 = 4000 - SHIP_COUNT;
+	if (SHIP_COUNT2 == 0) {
+		sc = 0;
+	}
+	if (SHIP_COUNT2 != 0) {
+		SetFontSize(50);
+		DrawFormatString(700, 30, 0x000000, "船が来るまで%d秒", SHIP_COUNT2 / 100);
+	}
+	if (SHIP_COUNT2 == 0)
 	{
 		SHIP_X -= SHIP_SPEED;
 	}
 	if (SHIP_X == 1200)
 	{
 		SHIP_SPEED = 0;
-		NET = 1;
+		SetFontSize(50);
+		DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
+		if (cr == 0) {
+			NET = 1;
+		}
 	}
 	if (--SHIP_act_wait <= 0)
 	{
@@ -1467,62 +1475,83 @@ void Ship() {
 
 //網アニメーション
 void Ami() {
+	if (cr == 0) {
+		if (--NET_act_wait <= 0)
+		{
+			if (key1 < 1) {
+				NET_act_index++;
+				NET_act_wait = NET_ANI_SPEED;
+				NET_act_index %= NET_MOTION_INDEX;
+			}
 
-	if (--NET_act_wait <= 0)
+			motion_index4 = netanime[NET_act_index];
+		}
+		if (motion_index4 == 4) {
+			//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+			if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
+				250 >= boss.by && 270 <= boss.by + boss.bw) {
+				cr = 1;
+			}
+		}
+		if (motion_index4 == 5) {
+			//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+			if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
+				310 >= boss.by && 330 <= boss.by + boss.bw) {
+				cr = 1;
+
+			}
+		}
+		if (motion_index4 == 6) {
+			//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+			if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
+				360 >= boss.by && 380 <= boss.by + boss.bw) {
+				cr = 1;
+			}
+		}
+		DrawExtendGraph(net.nx, net.ny, net.nx + net.nw, net.ny + net.nh, net1[motion_index4], TRUE);
+	}
+}
+void BHA() {
+	if (--HOKAKU_act_wait <= 0)
 	{
 		if (key1 < 1) {
-			NET_act_index++;
-			NET_act_wait = NET_ANI_SPEED;
-			NET_act_index %= NET_MOTION_INDEX;
+			HOKAKU_act_index++;
+			HOKAKU_act_wait = HOKAKU_SPEED;
+			HOKAKU_act_index %= HOKAKU_MOTION_INDEX;
 		}
+		motion_index8 = BossHokaku[HOKAKU_act_index];
+	}
+	if (motion_index8 == 3) {
+		cr2 = 1;
+	}
 
-		motion_index4 = netanime[NET_act_index];
-	}
-	if (motion_index4 == 4) {
-		//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-		if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
-			250 >= boss.by && 270 <= boss.by + boss.bw) {
-			GameState = 3;
-			StopSoundMem(BossSound);
-			PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
-		}
-	}
-	if (motion_index4 == 5) {
-		//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-		if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
-			310 >= boss.by && 330 <= boss.by + boss.bw) {
-			GameState = 3;
-			StopSoundMem(BossSound);
-			PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
-		}
-	}
-	if (motion_index4 == 6) {
-		//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-		if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
-			360 >= boss.by && 380 <= boss.by + boss.bw) {
-			GameState = 3;
-			StopSoundMem(BossSound);
-			PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
-		}
-	}
-	DrawExtendGraph(net.nx, net.ny, net.nx + net.nw, net.ny + net.nh, net1[motion_index4], TRUE);
+	DrawGraph(1000, 50, Hokaku[motion_index8], TRUE);
 }
-
 void BossStage() {
 
 	BossBackScrool();
-	BossMove();
 	PlayerMove();
+	if (cr == 0) {
+		BossMove();
+		HOKAKU_act_index = 0;
+	}
 	LifeImage();
 	MeterImage();
-	GameClearHit(&player);
-	Goal();
+	if (cr == 1) {
+		BHA();
+	}
+	if (cr2 == 1) {
+		GameClearHit();
+	}
+	//Goal();
 	if (NET == 1) {
 		Ami();
 	}
 	Ship();
 	Pouse();
 }
+
+
 /*************************************
 *自機と敵機の当たり判定（四角）
 * 引数：PLAYER　ポインタ
@@ -1555,10 +1584,33 @@ int HitBoxPlayer(Player* p, Boss* b)
 	}
 	if (Leve == 2) {
 		//x,yは中心座標とする
-		int px = p->x - (p->w - player.w - 30);
+		int px = p->x - 20 - (p->w - player.w - 90);
+		int py = p->y - 10 - (p->h - player.h - 90);
+		int ph = px - 20 + p->h - 90;
+		int pw = py - 5 + p->w - 150;
+
+		int bx1 = b->bx - (b->bw - boss.bw - 100);
+		int by2 = b->by - (b->bh - boss.bh - 150);
+		int bh1 = bx1 + b->bh - 290;
+		int bw2 = by2 + b->bw - 280;
+
+		//判定確認用
+		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);*/
+
+		//短径が重なっていたら当たり
+		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+	if (Leve == 3) {
+		//x,yは中心座標とする
+		int px = p->x - (p->w - player.w - 70);
 		int py = p->y - (p->h - player.h - 70);
-		int ph = px + p->h - 70;
-		int pw = py + p->w - 145;
+		int ph = px + p->h - 90;
+		int pw = py + p->w - 130;
 
 		int bx1 = b->bx - (b->bw - boss.bw - 100);
 		int by2 = b->by - (b->bh - boss.bh - 150);
@@ -1586,6 +1638,52 @@ int HitBoxPlayer2(Player* p, Soni* s)
 		int py = p->y - (p->h - player.h - 20);
 		int ph = px + 20 + p->h - 30;
 		int pw = py + p->w - 50;
+
+		int sx1 = s->sx - (s->sw - soni.sw - 180);
+		int sy2 = s->sy - (s->sh - soni.sh - 100);
+		int sh1 = sx1 + s->sh - 390;
+		int sw2 = sy2 + s->sw - 200;
+
+		////判定確認用
+		//DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		//DrawBox(sx1, sy2, sh1, sw2, 0xFFFFFF, FALSE);
+
+		//短径が重なっていたら当たり
+		if (px < sh1 && sx1 < ph && py < sw2 && sy2 < pw) {
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+	if (Leve == 2) {
+		//x,yは中心座標とする
+		int px = p->x - 20 - (p->w - player.w - 90);
+		int py = p->y - 10 - (p->h - player.h - 90);
+		int ph = px - 20 + p->h - 90;
+		int pw = py - 5 + p->w - 150;
+
+		int sx1 = s->sx - (s->sw - soni.sw - 180);
+		int sy2 = s->sy - (s->sh - soni.sh - 100);
+		int sh1 = sx1 + s->sh - 390;
+		int sw2 = sy2 + s->sw - 200;
+
+		////判定確認用
+		//DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		//DrawBox(sx1, sy2, sh1, sw2, 0xFFFFFF, FALSE);
+
+		//短径が重なっていたら当たり
+		if (px < sh1 && sx1 < ph && py < sw2 && sy2 < pw) {
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+	if (Leve == 3) {
+		//x,yは中心座標とする
+		int px = p->x - (p->w - player.w - 70);
+		int py = p->y - (p->h - player.h - 70);
+		int ph = px + p->h - 90;
+		int pw = py + p->w - 130;
 
 		int sx1 = s->sx - (s->sw - soni.sw - 180);
 		int sy2 = s->sy - (s->sh - soni.sh - 100);
