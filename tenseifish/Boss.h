@@ -17,13 +17,13 @@ int BOSS_POS_X = 1000;
 int BOSS_POS_Y = 200;
 int BOSS_WIDTH = 450;
 int BOSS_HEIGHT = 450;
-int BOSS_SPEED = 10;
+int BOSS_SPEED = 20;
 
 int SONIC_POS_X = 1400;
 int SONIC_POS_Y = 130;
 int SONIC_WIDTH = 350;
 int SONIC_HEIGHT = 350;
-int SONIC_SPEED = 8;
+int SONIC_SPEED =20;
 
 int Boss1[13] = { 0 };		//ƒ{ƒX‚Ì‰æ‘œ‚ðŠi”[‚·‚é”z—ñ
 int Boss2[13] = { 0 };		//ƒ{ƒX‚Ì‰æ‘œ‚ðŠi”[‚·‚é”z—ñ

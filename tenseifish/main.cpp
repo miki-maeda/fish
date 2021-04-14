@@ -440,7 +440,7 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 2400;
+	Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 
@@ -569,7 +569,7 @@ void PlayerMove() {
 	act_index %= MAX_MOTION_INDEX;*/
 	//DrawGraph(player.x, player.y, sakana[Leve - 1][motion_index], TRUE);
 	int motion_index = anime[act_index];
-	if (player.muteki == 0) {
+	if (player.muteki == 0&&key2 < 1) {
 		if (key2 < 1) {
 			DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
 		}
@@ -590,9 +590,7 @@ void PlayerMove() {
 
 			}
 		}
-		else if (key2 < 1) {
-			DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
-		}
+		
 	}
 	int ColorCheck(int x, int y);
 	ColorCheck(player.x + player.w, player.y + (Scke * Scke * 30));						//右上
@@ -1225,25 +1223,25 @@ void BossMove() {
 	if (BOSS_PATTREN == 3) {
 		BossMove3();
 	}
+	if (player.muteki == 0) {
+		if (key1 < 1) {
+			if (player.muteki == 0) {
+				//当たり判定
+				if (HitBoxPlayer(&player, &boss) == TRUE) {
 
-	if (key1 < 1) {
-		if (player.muteki == 0) {
+					player.life -= 1;
+					player.muteki = 1;
+					PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
+				}
+			}
 			//当たり判定
-			if (HitBoxPlayer(&player, &boss) == TRUE) {
+			if (HitBoxPlayer2(&player, &soni) == TRUE) {
 
 				player.life -= 1;
 				player.muteki = 1;
 				PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
 			}
 		}
-		//当たり判定
-		if (HitBoxPlayer2(&player, &soni) == TRUE) {
-
-			player.life -= 1;
-			player.muteki = 1;
-			PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
-		}
-
 	}
 }
 void BossMove1() {
@@ -1308,12 +1306,12 @@ void BossMove2() {
 		if (count > 101 && count < 399) {
 			motion_index2 = BOSSUp[BOSS_act_index];
 			BOSS_SPEED = 0;
-			boss.by -= 10;
+			boss.by -= 20;
 		}
 
 		if (count == 399) {
 			boss.bx = 1400;
-			BOSS_SPEED = 10;
+			BOSS_SPEED = 20;
 		}
 
 		if (count > 399 && count < 499) {
@@ -1328,7 +1326,7 @@ void BossMove2() {
 		}
 		if (count == 499) {
 			count = 0;
-			BOSS_SPEED = 10;
+			BOSS_SPEED = 20;
 			BOSS_PATTREN = 3;
 
 		}
@@ -1427,7 +1425,7 @@ void BossMove3() {
 		if (count == 799) {
 			count = 0;
 			BOSS_act_index2 = 0;
-			BOSS_SPEED = 10;
+			BOSS_SPEED = 20;
 			BOSS_PATTREN = 1;
 
 		}
@@ -1568,12 +1566,12 @@ int HitBoxPlayer(Player* p, Boss* b)
 
 		int bx1 = b->bx - (b->bw - boss.bw - 100);
 		int by2 = b->by - (b->bh - boss.bh - 150);
-		int bh1 = bx1 + b->bh - 290;
+		int bh1 = bx1 + b->bh - 270;
 		int bw2 = by2 + b->bw - 280;
 
 		//判定確認用
-		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);*/
+		DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);
 
 		//短径が重なっていたら当たり
 		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {
