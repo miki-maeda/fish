@@ -440,7 +440,8 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 60;
+	Time =2400;
+	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 
@@ -1129,7 +1130,7 @@ void BossST(Player* p) {
 	int pw = p->w;
 
 	if (Time <= 0) {
-		DrawGraph(500, 500, BOSSROAD, TRUE);
+		DrawGraph(800, 50, BOSSROAD, TRUE);
 		if (1410 >= px && 1410 <= px + ph &&
 			800 >= py && 0 <= py + pw) {
 			GameState = 4;
@@ -1570,8 +1571,8 @@ int HitBoxPlayer(Player* p, Boss* b)
 		int bw2 = by2 + b->bw - 280;
 
 		//判定確認用
-		DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);
+		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
+		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);*/
 
 		//短径が重なっていたら当たり
 		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {
@@ -1589,7 +1590,7 @@ int HitBoxPlayer(Player* p, Boss* b)
 
 		int bx1 = b->bx - (b->bw - boss.bw - 100);
 		int by2 = b->by - (b->bh - boss.bh - 150);
-		int bh1 = bx1 + b->bh - 290;
+		int bh1 = bx1 + b->bh - 270;
 		int bw2 = by2 + b->bw - 280;
 
 		//判定確認用
@@ -1612,7 +1613,7 @@ int HitBoxPlayer(Player* p, Boss* b)
 
 		int bx1 = b->bx - (b->bw - boss.bw - 100);
 		int by2 = b->by - (b->bh - boss.bh - 150);
-		int bh1 = bx1 + b->bh - 290;
+		int bh1 = bx1 + b->bh - 270;
 		int bw2 = by2 + b->bw - 280;
 
 		//判定確認用
