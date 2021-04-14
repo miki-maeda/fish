@@ -33,6 +33,7 @@ void GameGiyo2();
 void GameGiyo3();
 void GameRule();
 void GameRule2();
+void dieam();
 
 int LoadImages();          //画像読み込み
 int LoadSound();		// 音楽読込み
@@ -441,6 +442,7 @@ void GameInit() {
 	Umispeed = 0;
 	Time = 2400;
 	Iwaspeed = 0;
+	motion_index7 = 0;
 
 	//餌の初期化
 	for (int i = 0; i < 10; i++) {
@@ -547,16 +549,16 @@ void PlayerMove() {
 	}
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
-	if (Leve == 1 && key1 != 1) {
+	if (Leve == 1 && key1 != 1 && Leve == 1 && key2 != 1) {
 		Umispeed -= 2;
 		Iwaspeed -= 5;
 	}
-	if (Leve == 2 && key1 != 1) {
+	if (Leve == 2 && key1 != 1 && key2 != 1) {
 		Umispeed -= 4;
 		Iwaspeed -= 7;
 		player.speed = 8;
 	}
-	if (Leve == 3 && key1 != 1) {
+	if (Leve == 3 && key1 != 1 && key2 != 1) {
 		Umispeed -= 6;
 		Iwaspeed -= 9;
 		player.speed = 9;
@@ -569,10 +571,13 @@ void PlayerMove() {
 	//DrawGraph(player.x, player.y, sakana[Leve - 1][motion_index], TRUE);
 	int motion_index = anime[act_index];
 	if (player.muteki == 0) {
-		DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+		if (key2 < 1) {
+			DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
+		}
 	}
+
 	if (player.muteki == 1) {
-		if (key1 < 1) {
+		if (key1 < 1 && key2 < 1) {
 
 			// ダメージが入ると５回のうち２回表示する。
 			static int count = 0;
@@ -586,7 +591,7 @@ void PlayerMove() {
 
 			}
 		}
-		else {
+		else if (key2 < 1) {
 			DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
 		}
 	}
@@ -669,6 +674,10 @@ int LoadImages() {
 	if ((Gameclear[0] = LoadGraph("Image/GameClear.png")) == -1)return -1;
 	if ((Gameclear[1] = LoadGraph("Image/GameClear(NoEat).png")) == -1)return -1;
 	if ((Gameclear[2] = LoadGraph("Image/GameClear(MaxEat).png")) == -1)return -1;
+	//ゲームオーバー時のアニメーション
+	if ((LoadDivGraph("Image/FishDie.png", 7, 7, 1, 30, 30, fishdie[0])) == -1)return -1;
+	if ((LoadDivGraph("Image/FishDie Level2.png", 7, 7, 1, 150, 150, fishdie[1])) == -1)return -1;
+	if ((LoadDivGraph("Image/FishDie Level3.png", 7, 7, 1, 225, 225, fishdie[2])) == -1)return -1;
 	//ゲームオーバー画像
 	if ((Gameover = LoadGraph("Image/GameOver.png")) == -1)return -1;
 
@@ -752,13 +761,13 @@ void EatMove() {
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 			//真っすぐ左に移動
-			if (Leve == 1 && key1 != 1) {
+			if (Leve == 1 && key1 != 1 && Leve == 1 && key2 != 1) {
 				eat[i].e_x -= 5;
 			}
-			if (Leve == 2 && key1 != 1) {
+			if (Leve == 2 && key1 != 1 && key2 != 1) {
 				eat[i].e_x -= 7;
 			}
-			if (Leve == 3 && key1 != 1) {
+			if (Leve == 3 && key1 != 1 && key2 != 1) {
 				eat[i].e_x -= 9;
 			}
 
@@ -870,10 +879,38 @@ void LifeImage() {
 
 	}
 	if (player.life < 1) {
-		StopSoundMem(MainSound);
-		StopSoundMem(BossSound);
+		key2 = 1;
+		player.flg = FALSE;
+		boss.flg = FALSE;
+		boss.speed = FALSE;
+		dieam();
+
+	}
+}
+void dieam() {
+
+	if (--DEI_act_wait <= 0)
+	{
+		if (key1 < 1) {
+			DEI_act_index++;
+			DEI_act_wait = DEI_ANI_SPEED;
+			DEI_act_index %= DEI_MOTION_INDEX;
+		}
+
+		motion_index7 = deianime[DEI_act_index];
+
+	}
+
+	DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, fishdie[Leve - 1][motion_index7], TRUE);
+
+
+	StopSoundMem(MainSound);
+	StopSoundMem(BossSound);
+	PlaySoundMem(GameOverSound, DX_PLAYTYPE_LOOP, TRUE);
+
+	if (motion_index7 > 5) {
+		key2 = 0;
 		GameState = 7;
-		PlaySoundMem(GameOverSound, DX_PLAYTYPE_LOOP, TRUE);
 	}
 }
 
@@ -1149,7 +1186,7 @@ void BossInit() {
 }
 
 void BossBackScrool() {
-	if (GameState == 5 && key1 < 1) {
+	if (GameState == 5 && key1 < 1 && GameState == 5 && key2 < 1) {
 		ScroolSpeed -= player.speed;
 
 	}
