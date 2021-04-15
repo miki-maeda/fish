@@ -582,6 +582,7 @@ void PlayerMove() {
 	}
 
 	int ColorCheck(int x, int y);
+
 	if (Leve == 1) {
 		ColorCheck(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd);		//左上
 		ColorCheck(player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 - CollYadd);	//右上
@@ -603,7 +604,7 @@ void PlayerMove() {
 		ColorCheck(player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2);		//右下
 	}
 
-	if (player.muteki != 0 && Damege != 0) {
+	if (player.muteki != 0 && Damege != 0 && key1<1&&player.life>0) {
 		player.flg = FALSE;
 		player.x -= 1;
 		player.y -= 2;
@@ -640,6 +641,8 @@ void PlayerMove() {
 		}
 		
 	}
+
+	DrawBox(player.x, player.y, player.x + player.w, player.y + player.h, 0xFFFFFF, FALSE);
 	
 	//当たり判定の範囲確認用BOX
 	//if (Leve == 1) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 + CollYadd, GetColor(255, 0, 0), TRUE);		//右下
@@ -1129,10 +1132,6 @@ void GameClear() {
 	if (EatAmount == 0) {
 		EndBranch = 1;
 	}
-	//全てが平均的な場合
-	else if (em == im == am) {
-		EndBranch = 2;
-	}
 	//イカが一番多い時
 	else if (im >= am && im >= em && im > 4) {
 		EndBranch = 3;
@@ -1156,6 +1155,10 @@ void GameClear() {
 	//レベルが3の状態で餌が平均、MAXじゃない場合
 	else if (Leve == 3 && em < 5 && am < 5 && im < 5) {
 		EndBranch = 8;
+	}
+	//全てが平均的な場合
+	else if (em == im&&em==am&&am==im) {
+		EndBranch = 2;
 	}
 
 	//エンディング表示
@@ -1822,54 +1825,56 @@ int EatCheck(int x, int y) {
 void Pouse() {
 	static bool push = 0;
 
-	if (g_KeyFlg & PAD_INPUT_8 && key1 < 1) {
-		key1 = 1;
-		player.flg = FALSE;
-		boss.flg = FALSE;
-		boss.speed = FALSE;
-		PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
-	}
-	else if (key1 > 0 && g_KeyFlg & PAD_INPUT_2) {
-		player.flg = TRUE;
-		boss.flg = TRUE;
-		boss.speed = TRUE;
-		key1 = 0;
-	}
-
-	if (key1 > 0) {
-		DrawGraph(355, 100, pauseImage, TRUE);
-		//player.flg = FALSE;
-		// メニューカーソルの描画
-		DrawRotaGraph(570, 390 + MenuNo * 80, 0.3f, 0, Corsol2, TRUE);
-
-		// メニューカーソル移動処理
-		if (g_KeyFlg & PAD_INPUT_DOWN) {
-			if (++MenuNo > 2)MenuNo = 0;
-			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+	if (player.life > 0) {
+		if (g_KeyFlg & PAD_INPUT_8 && key1 < 1) {
+			key1 = 1;
+			player.flg = FALSE;
+			boss.flg = FALSE;
+			boss.speed = FALSE;
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 		}
-		if (g_KeyFlg & PAD_INPUT_UP) {
-			if (--MenuNo < 0)MenuNo = 2;
-			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		else if (key1 > 0 && g_KeyFlg & PAD_INPUT_2) {
+			player.flg = TRUE;
+			boss.flg = TRUE;
+			boss.speed = TRUE;
+			key1 = 0;
 		}
 
-	}if (g_KeyFlg & PAD_INPUT_2) {
-		if (push == 0) {
-			push = 1;
-		}
-		if (MenuNo == 1) {
-			push = 0;
-			MenuNo = 0;
-			StopSoundMem(MainSound);
-			StopSoundMem(BossSound);
-			//key1 = 0;
-			GameState = 1;
-		}
-		else if (MenuNo == 2) {
-			push = 0;
-			MenuNo = 0;
-			StopSoundMem(MainSound);
-			StopSoundMem(BossSound);
-			GameState = 0;
+		if (key1 > 0) {
+			DrawGraph(355, 100, pauseImage, TRUE);
+			//player.flg = FALSE;
+			// メニューカーソルの描画
+			DrawRotaGraph(570, 390 + MenuNo * 80, 0.3f, 0, Corsol2, TRUE);
+
+			// メニューカーソル移動処理
+			if (g_KeyFlg & PAD_INPUT_DOWN) {
+				if (++MenuNo > 2)MenuNo = 0;
+				PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+			}
+			if (g_KeyFlg & PAD_INPUT_UP) {
+				if (--MenuNo < 0)MenuNo = 2;
+				PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+			}
+
+		}if (g_KeyFlg & PAD_INPUT_2) {
+			if (push == 0) {
+				push = 1;
+			}
+			if (MenuNo == 1) {
+				push = 0;
+				MenuNo = 0;
+				StopSoundMem(MainSound);
+				StopSoundMem(BossSound);
+				//key1 = 0;
+				GameState = 1;
+			}
+			else if (MenuNo == 2) {
+				push = 0;
+				MenuNo = 0;
+				StopSoundMem(MainSound);
+				StopSoundMem(BossSound);
+				GameState = 0;
+			}
 		}
 	}
 }
