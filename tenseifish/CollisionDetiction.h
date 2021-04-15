@@ -13,3 +13,5 @@ int WaitTime = 0;
 
 int CollXadd;
 int CollYadd;
+
+int PointNom = 0;

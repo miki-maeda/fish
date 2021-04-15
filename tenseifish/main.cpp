@@ -432,6 +432,7 @@ void GameInit() {
 	//当たり判定用変数の初期化
 	CollXadd = 0;
 	CollYadd = 0;
+	PointNom = 0;
 
 	//プレイヤーの初期化
 	player.flg = TRUE;
@@ -607,8 +608,14 @@ void PlayerMove() {
 	if (player.muteki != 0 && Damege != 0  && player.life>0) {
 		if (key1 < 1) {
 			player.flg = FALSE;
-			player.x -= 1;
-			player.y -= 2;
+			if (PointNom == 1) {
+				player.x += 1;
+				player.y -= 2;
+			}
+			else if (PointNom == 2) {
+				player.x -= 1;
+				player.y -= 2;
+			}
 			if (Feedflg == FALSE) {
 				DEat();
 				Feedflg = TRUE;
@@ -616,6 +623,7 @@ void PlayerMove() {
 		}
 	}
 	else {
+		PointNom = 0;
 		Damege = 0;
 		player.flg = TRUE;
 		Feedflg = FALSE;
@@ -1846,6 +1854,32 @@ int ColorCheck(int x, int y) {
 	GetColor2(Cr1, &r, &g, &b);
 	if (r == 98 && g == 96 && b == 94) {
 		if (player.muteki == 0) {
+			if (PointNom == 0) {
+
+				//Level 1 左の判定
+				if ((y == player.y + player.h / 2 - CollYadd) || (y == player.y + player.h / 2 + CollYadd)) {
+					if (x == player.x + player.w / 2 - CollXadd) PointNom = 1;
+					if (x == player.x + player.w / 2 + CollXadd * 3) PointNom = 2;
+				}
+
+				//Level 2 左の判定
+				if ((player.x + player.w / 2) && ((y == player.y + player.h / 2 - CollYadd / 4) || (y == player.y + player.h / 2 + CollYadd / 4))) {
+					PointNom = 1;
+				}
+				//Level 2 右の判定
+				if ((player.x + player.w / 2 + CollXadd) && ((y == player.y + player.h / 2 - CollYadd + 2) || (y == player.y + player.h / 2 + CollYadd + 2))) {
+					PointNom = 2;
+				}
+
+				//Level 3 左の判定
+				if ((x == player.x + player.w / 2 - CollXadd) && ((y == player.y + player.h / 2 - CollYadd) || (y == player.y + player.h / 2 + CollYadd))) {
+					PointNom = 1;
+				}
+				//Level 3 右の判定
+				if ((x == player.x + player.w / 2 + CollXadd * 5 + 5) && ((y == player.y + player.h / 2 - CollYadd * 2) || (y == player.y + player.h / 2 + CollYadd * 2))) {
+					PointNom = 2;
+				}
+			}
 			Damege = 1;
 			player.life -= 1;
 			player.muteki = 1;
