@@ -986,8 +986,6 @@ void MeterImage() {
 	DrawGraph(m_x + 480, m_y, Meter[2][im], TRUE);
 	DrawGraph(480, 65, feedImage[2][0], TRUE);
 
-	DrawFormatString(0, 100, 0x000000, "em.%d,am.%d,im.%d", em,am,im);
-
 }
 
 //ê¨í∑
