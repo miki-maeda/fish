@@ -1520,8 +1520,7 @@ void BossMove3() {
 void Ship() {
 	if (key1 < 1) {
 		SHIP_COUNT += sc;
-	/*	SHIP_COUNT2 = 4000 - SHIP_COUNT;*/
-		SHIP_COUNT2 = 100 - SHIP_COUNT;
+		SHIP_COUNT2 = 4000 - SHIP_COUNT;
 		if (SHIP_COUNT2 == 0) {
 			sc = 0;
 		}
