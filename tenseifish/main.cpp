@@ -445,7 +445,7 @@ void GameInit() {
 	player.muteki = 0;
 	Umispeed = 0;
 	Time = 2400;
-	//Time = 60;
+	/*Time = 60;*/
 	Iwaspeed = 0;
 	motion_index7 = 0;
 
@@ -609,11 +609,16 @@ void PlayerMove() {
 			player.flg = FALSE;
 			player.x -= 1;
 			player.y -= 2;
+			if (Feedflg == FALSE) {
+				DEat();
+				Feedflg = TRUE;
+			}
 		}
 	}
 	else {
 		Damege = 0;
 		player.flg = TRUE;
+		Feedflg = FALSE;
 	}
 
 	/*act_index++;
@@ -988,7 +993,6 @@ void MeterImage() {
 	//イカメーター
 	DrawGraph(m_x + 480, m_y, Meter[2][im], TRUE);
 	DrawGraph(480, 65, feedImage[2][0], TRUE);
-
 }
 
 //成長
@@ -1034,6 +1038,24 @@ void PlayerEat(int* e) {
 		PlayerGrowth();
 		PlaySoundMem(EvoSE, DX_PLAYTYPE_BACK, TRUE);
 	}
+}
+
+void DEat() {
+
+	int Rand = GetRand(2);
+
+	switch (Rand) {
+	case 0:
+		if (em < 6&&em>0) em--;
+		break;
+	case 1:
+		if (am < 6&&am>0)am--;
+		break;
+	case 2:
+		if (im < 6&&im>0)im--;
+		break;
+	}
+	EatAmount--;
 }
 
 //餌とプレイヤーのあたり判定
@@ -1100,6 +1122,7 @@ int Hit(Player* p, Eat* e) {
 				player.life--;
 				player.muteki = 1;
 				PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
+				DEat();
 				return TRUE;
 			}
 		}
@@ -1132,8 +1155,12 @@ void GameClear() {
 	if (EatAmount == 0) {
 		EndBranch = 1;
 	}
+	//全てが平均的な場合
+	else if (em == im && em == am && am == im) {
+		EndBranch = 2;
+	}
 	//イカが一番多い時
-	else if (im >= am && im >= em && im > 4) {
+	else if (im >= am!=em && im >= em!=am && im > 4) {
 		EndBranch = 3;
 	}
 	//アジが一番多い場合
@@ -1156,10 +1183,7 @@ void GameClear() {
 	else if (Leve == 3 && em < 5 && am < 5 && im < 5) {
 		EndBranch = 8;
 	}
-	//全てが平均的な場合
-	else if (em == im&&em==am&&am==im) {
-		EndBranch = 2;
-	}
+	
 
 	//エンディング表示
 	DrawGraph(0, 0, Gameclear[EndBranch], TRUE);

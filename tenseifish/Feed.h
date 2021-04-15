@@ -18,7 +18,7 @@ int CountEat = 0;		//カウントする
 int Eatflg = 0;
 int EatCont = 0;
 int er = 0, eg = 0, eb = 0;
-
+int Feedflg = FALSE;
 
 struct Eat {
 
@@ -34,4 +34,5 @@ struct Eat eat[10];				//餌の表示する数
 struct Eat eat0 = { TRUE,0,0,1410,0,0,0,FALSE };
 
 int Hit(Player* p, Eat* e);				//敵とのあたり判定
-int EatCheck(int x, int y);
+int EatCheck(int x, int y);				//敵の出現場所の確認
+void DEat();
