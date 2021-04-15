@@ -1440,64 +1440,86 @@ void BossMove3() {
 			BOSS_act_index2 = 0;
 			MS = 0;
 			motion_index5 = BOSSAnime[BOSS_act_index];
-			if (boss.by < 90) {
-				BOSS_SPEED = 0;
-			}
-			boss.by -= BOSS_SPEED;
+			boss.by = player.y - 100;
+			/*	if (boss.by < 90) {
+					BOSS_SPEED = 0;
+				}*/
+				//boss.by -= BOSS_SPEED;
+			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
 		}
 		if (count > 50 && count < 100) {
 			MS = 1;
+			boss.by = player.y - 100;
 			motion_index5 = BOSSBoom[BOSS_act_index2];
+			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
 		}
 		if (count == 99) {
 			soni.sx = 890;
-			soni.sy = 120;
+			//soni.sy = 120;
+			soni.sy = player.y - 100;
 		}
 		if (count > 100 && count < 300) {
 			BOSS_act_index2 = 0;
 			MS = 0;
-			BOSS_SPEED = 10;
+			//BOSS_SPEED = 10;
 			motion_index5 = BOSSAnime[BOSS_act_index];
-			if (boss.by > 300) {
+			boss.by = player.y - 100;
+			/*if (boss.by > 300) {
 				BOSS_SPEED = 0;
 			}
-			boss.by += BOSS_SPEED;
+			boss.by += BOSS_SPEED;*/
+			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
+
 		}
 		if (count > 300 && count < 350) {
 			MS = 1;
+			boss.by = player.y - 100;
 			motion_index5 = BOSSBoom[BOSS_act_index2];
+			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
+
 		}
 		if (count == 349) {
 			soni.sx = 890;
-			soni.sy = 340;
+			//soni.sy = 340;
+			soni.sy = player.y - 100;
 		}
 		if (count > 350 && count < 500) {
 			BOSS_act_index2 = 0;
 			MS = 0;
-			BOSS_SPEED = 10;
+			//BOSS_SPEED = 10;
 			motion_index5 = BOSSAnime[BOSS_act_index];
-			if (boss.by > 450) {
+			boss.by = player.y - 100;
+			/*if (boss.by > 450) {
 				BOSS_SPEED = 0;
 			}
-			boss.by += BOSS_SPEED;
+			boss.by += BOSS_SPEED;*/
+			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
+
 		}
 		if (count > 500 && count < 550) {
 			MS = 1;
+			boss.by = player.y - 100;
 			motion_index5 = BOSSBoom[BOSS_act_index2];
+			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
+
 		}
 		if (count == 549) {
 			soni.sx = 890;
-			soni.sy = 470;
+			//soni.sy = 470;
+			soni.sy = player.y - 100;
 		}
 		if (count > 550 && count < 800) {
 			BOSS_act_index2 = 0;
 			MS = 0;
-			BOSS_SPEED = 10;
+			motion_index5 = BOSSAnime[BOSS_act_index];
+			boss.by = player.y - 100;
+			/*BOSS_SPEED = 10;
 			motion_index5 = BOSSAnime[BOSS_act_index];
 			if (boss.by < 300) {
 				BOSS_SPEED = 0;
 			}
-			boss.by -= BOSS_SPEED;
+			boss.by -= BOSS_SPEED;*/
+			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
 
 		}
 
@@ -1512,10 +1534,11 @@ void BossMove3() {
 			BOSS_act_index2 = 0;
 			BOSS_SPEED = 20;
 			BOSS_PATTREN = 1;
+			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
 
 		}
 	}
-	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
+	//DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
 }
 
 
