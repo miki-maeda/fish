@@ -604,10 +604,12 @@ void PlayerMove() {
 		ColorCheck(player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2);		//右下
 	}
 
-	if (player.muteki != 0 && Damege != 0 && key1<1&&player.life>0) {
-		player.flg = FALSE;
-		player.x -= 1;
-		player.y -= 2;
+	if (player.muteki != 0 && Damege != 0  && player.life>0) {
+		if (key1 < 1) {
+			player.flg = FALSE;
+			player.x -= 1;
+			player.y -= 2;
+		}
 	}
 	else {
 		Damege = 0;
@@ -641,8 +643,6 @@ void PlayerMove() {
 		}
 		
 	}
-
-	DrawBox(player.x, player.y, player.x + player.w, player.y + player.h, 0xFFFFFF, FALSE);
 	
 	//当たり判定の範囲確認用BOX
 	//if (Leve == 1) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 + CollYadd, GetColor(255, 0, 0), TRUE);		//右下
