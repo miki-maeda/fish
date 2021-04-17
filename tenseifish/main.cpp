@@ -342,7 +342,7 @@ void GameRule()
 	DrawGraph(0, 0, Gamerule, TRUE);
 
 	// メニューカーソルの描画
-	DrawRotaGraph(365 + MenuNo * 380, 770, 0.3f, 0, Corsol, TRUE);
+	DrawRotaGraph(500 + MenuNo * 260, 770, 0.3f, 0, Corsol, TRUE);
 
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
@@ -1970,19 +1970,19 @@ void GameOver() {
 
 	// メニューカーソルの描画
 	if (MenuNo != 1) {
-		DrawRotaGraph(80 + MenuNo * 450, 743, 0.3f, 0, Corsol, TRUE);
+		DrawRotaGraph(100 + MenuNo * 450, 715, 0.3f, 0, Corsol2, TRUE);
 	}
 	else {
-		DrawRotaGraph(560, 743, 0.3f, 0, Corsol, TRUE);
+		DrawRotaGraph(740, 715, 0.3f, 0, Corsol2, TRUE);
 	}
 
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
-		if (++MenuNo > 2)MenuNo = 0;
+		if (++MenuNo > 1)MenuNo = 0;
 		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
-		if (--MenuNo < 0)MenuNo = 2;
+		if (--MenuNo < 0)MenuNo = 1;
 		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 	}
 
@@ -2005,10 +2005,6 @@ void GameOver() {
 			MenuNo = 0;
 			StopSoundMem(GameOverSound);
 			PlaySoundMem(TitleSound, DX_PLAYTYPE_BACK, TRUE);
-		}
-		else {
-			push = 0;
-			DxLib_End();
 		}
 	}
 }
