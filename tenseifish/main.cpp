@@ -1914,7 +1914,7 @@ void Pouse() {
 			boss.speed = FALSE;
 			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 		}
-		else if (key1 > 0 && g_KeyFlg & PAD_INPUT_2) {
+		else if (key1 > 0 && g_KeyFlg & PAD_INPUT_8) {
 			player.flg = TRUE;
 			boss.flg = TRUE;
 			boss.speed = TRUE;
@@ -1925,36 +1925,37 @@ void Pouse() {
 			DrawGraph(355, 100, pauseImage, TRUE);
 			//player.flg = FALSE;
 			// メニューカーソルの描画
-			DrawRotaGraph(570, 390 + MenuNo * 80, 0.3f, 0, Corsol2, TRUE);
+			DrawRotaGraph(590, 445 + MenuNo * 80, 0.3f, 0, Corsol2, TRUE);
 
 			// メニューカーソル移動処理
 			if (g_KeyFlg & PAD_INPUT_DOWN) {
-				if (++MenuNo > 2)MenuNo = 0;
+				if (++MenuNo > 1)MenuNo = 0;
 				PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 			}
 			if (g_KeyFlg & PAD_INPUT_UP) {
-				if (--MenuNo < 0)MenuNo = 2;
+				if (--MenuNo < 0)MenuNo = 1;
 				PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 			}
-
-		}if (g_KeyFlg & PAD_INPUT_2) {
-			if (push == 0) {
-				push = 1;
-			}
-			if (MenuNo == 1) {
-				push = 0;
-				MenuNo = 0;
-				StopSoundMem(MainSound);
-				StopSoundMem(BossSound);
-				//key1 = 0;
-				GameState = 1;
-			}
-			else if (MenuNo == 2) {
-				push = 0;
-				MenuNo = 0;
-				StopSoundMem(MainSound);
-				StopSoundMem(BossSound);
-				GameState = 0;
+			if (g_KeyFlg & PAD_INPUT_2) {
+				if (push == 0) {
+					push = 1;
+				}
+				if (MenuNo == 0) {
+					push = 0;
+					//MenuNo = 0;
+					StopSoundMem(MainSound);
+					StopSoundMem(BossSound);
+					key1 = 0;
+					GameState = 1;
+				}
+				else if (MenuNo == 1) {
+					push = 0;
+					MenuNo = 0;
+					key1 = 0;
+					StopSoundMem(MainSound);
+					StopSoundMem(BossSound);
+					GameState = 0;
+				}
 			}
 		}
 	}
