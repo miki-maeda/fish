@@ -445,8 +445,8 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 2400;
-	/*Time = 60;*/
+	//Time = 2400;
+	Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -766,6 +766,8 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/maguro2.png", 6, 6, 1, 350, 350, Boss2)) == -1)return -1;
 	//Boss•KE‹Z
 	if ((LoadDivGraph("Image/Sonic.png", 2, 2, 1, 450, 450, Sonic)) == -1)return -1;
+	//BossŒx
+	if ((Keikoku = LoadGraph("Image/keikoku.png")) == -1)return -1;
 	//Boss•ßŠl
 	if ((LoadDivGraph("Image/Hokaku.png", 4, 4, 1, 350, 500, Hokaku)) == -1)return -1;
 	//ƒQ[ƒ€ƒNƒŠƒA‰æ‘œ
@@ -1429,6 +1431,7 @@ void BossMove1() {
 		if (count > 101&& count < 150) {
 			motion_index2 = BOSSAttack[BOSS_act_index];
 			boss.by = player.y - 100;
+			DrawGraph(boss.bx + 100, boss.by - 50, Keikoku, TRUE);
 			BOSS_SPEED = 20;
 		}
 		if (count > 151 && count < 350) {
@@ -1471,8 +1474,11 @@ void BossMove2() {
 			boss.bx -= BOSS_SPEED;
 			boss.by += 10;
 		}
-		if (count == 100) {
+		if (count > 70 && count < 100) {
+			DrawGraph(boss.bx, 600, Keikoku, TRUE);
 			boss.bx = player.x - 100;
+		}
+		if (count > 60 && count < 70) {
 			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 		}
 		if (count > 101 && count < 399) {
@@ -1538,6 +1544,7 @@ void BossMove3() {
 		if (count > 50 && count < 100) {
 			MS = 1;
 			boss.by = player.y - 100;
+			DrawGraph(boss.bx + 100, boss.by - 50, Keikoku, TRUE);
 			motion_index5 = BOSSBoom[BOSS_act_index2];
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
 		}
@@ -1563,6 +1570,7 @@ void BossMove3() {
 		if (count > 300 && count < 350) {
 			MS = 1;
 			boss.by = player.y - 100;
+			DrawGraph(boss.bx + 100, boss.by - 50, Keikoku, TRUE);
 			motion_index5 = BOSSBoom[BOSS_act_index2];
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
 
@@ -1589,6 +1597,7 @@ void BossMove3() {
 		if (count > 500 && count < 550) {
 			MS = 1;
 			boss.by = player.y - 100;
+			DrawGraph(boss.bx + 100, boss.by - 50, Keikoku, TRUE);
 			motion_index5 = BOSSBoom[BOSS_act_index2];
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
 

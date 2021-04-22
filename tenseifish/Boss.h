@@ -18,6 +18,7 @@ int BOSS_POS_Y = 200;
 int BOSS_WIDTH = 450;
 int BOSS_HEIGHT = 450;
 int BOSS_SPEED = 20;
+int Keikoku;        //É{ÉXÇÃåxçê
 
 int SONIC_POS_X = 1400;
 int SONIC_POS_Y = 130;
