@@ -800,11 +800,13 @@ int LoadSound() {
 	if ((WallSE = LoadSoundMem("Sound/se_wall_1.mp3")) == -1)return -1;
 	if ((EvoSE = LoadSoundMem("Sound/powerup10.mp3")) == -1)return -1;
 	if ((DieSE = LoadSoundMem("Sound/NES-General01-10(Pitch).mp3")) == -1)return -1;
+	if ((KeikokuSE = LoadSoundMem("Sound/meka_ge_keihou03.mp3")) == -1)return -1;
 
 	//‰¹—Ê’²®
 	ChangeVolumeSoundMem(125, MainSound);
 	ChangeVolumeSoundMem(125, TitleSound);
 	ChangeVolumeSoundMem(150, GameOverSound);
+	ChangeVolumeSoundMem(125, KeikokuSE);
 	ChangeVolumeSoundMem(200, EatSE);
 	ChangeVolumeSoundMem(200, CarsolSE);
 	ChangeVolumeSoundMem(200, DesitionSE);
@@ -1370,6 +1372,7 @@ void BossMove1() {
 		if (count > 0 && count < 100) {
 			motion_index2 = BOSSAnime[BOSS_act_index];
 			boss.by = player.y - 100;
+			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 		}
 
 		if (count > 101&& count < 150) {
@@ -1419,6 +1422,7 @@ void BossMove2() {
 		}
 		if (count == 100) {
 			boss.bx = player.x - 100;
+			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 		}
 		if (count > 101 && count < 399) {
 			motion_index2 = BOSSUp[BOSS_act_index];
@@ -1478,6 +1482,7 @@ void BossMove3() {
 				}*/
 				//boss.by -= BOSS_SPEED;
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
+			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 		}
 		if (count > 50 && count < 100) {
 			MS = 1;
@@ -1501,6 +1506,7 @@ void BossMove3() {
 			}
 			boss.by += BOSS_SPEED;*/
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
+			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 
 		}
 		if (count > 300 && count < 350) {
@@ -1526,6 +1532,7 @@ void BossMove3() {
 			}
 			boss.by += BOSS_SPEED;*/
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
+			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 
 		}
 		if (count > 500 && count < 550) {
@@ -1552,6 +1559,7 @@ void BossMove3() {
 			}
 			boss.by -= BOSS_SPEED;*/
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
+			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 
 		}
 

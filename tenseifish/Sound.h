@@ -14,3 +14,4 @@ int DamegeSE;
 int EatSE;
 int EvoSE;
 int DieSE;
+int KeikokuSE;
