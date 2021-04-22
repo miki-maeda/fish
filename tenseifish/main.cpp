@@ -449,6 +449,9 @@ void GameInit() {
 	/*Time = 60;*/
 	Iwaspeed = 0;
 	motion_index7 = 0;
+	LeveUpflg1 = FALSE;
+	LeveUpflg2 = FALSE;
+	LCount = 0;
 
 	//餌の初期化
 	for (int i = 0; i < 10; i++) {
@@ -555,8 +558,8 @@ void PlayerMove() {
 	}
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
-	if (Damege != 1) {
-		if (Leve == 1 && key1 != 1 && Leve == 1 && key2 != 1) {
+	if (Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg1 != TRUE) {
+		if (Leve == 1 && key1 != 1  && key2 != 1) {
 			Umispeed -= 2;
 			Iwaspeed -= 5;
 		}
@@ -655,6 +658,48 @@ void PlayerMove() {
 			}
 		}
 		
+	}
+
+	if (LeveUpflg1 == TRUE) {
+		if (key1 < 1 || key2 < 1) {
+			player.flg = FALSE;
+			// ダメージが入ると５回のうち２回表示する。
+			LCount = (LCount + 1) % 21;
+			if (LCount % 5 == 0) {
+				if (LeveUpflg2 != TRUE) {
+					if (Leve == 1) {
+						player.w *= Scke;
+						player.h *= Scke;
+						player.x -= PLAYER_WIDTH / 2;
+						player.y -= PLAYER_HEIGHT / 2;
+						Leve = 2;
+					}
+					else if (Leve == 2) {
+						player.w = PLAYER_WIDTH;
+						player.h = PLAYER_HEIGHT;
+						player.x += player.w / 2;
+						player.y += player.h / 2;
+						Leve = 1;
+					}
+				}
+				if (LeveUpflg2 == TRUE) {
+					if (Leve == 2) {
+						Leve = 3;
+					}
+					else if (Leve == 3) {
+						Leve = 2;
+					}
+				}
+			}
+
+			if (LCount >= 20 || player.life == 0) {
+				LeveUpflg1 = FALSE;
+				LeveUpflg2 = FALSE;
+				player.flg = TRUE;
+				LCount = 0;
+
+			}
+		}
 	}
 	
 	//当たり判定の範囲確認用BOX
@@ -825,20 +870,20 @@ void EatMove() {
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 
-			if (Damege != 1) {
+			if (Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg2 != TRUE) {
 				//真っすぐ左に移動
 				if (Leve == 1 && key1 != 1 && Leve == 1 && key2 != 1) {
-					eat[i].e_x -= 5;
+					eat[i].e_x -= 6;
 				}
 				if (Leve == 2 && key1 != 1 && key2 != 1) {
-					eat[i].e_x -= 7;
+					eat[i].e_x -= 8;
 				}
 				if (Leve == 3 && key1 != 1 && key2 != 1) {
-					eat[i].e_x -= 9;
+					eat[i].e_x -= 10;
 				}
 			}
 
-			if (Leve == 1) {
+			/*if (Leve == 1) {
 				if (eat[i].e_x == SCREEN_WIDTH - 5)EatCheck(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) + 3) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
@@ -853,7 +898,7 @@ void EatMove() {
 				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) - 8) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w - 6) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
 
-			}
+			}*/
 
 
 
@@ -894,7 +939,7 @@ void EatMove() {
 	}
 
 	//餌の設定
-	if (Range / 5 % 50 == 0 && key1 < 1	&&Damege != 1) {
+	if (Range / 5 % 50 == 0 && key1 < 1	&&Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg2 != TRUE) {
 		EatImage();
 	}
 }
@@ -1009,15 +1054,21 @@ void MeterImage() {
 void PlayerGrowth() {
 
 	//サイズの変更量の増加
-	if (Leve == 1)Scke = 2;
-	else if (Leve == 2)Scke = 1.5;
-
+	if (Leve == 1) {
+		Scke = 2;
+		player.w *= Scke;
+		player.h *= Scke;
+		player.x -= PLAYER_WIDTH / 2;
+		player.y -= PLAYER_HEIGHT / 2;
+	}
+	else if (Leve == 2) {
+		Scke = 1.5;
+		LeveUpflg2 = TRUE;
+		player.w *= Scke;
+		player.h *= Scke;
+	}
+	LeveUpflg1 = TRUE;
 	LeveUp *= 2;
-
-	//プレイヤーのサイズ変更
-	player.w *= Scke;
-	player.h *= Scke;
-	//レベルを上げる
 	Leve++;
 	LifeMax++;
 }
@@ -1065,7 +1116,7 @@ void DEat() {
 		if (im < 6&&im>0)im--;
 		break;
 	}
-	EatAmount--;
+	/*EatAmount--;*/
 }
 
 //餌とプレイヤーのあたり判定

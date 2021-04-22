@@ -19,6 +19,11 @@ int Eatflg = 0;
 int EatCont = 0;
 int er = 0, eg = 0, eb = 0;
 int Feedflg = FALSE;
+int LeveUpflg1 = FALSE;
+int LeveUpflg2 = FALSE;
+int LCount = 0;
+int LeveC;
+
 
 struct Eat {
 
