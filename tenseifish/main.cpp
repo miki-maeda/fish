@@ -644,12 +644,12 @@ void PlayerMove() {
 
 			// ダメージが入ると５回のうち２回表示する。
 			static int count = 0;
-			count = (count + 1) % 60;
+			count = (count + 1) % 20;
 			if (count % 2 == 0) {
 				//表示
 				DrawExtendGraph(player.x, player.y, player.x + player.w, player.y + player.h, sakana[Leve - 1][motion_index], TRUE);
 			}
-			if (count == 59 || player.life == 0) {
+			if (count == 19 || player.life == 0) {
 				player.muteki = 0;
 
 			}
