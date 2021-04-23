@@ -613,14 +613,12 @@ void PlayerMove() {
 	if (player.muteki != 0 && Damege != 0  && player.life>0) {
 		if (key1 < 1) {
 			player.flg = FALSE;
-			if (PointNom == 1) {
-				player.x += 1;
-				player.y -= 2;
-			}
-			else if (PointNom == 2) {
-				player.x -= 1;
-				player.y -= 2;
-			}
+			
+			if (PointNom == 1) player.x += 3;
+			if (PointNom == 2) player.x -= 1;
+			
+			player.y -= 5;
+			
 			if (Feedflg == FALSE) {
 				DEat();
 				Feedflg = TRUE;
