@@ -445,8 +445,8 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 2400;
-	//Time = 60;
+	//Time = 2400;
+	Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -457,6 +457,8 @@ void GameInit() {
 	for (int i = 0; i < 10; i++) {
 		eat[i].flg = FALSE;
 	}
+
+	
 	//ゲームメインへ
 	GameState = 2;
 
@@ -789,6 +791,8 @@ int LoadImages() {
 
 	//ボスへの道
 	if ((BOSSROAD = LoadGraph("Image/ボスへの道.png")) == -1)return -1;
+	//水しぶき
+	if ((LoadDivGraph("Image/hasira.png", 8, 8, 1, 167, 500, sibuki)) == -1)return -1;
 
 	//UI画像
 	//ライフ
@@ -1485,6 +1489,15 @@ void BossMove2() {
 			motion_index2 = BOSSUp[BOSS_act_index];
 			BOSS_SPEED = 0;
 			boss.by -= 20;
+			if (count == 160) {
+				sibuki_act_index = 0;
+			}
+			if (count > 170 && count < 240) {
+		
+				//sibuki_act_index = 0;
+				Sibuki();
+			}
+
 		}
 
 		if (count == 399) {
@@ -1639,6 +1652,29 @@ void BossMove3() {
 		}
 	}
 	//DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
+}
+
+void Sibuki() {//水しぶきのアニメーション
+
+	//sibuki_act_index = 0;
+
+	if (--sibuki_act_wait <= 0)
+	{
+		if (key1 < 1) {
+			sibuki_act_index++;
+			sibuki_act_wait = sibuki_ANI_SPEED;
+			sibuki_act_index %= sibuki_MOTION_INDEX;
+		}
+
+		motion_index9 = sibukianime[sibuki_act_index];
+
+	}
+
+
+	DrawExtendGraph(boss.bx, SIBUKI_Y, boss.bx + boss.bw, SIBUKI_Y + 165, sibuki[motion_index9], TRUE);
+	//DrawExtendGraph(500, SIBUKI_Y, 500 + 300, SIBUKI_Y + 300, sibuki[motion_index9], TRUE);
+
+
 }
 
 

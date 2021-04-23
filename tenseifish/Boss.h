@@ -11,6 +11,8 @@ void Ami();
 void Ship();
 void BHA();
 
+void Sibuki();
+
 
 //Bossの初期値
 int BOSS_POS_X = 1000;
@@ -70,6 +72,16 @@ int BOSS_MOTION_INDEX = 4;// 0,1,2,1 の4種類
 int BOSSB_MOTION_INDEX = 12;	// 5,4,3,2,1,0 の6種類 
 int SONIC_MOTION_INDEX = 2;	// 2コマ
 int HOKAKU_MOTION_INDEX = 4;	// 4コマ
+
+
+int sibukianime[] = { 0,1,2,3,4,5,6,7 };
+int sibuki[8] = { 0 };
+int sibuki_ANI_SPEED = 10;
+int sibuki_act_wait = sibuki_ANI_SPEED;
+int sibuki_act_index = 0;
+int sibuki_MOTION_INDEX = 8;
+int motion_index9;
+int SIBUKI_Y = 5;
 
 
 int shipanime[] = { 0,1,0,2 };      //船のアニメーション
