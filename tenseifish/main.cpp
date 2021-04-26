@@ -1350,6 +1350,8 @@ void BossInit() {
 	player.x = PLAYER_POS_X;
 	player.y = PLAYER_POS_Y;
 
+	motion_index9 = 0;
+
 	//ゲームメインへ
 	GameState = 5;
 }
@@ -1492,7 +1494,6 @@ void BossMove2() {
 			}
 			if (count > 170 && count < 240) {
 		
-				//sibuki_act_index = 0;
 				Sibuki();
 			}
 
@@ -1654,8 +1655,6 @@ void BossMove3() {
 
 void Sibuki() {//水しぶきのアニメーション
 
-	//sibuki_act_index = 0;
-
 	if (--sibuki_act_wait <= 0)
 	{
 		if (key1 < 1) {
@@ -1669,7 +1668,7 @@ void Sibuki() {//水しぶきのアニメーション
 	}
 
 
-	DrawExtendGraph(boss.bx, SIBUKI_Y, boss.bx + boss.bw, SIBUKI_Y + 165, sibuki[motion_index9], TRUE);
+	DrawExtendGraph(boss.bx, SIBUKI_Y, boss.bx + boss.bw, SIBUKI_Y + 162, sibuki[motion_index9], TRUE);
 	//DrawExtendGraph(500, SIBUKI_Y, 500 + 300, SIBUKI_Y + 300, sibuki[motion_index9], TRUE);
 
 
