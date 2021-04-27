@@ -764,8 +764,9 @@ int LoadImages() {
 	//Boss
 	if ((LoadDivGraph("Image/maguro.png", 12, 12, 1, 350, 350, Boss1)) == -1)return -1;
 	if ((LoadDivGraph("Image/maguro2.png", 6, 6, 1, 350, 350, Boss2)) == -1)return -1;
+	if ((LoadDivGraph("Image/rasubosu.png", 6, 6, 1, 350, 350, Boss3)) == -1)return -1;
 	//Boss•KE‹Z
-	if ((LoadDivGraph("Image/Sonic.png", 2, 2, 1, 450, 450, Sonic)) == -1)return -1;
+	if ((LoadDivGraph("Image/ƒ\ƒjƒbƒNƒu[ƒ€.png", 2, 2, 1, 450, 450, Sonic)) == -1)return -1;
 	//BossŒx
 	if ((Keikoku = LoadGraph("Image/keikoku.png")) == -1)return -1;
 	//Boss•ßŠl
@@ -1312,6 +1313,7 @@ void BossInit() {
 
 	//Boss‚Ì‰Šú‰»
 	boss.flg = TRUE;
+	boss.dir = 0;
 	boss.bx = BOSS_POS_X;
 	boss.by = BOSS_POS_Y;
 	boss.bw = BOSS_WIDTH;
@@ -1347,7 +1349,7 @@ void BossInit() {
 	net.speed = 15;
 
 	//player‚ÌˆÊ’u‰Šú‰»
-	player.x = PLAYER_POS_X;
+	player.x = 500;
 	player.y = PLAYER_POS_Y;
 
 	motion_index9 = 0;
@@ -1425,92 +1427,121 @@ void BossMove1() {
 
 		count = (count + 1) % 500;
 		//DrawFormatString(100, 160, 0x000000, "%d", count);
+		/*DrawFormatString(100, 180, 0x000000, "%d", boss.bx);
+		DrawFormatString(100, 240, 0x000000, "%d", boss.by);*/
 
+		if (count == 1) {
+			BOSS_SPEED = 20;
+		}
 		if (count > 0 && count < 100) {
+			if (boss.bx == 0) {
+				BOSS_SPEED = 0;
+			}
+			boss.bx += BOSS_SPEED;
+
 			motion_index2 = BOSSAnime[BOSS_act_index];
-			boss.by = player.y - 100;
+			boss.by = player.y - 180;
 			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 		}
 
-		if (count > 101&& count < 150) {
+		if (count > 101 && count < 150) {
 			motion_index2 = BOSSAttack[BOSS_act_index];
-			boss.by = player.y - 100;
-			DrawGraph(boss.bx + 100, boss.by - 50, Keikoku, TRUE);
+			boss.by = player.y - 180;
+			DrawGraph(boss.bx + 200, boss.by - 50, Keikoku, TRUE);
 			BOSS_SPEED = 20;
 		}
-		if (count > 151 && count < 350) {
+		if (count > 151 && count < 300) {
 			motion_index2 = BOSSAttack[BOSS_act_index];
-			boss.bx -= BOSS_SPEED;
+			boss.bx += BOSS_SPEED;
 		}
-		if (count == 351) {
-			boss.bx = 1400; 
+		if (count == 301) {
+			boss.bx = 1400;
 		}
 
-		if (count > 352 && count < 499){
-			motion_index2 = BOSSAnime[BOSS_act_index];
-			if (boss.bx < 1000) {
-
+		if (count > 302 && count < 499) {
+			motion_index2 = BossKoutai[BOSS_act_index];
+			boss.dir = 1;
+			if (boss.bx < -450) {
+				boss.dir = 0;
 				BOSS_SPEED = 0;
 			}
 			boss.bx -= BOSS_SPEED;
-			boss.by = BOSS_POS_Y;
+			boss.by = 600;
 			boss.bw = BOSS_WIDTH;
 			boss.bh = BOSS_HEIGHT;
-
 		}
 
 		if (count == 499) {
 			count = 0;
+			boss.by = 200;
 			BOSS_SPEED = 20;
 			BOSS_PATTREN = 2;
 		}
 	}
-	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
+	if (boss.dir == 0) {
+		DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
+	}
+	if (boss.dir == 1) {
+		DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss3[motion_index2], TRUE);
+	}
 }
 
 void BossMove2() {
 	if (key1 < 1) {
 		count = (count + 1) % 500;
 		//DrawFormatString(100, 160, 0x000000, "%d", count);
-
+		/*DrawFormatString(100, 180, 0x000000, "%d", boss.bx);
+		DrawFormatString(100, 240, 0x000000, "%d", boss.by);*/
 		if (count > 0 && count < 100) {
+			if (boss.bx == 0) {
+
+				BOSS_SPEED = 0;
+			}
+			boss.bx += BOSS_SPEED;
+			motion_index2 = BOSSAnime[BOSS_act_index];
+		}
+
+		if (count > 100 && count < 200) {
 			motion_index2 = BOSSDown[BOSS_act_index];
-			boss.bx -= BOSS_SPEED;
+			BOSS_SPEED = 20;
+			boss.bx += BOSS_SPEED;
 			boss.by += 10;
 		}
-		if (count > 70 && count < 100) {
-			DrawGraph(boss.bx, 600, Keikoku, TRUE);
-			boss.bx = player.x - 100;
+		if (count > 170 && count < 200) {
+			DrawGraph(boss.bx + 100, 600, Keikoku, TRUE);
+			boss.bx = player.x - 130;
 		}
-		if (count > 60 && count < 70) {
+		if (count > 160 && count < 170) {
 			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 		}
-		if (count > 101 && count < 399) {
+		if (count > 201 && count < 399) {
 			motion_index2 = BOSSUp[BOSS_act_index];
 			BOSS_SPEED = 0;
 			boss.by -= 20;
 			if (count == 160) {
 				sibuki_act_index = 0;
 			}
-			if (count > 170 && count < 240) {
-		
+			if (count > 270 && count < 340) {
+
+				//sibuki_act_index = 0;
 				Sibuki();
 			}
 
 		}
 
 		if (count == 399) {
-			boss.bx = 1400;
+			boss.bx = BOSS_POS_X;
 			BOSS_SPEED = 20;
 		}
 
-		if (count > 399 && count < 499) {
+		if (count > 399 && count < 498) {
 			motion_index2 = BOSSAnime[BOSS_act_index];
-			if (boss.bx < 1000) {
+			if (boss.bx == 0) {
+
 				BOSS_SPEED = 0;
 			}
-			boss.bx -= BOSS_SPEED;
-			boss.by = BOSS_POS_Y;
+			boss.bx += BOSS_SPEED;
+			boss.by = player.y - 180;
 			boss.bw = BOSS_WIDTH;
 			boss.bh = BOSS_HEIGHT;
 		}
@@ -1523,6 +1554,7 @@ void BossMove2() {
 	}
 
 	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
+
 
 }
 
@@ -1541,36 +1573,40 @@ void BossMove3() {
 	if (key1 < 1) {
 		count = (count + 1) % 900;
 		//DrawFormatString(100, 160, 0x000000, "%d", count);
+		if (count > 0 && count < 25) {
+			if (boss.bx == 0) {
+
+				BOSS_SPEED = 0;
+			}
+			boss.bx += BOSS_SPEED;
+			motion_index2 = BOSSAnime[BOSS_act_index];
+		}
 		if (count > 0 && count < 50) {
 			BOSS_act_index2 = 0;
 			MS = 0;
 			motion_index5 = BOSSAnime[BOSS_act_index];
-			boss.by = player.y - 100;
-			/*	if (boss.by < 90) {
-					BOSS_SPEED = 0;
-				}*/
-				//boss.by -= BOSS_SPEED;
+			boss.by = player.y - 180;
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
 			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
 		}
 		if (count > 50 && count < 100) {
 			MS = 1;
-			boss.by = player.y - 100;
-			DrawGraph(boss.bx + 100, boss.by - 50, Keikoku, TRUE);
+			boss.by = player.y - 180;
+			DrawGraph(boss.bx + 130, boss.by - 50, Keikoku, TRUE);
 			motion_index5 = BOSSBoom[BOSS_act_index2];
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
 		}
 		if (count == 99) {
-			soni.sx = 890;
+			soni.sx = 190;
 			//soni.sy = 120;
-			soni.sy = player.y - 100;
+			soni.sy = player.y - 180;
 		}
 		if (count > 100 && count < 300) {
 			BOSS_act_index2 = 0;
 			MS = 0;
 			//BOSS_SPEED = 10;
 			motion_index5 = BOSSAnime[BOSS_act_index];
-			boss.by = player.y - 100;
+			boss.by = player.y - 180;
 			/*if (boss.by > 300) {
 				BOSS_SPEED = 0;
 			}
@@ -1581,14 +1617,14 @@ void BossMove3() {
 		}
 		if (count > 300 && count < 350) {
 			MS = 1;
-			boss.by = player.y - 100;
-			DrawGraph(boss.bx + 100, boss.by - 50, Keikoku, TRUE);
+			boss.by = player.y - 180;
+			DrawGraph(boss.bx + 130, boss.by - 50, Keikoku, TRUE);
 			motion_index5 = BOSSBoom[BOSS_act_index2];
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
 
 		}
 		if (count == 349) {
-			soni.sx = 890;
+			soni.sx = 190;
 			//soni.sy = 340;
 			soni.sy = player.y - 100;
 		}
@@ -1597,7 +1633,7 @@ void BossMove3() {
 			MS = 0;
 			//BOSS_SPEED = 10;
 			motion_index5 = BOSSAnime[BOSS_act_index];
-			boss.by = player.y - 100;
+			boss.by = player.y - 180;
 			/*if (boss.by > 450) {
 				BOSS_SPEED = 0;
 			}
@@ -1608,14 +1644,14 @@ void BossMove3() {
 		}
 		if (count > 500 && count < 550) {
 			MS = 1;
-			boss.by = player.y - 100;
-			DrawGraph(boss.bx + 100, boss.by - 50, Keikoku, TRUE);
+			boss.by = player.y - 180;
+			DrawGraph(boss.bx + 130, boss.by - 50, Keikoku, TRUE);
 			motion_index5 = BOSSBoom[BOSS_act_index2];
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
 
 		}
 		if (count == 549) {
-			soni.sx = 890;
+			soni.sx = 190;
 			//soni.sy = 470;
 			soni.sy = player.y - 100;
 		}
@@ -1623,7 +1659,7 @@ void BossMove3() {
 			BOSS_act_index2 = 0;
 			MS = 0;
 			motion_index5 = BOSSAnime[BOSS_act_index];
-			boss.by = player.y - 100;
+			boss.by = player.y - 180;
 			/*BOSS_SPEED = 10;
 			motion_index5 = BOSSAnime[BOSS_act_index];
 			if (boss.by < 300) {
@@ -1638,7 +1674,7 @@ void BossMove3() {
 		if (count > 100 && count < 300 || count > 350 && count < 550 ||
 			count > 550 && count < 800) {
 			motion_index6 = BossSonic[BOSS_act_index3];
-			soni.sx -= SONIC_SPEED;
+			soni.sx += SONIC_SPEED;
 			DrawExtendGraph(soni.sx, soni.sy, soni.sx + soni.sw, soni.sy + soni.sh, Sonic[motion_index6], TRUE);
 		}
 		if (count == 799) {

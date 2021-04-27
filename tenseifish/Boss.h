@@ -15,7 +15,7 @@ void Sibuki();
 
 
 //Bossの初期値
-int BOSS_POS_X = 1000;
+int BOSS_POS_X = -400;
 int BOSS_POS_Y = 200;
 int BOSS_WIDTH = 450;
 int BOSS_HEIGHT = 450;
@@ -30,18 +30,20 @@ int SONIC_SPEED =20;
 
 int Boss1[13] = { 0 };		//ボスの画像を格納する配列
 int Boss2[13] = { 0 };		//ボスの画像を格納する配列
+int Boss3[5] = { 0 };		//ボスの画像を格納する配列
 int Sonic[3] = { 0 };      //ボスの必殺技を格納する配列
 int Hokaku[5] = { 0 };    //ボスの捕獲を格納する配列
 
 
-int BOSSBoom[] = { 5,5,4,4,3,3,2,1,0,2,1,0 };		//必殺技するときのアニメーションの番号 
+int BOSSBoom[] = { 2,2,1,1,0,0,5,6,5,4,5,6 };		//必殺技するときのアニメーションの番号 
 
-int BOSSAnime[] = { 0,1,0,2 };		//泳ぐときのアニメーションの番号 
-int BOSSAttack[] = { 3,4,3,5 };		//突進するときのアニメーションの番号 
-int BOSSDown[] = { 6,7,6,8 };         //下降するときのアニメーションの番号 
-int BOSSUp[] = { 9,10,9,11 };         //上昇するときのアニメーションの番号 
+int BOSSAnime[] = { 11,10,11,9 };		//泳ぐときのアニメーションの番号 
+int BOSSAttack[] = { 8,7,8,6 };		//突進するときのアニメーションの番号 
+int BOSSDown[] = { 5,4,5,3 };         //下降するときのアニメーションの番号 
+int BOSSUp[] = { 2,1,2,0 };         //上昇するときのアニメーションの番号 
 int BossSonic[] = { 0,1 };         //必殺技のアニメーション番号
 int BossHokaku[] = { 0,1,2,3 };         //捕獲のアニメーション番号
+int BossKoutai[] = { 0,1,0,2 };         //後退のアニメーション番号
 
 int HOKAKU_act_index = 0;
 int HOKAKU_SPEED = 20;
@@ -123,6 +125,7 @@ struct Boss//プレイヤー
 	int flg = true;
 	int bx = 0, by = 0, bw = 0, bh = 0;
 	int speed = 0;
+	int dir = 0;
 };
 struct Boss boss;
 
