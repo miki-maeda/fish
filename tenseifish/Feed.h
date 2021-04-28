@@ -15,15 +15,21 @@ int em, am, im;
 int MoveSpeed = 50;		//アニメーションが変わるスピード
 int MoveEat = MoveSpeed;	//アニメーションが変わるまでの時間
 int CountEat = 0;		//カウントする
-int Eatflg = 0;
-int EatCont = 0;
-int er = 0, eg = 0, eb = 0;
-int Feedflg = FALSE;
-int LeveUpflg1 = FALSE;
-int LeveUpflg2 = FALSE;
-int LCount = 0;
-int LeveC;
+int Eatflg = 0;			//エネミーが岩の中にいる時のフラグ
+int EatCont = 0;		//岩の中のチェック処理にかかった回数を格納する変数
+int er = 0, eg = 0, eb = 0;	//色を格納する変数	
+int Feedflg = FALSE;	//岩に当たった時にランダムでゲージを減らす処理フラグ
+int LeveUpflg1 = FALSE;	//レベルが上がった時のフラグ1(レベルが1から2)
+int LeveUpflg2 = FALSE;	//レベルが上がった時のフラグ2(レベルが2から3)
+int LCount = 0;			//レベルが上がった時の点滅			
+int LeveC;				//レベルの表記
+int Deatflg = FALSE;	//フラグ
+int DSpeed;				//吐き出した餌のスピード
+int RandEat = 0;		//吐き出す餌の種類
 
+//仮
+int LMflg=TRUE;
+int RMflg = FALSE;
 
 struct Eat {
 
@@ -33,11 +39,13 @@ struct Eat {
 	int e_x, e_y;		//餌の座標
 	float e_w, e_h;		//横幅、縦幅
 	int typeD;			//出現させる種類(FALSE:餌,TRUE:敵)
+	//仮
+	int DMove;			//魚の向き
 };
 
 struct Eat eat[10];				//餌の表示する数
-struct Eat eat0 = { TRUE,0,0,1410,0,0,0,FALSE };
+struct Eat eat0 = { TRUE,0,0,1410,0,0,0,FALSE,FALSE };
 
 int Hit(Player* p, Eat* e);				//敵とのあたり判定
 int EatCheck(int x, int y);				//敵の出現場所の確認
-void DEat();
+void DEat();							//岩もしくは敵に当たった時ランダムでエサゲージを下げる処理

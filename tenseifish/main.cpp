@@ -428,6 +428,7 @@ void GameInit() {
 	Leve = 1;
 	Scke = 1;
 	LeveUp = 10;
+	RandEat = 3;
 
 	//当たり判定用変数の初期化
 	CollXadd = 0;
@@ -445,8 +446,8 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	//Time = 2400;
-	Time = 60;
+	Time = 2400;
+	/*Time = 60;*/
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -610,26 +611,24 @@ void PlayerMove() {
 		ColorCheck(player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2);		//右下
 	}
 
-	if (player.muteki != 0 && Damege != 0  && player.life>0) {
+	if (player.muteki != 0 && Damege != 0 && player.life > 0) {
 		if (key1 < 1) {
 			player.flg = FALSE;
-			
 			if (PointNom == 1) player.x += 3;
 			if (PointNom == 2) player.x -= 1;
-			
+			Feedflg = TRUE;
 			player.y -= 5;
-			
-			if (Feedflg == FALSE) {
-				DEat();
-				Feedflg = TRUE;
-			}
 		}
 	}
 	else {
 		PointNom = 0;
 		Damege = 0;
 		player.flg = TRUE;
-		Feedflg = FALSE;
+	}
+	if (Feedflg == TRUE) {
+		if (key1 < 1) {
+			DEat();
+		}
 	}
 
 	/*act_index++;
@@ -1108,20 +1107,61 @@ void PlayerEat(int* e) {
 
 void DEat() {
 
-	int Rand = GetRand(2);
+	static int DEflg = FALSE;
+	static int Dx = 0, Dy = 0, Dw = 0, Dh = 0;
 
-	switch (Rand) {
-	case 0:
-		if (em < 6&&em>0) em--;
-		break;
-	case 1:
-		if (am < 6&&am>0)am--;
-		break;
-	case 2:
-		if (im < 6&&im>0)im--;
-		break;
+	if (DEflg == FALSE) {
+		RandEat = GetRand(2);
+		switch (RandEat) {
+		case 0:
+			if (em < 6 && em>0) em--;
+			else RandEat = 3;
+
+			break;
+		case 1:
+			if (am < 6 && am>0)am--;
+			else RandEat = 3;
+			break;
+		case 2:
+			if (im < 6 && im>0)im--;
+			else RandEat = 3;
+			break;
+		}
+		DEflg = TRUE;
 	}
-	/*EatAmount--;*/
+
+	if (Deatflg == FALSE) {
+		Dx = player.x;
+		Dy = player.y;
+		if (Leve != 3) {
+			Dw = player.w / Scke;
+			Dh = player.h / Scke;
+		}
+		else {
+			Dw = player.w / 2;
+			Dh = player.h / 2;
+		}
+		Deatflg = TRUE;
+	}
+
+	if (RandEat < 3) {
+		DrawExtendGraph(Dx + Dw / 2 + 10 + DSpeed, Dy + Dh / 2 + 10, Dx + Dw + DSpeed - 10, Dy + Dh - 10, feedImage[RandEat][0], Deatflg);
+		DSpeed += 10;
+		if (Dx + DSpeed >= SCREEN_WIDTH) {
+			Deatflg = FALSE;
+			Feedflg = FALSE;
+			DEflg = FALSE;
+			DSpeed = 0;
+		}
+	}
+	else {
+		DEflg = FALSE;
+	}
+
+	if (RandEat > 2) {
+		Deatflg = FALSE;
+		Feedflg = FALSE;
+	}
 }
 
 //餌とプレイヤーのあたり判定
