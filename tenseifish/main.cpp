@@ -1693,6 +1693,14 @@ void BossMove3() {
 
 void Sibuki() {//水しぶきのアニメーション
 
+
+	int count_s = 10;
+
+	if (count_s != 0) {
+
+		boss.bx -= 1.5;
+	}
+
 	if (--sibuki_act_wait <= 0)
 	{
 		if (key1 < 1) {
@@ -1704,12 +1712,8 @@ void Sibuki() {//水しぶきのアニメーション
 		motion_index9 = sibukianime[sibuki_act_index];
 
 	}
-
-
 	DrawExtendGraph(boss.bx, SIBUKI_Y, boss.bx + boss.bw, SIBUKI_Y + 162, sibuki[motion_index9], TRUE);
 	//DrawExtendGraph(500, SIBUKI_Y, 500 + 300, SIBUKI_Y + 300, sibuki[motion_index9], TRUE);
-
-
 }
 
 

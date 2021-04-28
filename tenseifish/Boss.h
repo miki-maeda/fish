@@ -84,7 +84,7 @@ int sibuki_act_index = 0;
 int sibuki_MOTION_INDEX = 8;
 int motion_index9;
 int SIBUKI_Y = 5;
-
+int SIBUKI_X;
 
 int shipanime[] = { 0,1,0,2 };      //船のアニメーション
 int ship1[9]{ 0 };
