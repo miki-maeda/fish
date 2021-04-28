@@ -110,6 +110,8 @@ int NET_ANI_SPEED = 20;
 int NET_act_wait = NET_ANI_SPEED;
 int NET_act_index = 0;
 int NET = 0;
+int netflg = 0;
+int counth = 0;
 
 struct Net //–Ô
 {

@@ -1320,6 +1320,7 @@ void BossInit() {
 	boss.bh = BOSS_HEIGHT;
 	boss.speed = BOSS_SPEED;
 	count = 0;
+	counth = 0;
 	BOSS_PATTREN = 1;
 
 
@@ -1342,11 +1343,12 @@ void BossInit() {
 	cr = 0;
 	cr2 = 0;
 
-	net.nx = 1100;
+	net.nx = 1350;
 	net.ny = 50;
 	net.nw = 350;
 	net.nh = 350;
 	net.speed = 15;
+	netflg = 0;
 
 	//playerの位置初期化
 	player.x = 500;
@@ -1715,7 +1717,7 @@ void Sibuki() {//水しぶきのアニメーション
 void Ship() {
 	if (key1 < 1) {
 		SHIP_COUNT += sc;
-		SHIP_COUNT2 = 4000 - SHIP_COUNT;
+		SHIP_COUNT2 = 400 - SHIP_COUNT;
 		if (SHIP_COUNT2 == 0) {
 			sc = 0;
 		}
@@ -1726,16 +1728,38 @@ void Ship() {
 		if (SHIP_COUNT2 == 0)
 		{
 			SHIP_X -= SHIP_SPEED;
+			net.nx -= SHIP_SPEED;
 		}
 		if (SHIP_X == 1200)
 		{
+			counth = (counth + 1) % 150;
 			SHIP_SPEED = 0;
 			SetFontSize(50);
 			DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
-			if (cr == 0) {
-				NET = 1;
-			}
+			
 		}
+		if (SHIP_X == 600)
+		{
+			counth = (counth + 1) % 150;
+			SHIP_SPEED = 0;
+			SetFontSize(50);
+			DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
+		}
+		if (counth > 1 && counth < 148) {
+			NET = 1;
+		}
+		if (motion_index4 == 6) {
+			netflg = 1;
+		}
+
+		if (netflg == 1) {
+			NET = 0;
+			SHIP_SPEED = 5;
+			netflg = 0;
+			motion_index4 = 0;
+			NET_act_index = 0;
+		}
+		
 		if (--SHIP_act_wait <= 0)
 		{
 			if (key1 < 1) {
@@ -1754,36 +1778,63 @@ void Ship() {
 void Ami() {
 	if (key1 < 1) {
 		if (cr == 0) {
-			if (--NET_act_wait <= 0)
-			{
-				if (key1 < 1) {
-					NET_act_index++;
-					NET_act_wait = NET_ANI_SPEED;
-					NET_act_index %= NET_MOTION_INDEX;
+			if (SHIP_SPEED == 0) {
+				if (--NET_act_wait <= 0)
+				{
+					if (key1 < 1) {
+						NET_act_index++;
+						NET_act_wait = NET_ANI_SPEED;
+						NET_act_index %= NET_MOTION_INDEX;
+					}
+					motion_index4 = netanime[NET_act_index];
 				}
+			}
+			if (SHIP_X == 1200) {
+				if (motion_index4 == 4) {
+					//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+					if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
+						250 >= boss.by && 270 <= boss.by + boss.bw) {
+						cr = 1;
+					}
+				}
+				if (motion_index4 == 5) {
+					//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+					if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
+						310 >= boss.by && 330 <= boss.by + boss.bw) {
+						cr = 1;
 
-				motion_index4 = netanime[NET_act_index];
-			}
-			if (motion_index4 == 4) {
-				//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-				if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
-					250 >= boss.by && 270 <= boss.by + boss.bw) {
-					cr = 1;
+					}
+				}
+				if (motion_index4 == 6) {
+					//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+					if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
+						360 >= boss.by && 380 <= boss.by + boss.bw) {
+						cr = 1;
+					}
 				}
 			}
-			if (motion_index4 == 5) {
-				//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-				if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
-					310 >= boss.by && 330 <= boss.by + boss.bw) {
-					cr = 1;
+			else if (SHIP_X == 600) {
+				if (motion_index4 == 4) {
+					//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+					if (500 >= boss.bx && 600 <= boss.bx + boss.bh &&
+						250 >= boss.by && 270 <= boss.by + boss.bw) {
+						cr = 1;
+					}
+				}
+				if (motion_index4 == 5) {
+					//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+					if (500 >= boss.bx && 600 <= boss.bx + boss.bh &&
+						310 >= boss.by && 330 <= boss.by + boss.bw) {
+						cr = 1;
 
+					}
 				}
-			}
-			if (motion_index4 == 6) {
-				//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-				if (1200 >= boss.bx && 1300 <= boss.bx + boss.bh &&
-					360 >= boss.by && 380 <= boss.by + boss.bw) {
-					cr = 1;
+				if (motion_index4 == 6) {
+					//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+					if (500 >= boss.bx && 600 <= boss.bx + boss.bh &&
+						360 >= boss.by && 380 <= boss.by + boss.bw) {
+						cr = 1;
+					}
 				}
 			}
 			DrawExtendGraph(net.nx, net.ny, net.nx + net.nw, net.ny + net.nh, net1[motion_index4], TRUE);
@@ -1805,7 +1856,7 @@ void BHA() {
 			cr2 = 1;
 		}
 
-		DrawGraph(1000, 50, Hokaku[motion_index8], TRUE);
+		DrawGraph(net.nx, net.ny, Hokaku[motion_index8], TRUE);
 	}
 }
 void BossStage() {
