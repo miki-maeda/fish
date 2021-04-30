@@ -859,6 +859,7 @@ int LoadSound() {
 	if ((EvoSE = LoadSoundMem("Sound/powerup10.mp3")) == -1)return -1;
 	if ((DieSE = LoadSoundMem("Sound/NES-General01-10(Pitch).mp3")) == -1)return -1;
 	if ((KeikokuSE = LoadSoundMem("Sound/meka_ge_keihou03.mp3")) == -1)return -1;
+	if ((SibukiSE = LoadSoundMem("Sound/水・ざぶーん05.mp3")) == -1)return -1;
 
 	//音量調整
 	ChangeVolumeSoundMem(125, MainSound);
@@ -1748,8 +1749,15 @@ void Sibuki() {//水しぶきのアニメーション
 	int count_s = 10;
 
 	if (count_s != 0) {
-
-		boss.bx -= 1.5;
+		if (Leve == 1) {
+			boss.bx -= 1.5;
+		}
+		else if (Leve == 2) {
+			boss.bx -= 4;
+		}
+		else {
+			boss.bx -= 6;
+		}
 	}
 
 	if (--sibuki_act_wait <= 0)
@@ -1765,6 +1773,9 @@ void Sibuki() {//水しぶきのアニメーション
 	}
 	DrawExtendGraph(boss.bx, SIBUKI_Y, boss.bx + boss.bw, SIBUKI_Y + 162, sibuki[motion_index9], TRUE);
 	//DrawExtendGraph(500, SIBUKI_Y, 500 + 300, SIBUKI_Y + 300, sibuki[motion_index9], TRUE);
+	if (CheckSoundMem(SibukiSE) == 0) {
+		PlaySoundMem(SibukiSE, DX_PLAYTYPE_BACK, TRUE);
+	}
 }
 
 

@@ -15,3 +15,4 @@ int EatSE;
 int EvoSE;
 int DieSE;
 int KeikokuSE;
+int SibukiSE;
