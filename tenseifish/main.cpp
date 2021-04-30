@@ -126,6 +126,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 void GameTitle() {
 	static bool push = 0;	// 押されたかどうか確認する関数
 
+	SHIPFlg = FALSE;
+
 	if (CheckSoundMem(TitleSound) == 0) {
 		PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
 	}
@@ -446,8 +448,8 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	//Time = 2400;
-	Time = 60;
+	Time = 2400;
+	/*Time = 60;*/
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -561,7 +563,7 @@ void PlayerMove() {
 	}
 	if (player.y > SCREEN_HEIGHT - player.h)player.y = SCREEN_HEIGHT - player.h;
 
-	if (Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg1 != TRUE) {
+	if (Damege != 1 && LeveUpflg1 != TRUE ) {
 		if (Leve == 1 && key1 != 1  && key2 != 1) {
 			Umispeed -= 2;
 			Iwaspeed -= 5;
@@ -1143,13 +1145,13 @@ void DEat() {
 	if (Deatflg == FALSE) {
 		Dx = player.x;
 		Dy = player.y;
-		if (Leve != 3) {
-			Dw = player.w / Scke;
-			Dh = player.h / Scke;
+		if (Leve == 1) {
+			Dw = player.w;
+			Dh = player.h;
 		}
 		else {
-			Dw = player.w / 2;
-			Dh = player.h / 2;
+			Dw = player.w / 1.5;
+			Dh = player.h / 1.5;
 		}
 		Deatflg = TRUE;
 	}
@@ -1238,7 +1240,7 @@ int Hit(Player* p, Eat* e) {
 				player.life--;
 				player.muteki = 1;
 				PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
-				DEat();
+				Feedflg = TRUE;
 				return TRUE;
 			}
 		}
@@ -1257,7 +1259,7 @@ void GameClearHit() {
 	GameState = 3;
 	StopSoundMem(BossSound);
 	PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
-
+	SHIPFlg = FALSE;
 }
 
 void GameClear() {
@@ -1407,6 +1409,8 @@ void BossInit() {
 	player.y = PLAYER_POS_Y;
 
 	motion_index9 = 0;
+	motion_index4 = 0;
+	NET_act_index = 0;
 
 	//ゲームメインへ
 	GameState = 5;
@@ -2449,6 +2453,7 @@ void Pouse() {
 }
 void GameOver() {
 	static bool push = 0; // 押されたかどうか確認する関数
+	SHIPFlg = FALSE;
 	DrawGraph(0, 0, Gameover, TRUE);
 
 	if (CheckSoundMem(GameOverSound) == 0) {
