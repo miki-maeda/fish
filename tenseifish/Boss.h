@@ -8,8 +8,11 @@ void BossStage();
 void BossBackScrool();
 
 void Ami();
+void AmiLs();	// 反転版
 void Ship();
+void ShipLs();	// 反転版
 void BHA();
+void BHALs();	// 反転版
 
 void Sibuki();
 
@@ -33,6 +36,7 @@ int Boss2[13] = { 0 };		//ボスの画像を格納する配列
 int Boss3[5] = { 0 };		//ボスの画像を格納する配列
 int Sonic[3] = { 0 };      //ボスの必殺技を格納する配列
 int Hokaku[5] = { 0 };    //ボスの捕獲を格納する配列
+int Hokaku2[5] = { 0 };	  //ボスの捕獲を格納する配列（反転）
 
 
 int BOSSBoom[] = { 2,2,1,1,0,0,5,6,5,4,5,6 };		//必殺技するときのアニメーションの番号 
@@ -88,11 +92,13 @@ int SIBUKI_X;
 
 int shipanime[] = { 0,1,0,2 };      //船のアニメーション
 int ship1[9]{ 0 };
+int ship2[9]{ 0 };
 int motion_index3;
 int SHIP_X = 1400;
 int SHIP_Y = -40;
 int SHIP_W = 350;
 int SHIP_H = 350;
+int SHIP_lX = 100;
 int SHIP_SPEED = 5;
 int SHIP_COUNT = 0;
 int SHIP_COUNT2 = 0;
@@ -101,9 +107,12 @@ int SHIP_act_wait = SHIP_ANI_SPEED;
 int SHIP_act_index = 0;
 int SHIP_MOTION_INDEX = 4;
 
+int SHIPFlg = FALSE;
+
 //網
 int netanime[] = { 0,1,2,3,4,5,6 };
 int net1[7] = { 0 };
+int net2[7] = { 0 };
 int motion_index4;
 int NET_MOTION_INDEX = 7;
 int NET_ANI_SPEED = 20;
@@ -117,7 +126,7 @@ struct Net //網
 {
 
 	int flg = true;
-	int nx = 0, ny = 0, nw = 0, nh = 0;
+	int nx = 0, lnx = 0, ny = 0, nw = 0, nh = 0;
 	int speed = 0;
 };
 static Net net;

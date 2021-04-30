@@ -446,8 +446,8 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 2400;
-	/*Time = 60;*/
+	//Time = 2400;
+	Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -758,8 +758,15 @@ int LoadImages() {
 	//船
 	if ((LoadDivGraph("Image/船.png", 9, 3, 1, 400, 700, ship1)) == -1)return -1;
 
+	//船2
+	if ((LoadDivGraph("Image/船2.png", 9, 3, 1, 400, 700, ship2)) == -1)return -1;
+
 	//網
 	if ((LoadDivGraph("Image/網.png", 7, 7, 1, 400, 400, net1)) == -1)return -1;
+
+	//網2
+	if ((LoadDivGraph("Image/網2.png", 7, 7, 1, 400, 400, net2)) == -1)return -1;
+
 	//Boss
 	if ((LoadDivGraph("Image/maguro.png", 12, 12, 1, 350, 350, Boss1)) == -1)return -1;
 	if ((LoadDivGraph("Image/maguro2.png", 6, 6, 1, 350, 350, Boss2)) == -1)return -1;
@@ -770,6 +777,8 @@ int LoadImages() {
 	if ((Keikoku = LoadGraph("Image/keikoku.png")) == -1)return -1;
 	//Boss捕獲
 	if ((LoadDivGraph("Image/Hokaku.png", 4, 4, 1, 350, 500, Hokaku)) == -1)return -1;
+	//Boss捕獲2
+	if ((LoadDivGraph("Image/マグロ捕獲2.png", 4, 4, 1, 350, 500, Hokaku2)) == -1)return -1;
 	//ゲームクリア画像
 	if ((Gameclear[0] = LoadGraph("Image/GameClear.png")) == -1)return -1;
 	if ((Gameclear[1] = LoadGraph("Image/GameClear(NoEat).png")) == -1)return -1;
@@ -1371,6 +1380,7 @@ void BossInit() {
 
 
 	SHIP_X = 1500;
+	SHIP_lX = -400;
 	SHIP_Y = -100;
 	SHIP_W = 350;
 	SHIP_H = 350;
@@ -1384,6 +1394,7 @@ void BossInit() {
 	cr2 = 0;
 
 	net.nx = 1350;
+	net.lnx = -250;
 	net.ny = 50;
 	net.nw = 350;
 	net.nh = 350;
@@ -1759,41 +1770,116 @@ void Sibuki() {//水しぶきのアニメーション
 
 //船アニメーション
 void Ship() {
-	if (key1 < 1) {
-		SHIP_COUNT += sc;
-		SHIP_COUNT2 = 400 - SHIP_COUNT;
-		if (SHIP_COUNT2 == 0) {
-			sc = 0;
+	if (SHIPFlg == FALSE) {
+		if (key1 < 1) {
+			SHIP_COUNT += sc;
+			SHIP_COUNT2 = 400 - SHIP_COUNT;
+			if (SHIP_COUNT2 == 0) {
+				sc = 0;
+			}
+			if (SHIP_COUNT2 != 0) {
+				SetFontSize(50);
+				DrawFormatString(700, 30, 0x000000, "船が来るまで%d秒", SHIP_COUNT2 / 100);
+			}
+			if (SHIP_COUNT2 == 0)
+			{
+				SHIP_X -= SHIP_SPEED;
+				net.nx -= SHIP_SPEED;
+				SetFontSize(50);
+				DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
+			}
+			if (SHIP_X == 1300)
+			{
+				counth = (counth + 1) % 150;
+				SHIP_SPEED = 0;
+
+			}
+			if (SHIP_X == 800)
+			{
+				counth = (counth + 1) % 150;
+				SHIP_SPEED = 0;
+
+			}
+			if (SHIP_X == 300)
+			{
+				counth = (counth + 1) % 150;
+				SHIP_SPEED = 0;
+			}
+			if (SHIP_X == -300)
+			{
+				SHIPFlg = TRUE;
+				SHIP_X = 1500;
+				net.nx = 1350;
+			}
+
+			if (counth > 1 && counth < 148) {
+				NET = 1;
+			}
+			if (motion_index4 == 6) {
+				netflg = 1;
+			}
+
+			//if (SHIP_X != 300)
+			//{
+			if(SHIPFlg != TRUE){
+				if (netflg == 1) {
+					NET = 0;
+					SHIP_SPEED = 5;
+					netflg = 0;
+					motion_index4 = 0;
+					NET_act_index = 0;
+				}
+			}
+			//}
+
+			if (--SHIP_act_wait <= 0)
+			{
+				if (key1 < 1) {
+					SHIP_act_index++;
+					SHIP_act_wait = SHIP_ANI_SPEED;
+					SHIP_act_index %= SHIP_MOTION_INDEX;
+				}
+
+				motion_index3 = shipanime[SHIP_act_index];
+			}
+			DrawExtendGraph(SHIP_X, SHIP_Y, SHIP_X + SHIP_W, SHIP_Y + SHIP_H, ship1[motion_index3], TRUE);
 		}
-		if (SHIP_COUNT2 != 0) {
-			SetFontSize(50);
-			DrawFormatString(700, 30, 0x000000, "船が来るまで%d秒", SHIP_COUNT2 / 100);
-		}
-		if (SHIP_COUNT2 == 0)
-		{
-			SHIP_X -= SHIP_SPEED;
-			net.nx -= SHIP_SPEED;
-			SetFontSize(50);
-			DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
-		}
-		if (SHIP_X == 1300)
+	}
+}
+
+// 船（反転）アニメーション
+void ShipLs()
+{
+	if (SHIPFlg == TRUE)
+	{
+		SHIP_lX += SHIP_SPEED;
+		net.lnx += SHIP_SPEED;
+		SetFontSize(50);
+		DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
+
+		if (SHIP_lX == 200)
 		{
 			counth = (counth + 1) % 150;
 			SHIP_SPEED = 0;
 
 		}
-		if (SHIP_X == 800)
+		if (SHIP_lX == 700)
 		{
 			counth = (counth + 1) % 150;
 			SHIP_SPEED = 0;
 
 		}
-		if (SHIP_X == 300)
+		if (SHIP_lX == 900)
 		{
 			counth = (counth + 1) % 150;
 			SHIP_SPEED = 0;
 		}
-
+		if (SHIP_lX == 1500)
+		{
+			SHIPFlg = FALSE;
+			SHIP_lX = -400;
+			net.lnx = -250;
+		}
 		if (counth > 1 && counth < 148) {
 			NET = 1;
 		}
@@ -1801,7 +1887,7 @@ void Ship() {
 			netflg = 1;
 		}
 
-		if (SHIP_X != 300)
+		if (SHIP_X != 900)
 		{
 			if (netflg == 1) {
 				NET = 0;
@@ -1810,129 +1896,247 @@ void Ship() {
 				motion_index4 = 0;
 				NET_act_index = 0;
 			}
-		}
+			//}
 
-		if (--SHIP_act_wait <= 0)
-		{
-			if (key1 < 1) {
-				SHIP_act_index++;
-				SHIP_act_wait = SHIP_ANI_SPEED;
-				SHIP_act_index %= SHIP_MOTION_INDEX;
+			if (--SHIP_act_wait <= 0)
+			{
+				if (key1 < 1) {
+					SHIP_act_index++;
+					SHIP_act_wait = SHIP_ANI_SPEED;
+					SHIP_act_index %= SHIP_MOTION_INDEX;
+				}
+
+				motion_index3 = shipanime[SHIP_act_index];
 			}
-
-			motion_index3 = shipanime[SHIP_act_index];
+			DrawExtendGraph(SHIP_lX, SHIP_Y, SHIP_lX + SHIP_W, SHIP_Y + SHIP_H, ship2[motion_index3], TRUE);
 		}
-		DrawExtendGraph(SHIP_X, SHIP_Y, SHIP_X + SHIP_W, SHIP_Y + SHIP_H, ship1[motion_index3], TRUE);
 	}
 }
 
 //網アニメーション
 void Ami() {
-	if (key1 < 1) {
-		if (cr == 0) {
-			if (SHIP_SPEED == 0) {
-				if (--NET_act_wait <= 0)
-				{
-					if (key1 < 1) {
-						NET_act_index++;
-						NET_act_wait = NET_ANI_SPEED;
-						NET_act_index %= NET_MOTION_INDEX;
+	if (SHIPFlg == FALSE) {
+		if (key1 < 1) {
+			if (cr == 0) {
+				if (SHIP_SPEED == 0) {
+					if (--NET_act_wait <= 0)
+					{
+						if (key1 < 1) {
+							NET_act_index++;
+							NET_act_wait = NET_ANI_SPEED;
+							NET_act_index %= NET_MOTION_INDEX;
+						}
 					}
+					motion_index4 = netanime[NET_act_index];
 				}
-				motion_index4 = netanime[NET_act_index];
-			}
-			if (SHIP_X == 1300) {
-				if (motion_index4 == 4) {
-					//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-					if (1300 >= boss.bx && 1400 <= boss.bx + boss.bh &&
-						250 >= boss.by && 270 <= boss.by + boss.bw) {
-						cr = 1;
+				if (SHIP_X == 1300) {
+					if (motion_index4 == 4) {
+						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						if (1300 >= boss.bx && 1400 <= boss.bx + boss.bh &&
+							250 >= boss.by && 270 <= boss.by + boss.bw) {
+							cr = 1;
+						}
 					}
-				}
-				if (motion_index4 == 5) {
-					//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-					if (1300 >= boss.bx && 1400 <= boss.bx + boss.bh &&
-						310 >= boss.by && 330 <= boss.by + boss.bw) {
-						cr = 1;
+					if (motion_index4 == 5) {
+						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						if (1300 >= boss.bx && 1400 <= boss.bx + boss.bh &&
+							310 >= boss.by && 330 <= boss.by + boss.bw) {
+							cr = 1;
 
+						}
+					}
+					if (motion_index4 == 6) {
+						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						if (1300 >= boss.bx && 1400 <= boss.bx + boss.bh &&
+							360 >= boss.by && 380 <= boss.by + boss.bw) {
+							cr = 1;
+						}
 					}
 				}
-				if (motion_index4 == 6) {
-					//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-					if (1300 >= boss.bx && 1400 <= boss.bx + boss.bh &&
-						360 >= boss.by && 380 <= boss.by + boss.bw) {
-						cr = 1;
+				else if (SHIP_X == 700) {
+					if (motion_index4 == 4) {
+						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
+							250 >= boss.by && 270 <= boss.by + boss.bw) {
+							cr = 1;
+						}
 					}
-				}
-			}
-			else if (SHIP_X == 700) {
-				if (motion_index4 == 4) {
-					//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-					if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
-						250 >= boss.by && 270 <= boss.by + boss.bw) {
-						cr = 1;
-					}
-				}
-				if (motion_index4 == 5) {
-					//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-					if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
-						310 >= boss.by && 330 <= boss.by + boss.bw) {
-						cr = 1;
+					if (motion_index4 == 5) {
+						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
+							310 >= boss.by && 330 <= boss.by + boss.bw) {
+							cr = 1;
 
+						}
+					}
+					if (motion_index4 == 6) {
+						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
+							360 >= boss.by && 380 <= boss.by + boss.bw) {
+							cr = 1;
+						}
 					}
 				}
-				if (motion_index4 == 6) {
-					//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-					if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
-						360 >= boss.by && 380 <= boss.by + boss.bw) {
-						cr = 1;
+				else if (SHIP_X == 300) {
+					if (motion_index4 == 4) {
+						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						if (300 >= boss.bx && 400 <= boss.bx + boss.bh &&
+							250 >= boss.by && 270 <= boss.by + boss.bw) {
+							cr = 1;
+						}
 					}
-				}
-			}
-			else if (SHIP_X == 300) {
-				if (motion_index4 == 4) {
-					//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-					if (300 >= boss.bx && 400 <= boss.bx + boss.bh &&
-						250 >= boss.by && 270 <= boss.by + boss.bw) {
-						cr = 1;
-					}
-				}
-				if (motion_index4 == 5) {
-					//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-					if (300 >= boss.bx && 400 <= boss.bx + boss.bh &&
-						310 >= boss.by && 330 <= boss.by + boss.bw) {
-						cr = 1;
+					if (motion_index4 == 5) {
+						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						if (300 >= boss.bx && 400 <= boss.bx + boss.bh &&
+							310 >= boss.by && 330 <= boss.by + boss.bw) {
+							cr = 1;
 
+						}
+					}
+					if (motion_index4 == 6) {
+						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						if (300 >= boss.bx && 400 <= boss.bx + boss.bh &&
+							360 >= boss.by && 380 <= boss.by + boss.bw) {
+							cr = 1;
+						}
 					}
 				}
-				if (motion_index4 == 6) {
-					//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-					if (300 >= boss.bx && 400 <= boss.bx + boss.bh &&
-						360 >= boss.by && 380 <= boss.by + boss.bw) {
-						cr = 1;
-					}
-				}
+				DrawExtendGraph(net.nx, net.ny, net.nx + net.nw, net.ny + net.nh, net1[motion_index4], TRUE);
 			}
-			DrawExtendGraph(net.nx, net.ny, net.nx + net.nw, net.ny + net.nh, net1[motion_index4], TRUE);
 		}
 	}
 }
-void BHA() {
-	if (key1 < 1) {
-		if (--HOKAKU_act_wait <= 0)
-		{
-			if (key1 < 1) {
-				HOKAKU_act_index++;
-				HOKAKU_act_wait = HOKAKU_SPEED;
-				HOKAKU_act_index %= HOKAKU_MOTION_INDEX;
-			}
-			motion_index8 = BossHokaku[HOKAKU_act_index];
-		}
-		if (motion_index8 == 3) {
-			cr2 = 1;
-		}
 
-		DrawGraph(net.nx, net.ny, Hokaku[motion_index8], TRUE);
+void AmiLs() {
+	if (SHIPFlg == TRUE) {
+		if (key1 < 1) {
+			if (cr == 0) {
+				if (SHIP_SPEED == 0) {
+					if (--NET_act_wait <= 0)
+					{
+						if (key1 < 1) {
+							NET_act_index++;
+							NET_act_wait = NET_ANI_SPEED;
+							NET_act_index %= NET_MOTION_INDEX;
+						}
+					}
+					motion_index4 = netanime[NET_act_index];
+				}
+				if (SHIP_lX == 200) {
+					if (motion_index4 == 4) {
+						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						if (100 >= boss.bx && 200 <= boss.bx + boss.bh &&
+							250 >= boss.by && 270 <= boss.by + boss.bw) {
+							cr = 1;
+						}
+					}
+					if (motion_index4 == 5) {
+						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						if (200 >= boss.bx && 300 <= boss.bx + boss.bh &&
+							310 >= boss.by && 330 <= boss.by + boss.bw) {
+							cr = 1;
+
+						}
+					}
+					if (motion_index4 == 6) {
+						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						if (200 >= boss.bx && 300 <= boss.bx + boss.bh &&
+							360 >= boss.by && 380 <= boss.by + boss.bw) {
+							cr = 1;
+						}
+					}
+				}
+				else if (SHIP_lX == 700) {
+					if (motion_index4 == 4) {
+						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
+							250 >= boss.by && 270 <= boss.by + boss.bw) {
+							cr = 1;
+						}
+					}
+					if (motion_index4 == 5) {
+						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
+							310 >= boss.by && 330 <= boss.by + boss.bw) {
+							cr = 1;
+
+						}
+					}
+					if (motion_index4 == 6) {
+						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
+							360 >= boss.by && 380 <= boss.by + boss.bw) {
+							cr = 1;
+						}
+					}
+				}
+				else if (SHIP_lX == 900) {
+					if (motion_index4 == 4) {
+						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						if (800 >= boss.bx && 900 <= boss.bx + boss.bh &&
+							250 >= boss.by && 270 <= boss.by + boss.bw) {
+							cr = 1;
+						}
+					}
+					if (motion_index4 == 5) {
+						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						if (800 >= boss.bx && 900 <= boss.bx + boss.bh &&
+							310 >= boss.by && 330 <= boss.by + boss.bw) {
+							cr = 1;
+
+						}
+					}
+					if (motion_index4 == 6) {
+						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						if (800 >= boss.bx && 900 <= boss.bx + boss.bh &&
+							360 >= boss.by && 380 <= boss.by + boss.bw) {
+							cr = 1;
+						}
+					}
+				}
+				DrawExtendGraph(net.lnx, net.ny, net.lnx + net.nw, net.ny + net.nh, net2[motion_index4], TRUE);
+			}
+		}
+	}
+}
+
+void BHA() {
+	if (SHIPFlg == FALSE) {
+		if (key1 < 1) {
+			if (--HOKAKU_act_wait <= 0)
+			{
+				if (key1 < 1) {
+					HOKAKU_act_index++;
+					HOKAKU_act_wait = HOKAKU_SPEED;
+					HOKAKU_act_index %= HOKAKU_MOTION_INDEX;
+				}
+				motion_index8 = BossHokaku[HOKAKU_act_index];
+			}
+			if (motion_index8 == 3) {
+				cr2 = 1;
+			}
+			DrawGraph(net.nx, net.ny, Hokaku[motion_index8], TRUE);
+		}
+	}
+}
+
+void BHALs() {
+	if (SHIPFlg == TRUE) {
+		if (key1 < 1) {
+			if (--HOKAKU_act_wait <= 0)
+			{
+				if (key1 < 1) {
+					HOKAKU_act_index++;
+					HOKAKU_act_wait = HOKAKU_SPEED;
+					HOKAKU_act_index %= HOKAKU_MOTION_INDEX;
+				}
+				motion_index8 = BossHokaku[HOKAKU_act_index];
+			}
+			if (motion_index8 == 3) {
+				cr2 = 1;
+			}
+			DrawGraph(net.lnx, net.ny, Hokaku2[motion_index8], TRUE);
+		}
 	}
 }
 
@@ -1947,7 +2151,12 @@ void BossStage() {
 	LifeImage();
 	MeterImage();
 	if (cr == 1) {
-		BHA();
+		if (SHIPFlg == FALSE) {
+			BHA();
+		}
+		else if (SHIPFlg == TRUE) {
+			BHALs();
+		}
 	}
 	if (cr2 == 1) {
 		GameClearHit();
@@ -1955,8 +2164,10 @@ void BossStage() {
 	//Goal();
 	if (NET == 1) {
 		Ami();
+		AmiLs();
 	}
 	Ship();
+	ShipLs();
 	Pouse();
 }
 
