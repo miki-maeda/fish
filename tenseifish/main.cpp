@@ -115,6 +115,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 		case 12:
 			GameRule2();
 			break;
+		case 13:
+			Musicmixer();
 		}
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 	}
@@ -127,9 +129,10 @@ void GameTitle() {
 	static bool push = 0;	// 押されたかどうか確認する関数
 
 	SHIPFlg = FALSE;
-
 	if (CheckSoundMem(TitleSound) == 0) {
-		PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
+		if (BGMFlg == FALSE) {
+			PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
+		}
 	}
 	StopSoundMem(HelpSound);
 	
@@ -140,11 +143,15 @@ void GameTitle() {
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_DOWN) {
 		if (++MenuNo > 2)MenuNo = 0;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	if (g_KeyFlg & PAD_INPUT_UP) {
 		if (--MenuNo < 0)MenuNo = 2;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 
@@ -152,7 +159,9 @@ void GameTitle() {
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -164,7 +173,9 @@ void GameTitle() {
 			push = 0;
 			GameState = 6;
 			MenuNo = 0;
-			PlaySoundMem(HelpSound, DX_PLAYTYPE_LOOP, TRUE);
+			if (BGMFlg == FALSE) {
+				PlaySoundMem(HelpSound, DX_PLAYTYPE_LOOP, TRUE);
+			}
 		}
 		else {
 			push = 0;
@@ -181,16 +192,20 @@ void GameHelp()
 	StopSoundMem(TitleSound);
 
 	// メニューカーソルの描画
-	DrawRotaGraph(480, 300 + MenuNo * 185, 0.3f, 0, Corsol, TRUE);
+	DrawRotaGraph(530, 275 + MenuNo * 140, 0.3f, 0, Corsol, TRUE);
 
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_DOWN) {
-		if (++MenuNo > 2)MenuNo = 0;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (++MenuNo > 3)MenuNo = 0;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	if (g_KeyFlg & PAD_INPUT_UP) {
-		if (--MenuNo < 0)MenuNo = 2;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (--MenuNo < 0)MenuNo = 3;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 
@@ -198,7 +213,9 @@ void GameHelp()
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -211,11 +228,18 @@ void GameHelp()
 			GameState = 11;
 			MenuNo = 0;
 		}
+		else if (MenuNo == 2) {
+			push = 0;
+			GameState = 13;
+			MenuNo = 0;
+		}
 		else {
 			push = 0;
 			GameState = 0;
 			MenuNo = 0;
-			PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
+			if (BGMFlg == FALSE) {
+				PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
+			}
 		}
 	}
 }
@@ -231,11 +255,15 @@ void GameGiyo()
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
 		if (++MenuNo > 1)MenuNo = 0;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
 		if (--MenuNo < 0)MenuNo = 1;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 
@@ -243,7 +271,9 @@ void GameGiyo()
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -270,11 +300,15 @@ void GameGiyo2()
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
 		if (++MenuNo > 1)MenuNo = 0;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
 		if (--MenuNo < 0)MenuNo = 1;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 
@@ -282,7 +316,9 @@ void GameGiyo2()
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -309,11 +345,15 @@ void GameGiyo3()
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
 		if (++MenuNo > 1)MenuNo = 0;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
 		if (--MenuNo < 0)MenuNo = 1;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 
@@ -321,7 +361,9 @@ void GameGiyo3()
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -349,11 +391,15 @@ void GameRule()
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
 		if (++MenuNo > 1)MenuNo = 0;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
 		if (--MenuNo < 0)MenuNo = 1;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 
@@ -361,7 +407,9 @@ void GameRule()
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -388,11 +436,15 @@ void GameRule2()
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
 		if (++MenuNo > 1)MenuNo = 0;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
 		if (--MenuNo < 0)MenuNo = 1;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 
@@ -400,7 +452,9 @@ void GameRule2()
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -466,7 +520,9 @@ void GameInit() {
 	GameState = 2;
 
 	StopSoundMem(TitleSound);
-	PlaySoundMem(MainSound, DX_PLAYTYPE_BACK, TRUE);
+	if (BGMFlg == FALSE) {
+		PlaySoundMem(MainSound, DX_PLAYTYPE_BACK, TRUE);
+	}
 }
 
 /***********************************************
@@ -713,7 +769,7 @@ int LoadImages() {
 	//タイトル画像
 	if ((Gametitle = LoadGraph("Image/umi.png")) == -1)return -1;
 	//ゲームヘルプ画像
-	if ((Gamehelp = LoadGraph("Image/GameHelp.png")) == -1)return -1;
+	if ((Gamehelp = LoadGraph("Image/GameHelp2.png")) == -1)return -1;
 	//ゲーム概要画像
 	if ((Gamegiyo = LoadGraph("Image/ゲーム概要.png")) == -1)return -1;
 	//ゲーム概要画像2
@@ -724,12 +780,16 @@ int LoadImages() {
 	if ((Gamerule = LoadGraph("Image/ゲームルール1.png")) == -1)return -1;
 	// ゲームルール2画像
 	if ((Gamerule2 = LoadGraph("Image/ゲームルール2.png")) == -1)return -1;
+	// ゲーム音量調整画像
+	if ((GameMS = LoadGraph("Image/GameMusicSelect.png")) == -1)return -1;
 	//ポーズ画像
 	if ((pauseImage = LoadGraph("Image/pause.png")) == -1)return-1;
 	// カーソル画像
 	if ((Corsol = LoadGraph("Image/coursol.png")) == -1)return -1;
 	//ポーズ画面のカーソル画像
 	if ((Corsol2 = LoadGraph("Image/coursol2.png")) == -1)return -1;
+	// 音量調整画面のカーソル画像
+	if ((Mcorsol = LoadGraph("Image/MusicCoursol.png")) == -1)return -1;
 	//プレイヤー画像
 	//魚レベル1
 	if ((LoadDivGraph("Image/sakana.png", 10, 10, 1, 30, 30, sakana[0])) == -1)return -1;
@@ -864,17 +924,107 @@ int LoadSound() {
 	if ((SibukiSE = LoadSoundMem("Sound/水・ざぶーん05.mp3")) == -1)return -1;
 
 	//音量調整
-	ChangeVolumeSoundMem(125, MainSound);
-	ChangeVolumeSoundMem(125, TitleSound);
-	ChangeVolumeSoundMem(150, GameOverSound);
-	ChangeVolumeSoundMem(125, KeikokuSE);
-	ChangeVolumeSoundMem(200, EatSE);
-	ChangeVolumeSoundMem(200, CarsolSE);
-	ChangeVolumeSoundMem(200, DesitionSE);
-	ChangeVolumeSoundMem(200, HelpSound);
-	ChangeVolumeSoundMem(225, DamegeSE);
-	ChangeVolumeSoundMem(225, BossSound);
+		// BGM
+		ChangeVolumeSoundMem(125, MainSound);
+		ChangeVolumeSoundMem(125, TitleSound);
+		ChangeVolumeSoundMem(125, GameOverSound);
+		ChangeVolumeSoundMem(150, HelpSound);
+		ChangeVolumeSoundMem(150, BossSound);
+		// SE
+		ChangeVolumeSoundMem(125, KeikokuSE);
+		ChangeVolumeSoundMem(200, EatSE);
+		ChangeVolumeSoundMem(200, CarsolSE);
+		ChangeVolumeSoundMem(200, DesitionSE);
+		ChangeVolumeSoundMem(200, SibukiSE);
+		ChangeVolumeSoundMem(200, ClearSE);
+		ChangeVolumeSoundMem(225, EvoSE);
+	
 	return 0;
+}
+
+/*************************************************
+* 音ON:OFF
+**************************************************/
+void Musicmixer()
+{
+	static bool push = 0;	// 押されたかどうか確認する関数
+	DrawGraph(0, 0, GameMS, TRUE);
+	if (BGMFlg == FALSE) {
+		SetFontSize(60);
+		DrawString(710, 270, "ON", 0xff0000);
+		DrawString(780, 270, "/", 0x000000);
+		DrawString(850, 270, "OFF", 0x000000);
+	}
+	else if (BGMFlg == TRUE) {
+		SetFontSize(60);
+		DrawString(710, 270, "ON", 0x000000);
+		DrawString(780, 270, "/", 0x000000);
+		DrawString(850, 270, "OFF", 0xff0000);
+	}
+
+	if (SEFlg == FALSE) {
+		SetFontSize(60);
+		DrawString(710, 420, "ON", 0xff0000);
+		DrawString(780, 420, "/", 0x000000);
+		DrawString(850, 420, "OFF", 0x000000);
+	}
+	else if (SEFlg == TRUE) {
+		SetFontSize(60);
+		DrawString(710, 420, "ON", 0x000000);
+		DrawString(780, 420, "/", 0x000000);
+		DrawString(850, 420, "OFF", 0xff0000);
+	}
+
+	DrawRotaGraph(210, 300 + MenuNo * 147, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_DOWN) {
+		if (++MenuNo > 2)MenuNo = 0;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+	}
+	if (g_KeyFlg & PAD_INPUT_UP) {
+		if (--MenuNo < 0)MenuNo = 2;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+	}
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_2) {
+		if (push == 0) {
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
+			push = 1;
+		}
+
+		if ((MenuNo == 0) && (BGMFlg == FALSE)){
+			BGMFlg = TRUE;
+			StopSoundMem(HelpSound);
+			push = 0;
+		}
+		else if ((MenuNo == 0) && (BGMFlg == TRUE)) {
+			BGMFlg = FALSE;
+			PlaySoundMem(HelpSound, DX_PLAYTYPE_LOOP, TRUE);
+			push = 0;
+		}
+		else if ((MenuNo == 1) && (SEFlg == FALSE)){
+			SEFlg = TRUE;
+			StopSoundMem(DesitionSE);
+			push = 0;
+		}
+		else if ((MenuNo == 1) && (SEFlg == TRUE)) {
+			SEFlg = FALSE;
+			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			push = 0;
+		}
+		else {
+			GameState = 6;
+			MenuNo = 0;
+		}
+	}
 }
 
 
@@ -1041,7 +1191,9 @@ void dieam() {
 	StopSoundMem(WallSE);
 	StopSoundMem(DamegeSE);
 	if (CheckSoundMem(DieSE) == 0) {
-		PlaySoundMem(DieSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(DieSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 	if (motion_index7 > 5) {
@@ -1113,7 +1265,9 @@ void PlayerEat(int* e) {
 	//食べたものの量が一定量に達したら処理を移す
 	if ((EatAmount >= LeveUp)&&(Leve <3)) {
 		PlayerGrowth();
-		PlaySoundMem(EvoSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(EvoSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 }
 
@@ -1230,7 +1384,9 @@ int Hit(Player* p, Eat* e) {
 			if (ex + ew >= px && ex <= px + pw &&
 				ey + eh >= py && ey <= py + ph) {
 				e->flg = FALSE;
-				PlaySoundMem(EatSE, DX_PLAYTYPE_BACK, TRUE);
+				if (SEFlg == FALSE) {
+					PlaySoundMem(EatSE, DX_PLAYTYPE_BACK, TRUE);
+				}
 				return TRUE;
 			}
 		}
@@ -1239,7 +1395,9 @@ int Hit(Player* p, Eat* e) {
 				ey + eh >= phy && ey <= phy + phh && player.muteki == 0) {
 				player.life--;
 				player.muteki = 1;
-				PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
+				if (SEFlg == FALSE) {
+					PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
+				}
 				Feedflg = TRUE;
 				return TRUE;
 			}
@@ -1258,7 +1416,9 @@ void GameClearHit() {
 
 	GameState = 3;
 	StopSoundMem(BossSound);
-	PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
+	if (SEFlg == FALSE) {
+		PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
+	}
 	SHIPFlg = FALSE;
 }
 
@@ -1312,17 +1472,23 @@ void GameClear() {
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
 		if (++MenuNo > 1)MenuNo = 0;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
 		if (--MenuNo < 0)MenuNo = 1;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -1330,14 +1496,18 @@ void GameClear() {
 			push = 0;
 			GameState = 1;
 			StopSoundMem(ClearSE);
-			PlaySoundMem(MainSound, DX_PLAYTYPE_LOOP, TRUE);
+			if (BGMFlg == FALSE) {
+				PlaySoundMem(MainSound, DX_PLAYTYPE_LOOP, TRUE);
+			}
 		}
 		else if (MenuNo == 1) {
 			push = 0;
 			GameState = 0;
 			MenuNo = 0;
 			StopSoundMem(ClearSE);
-			PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
+			if (BGMFlg == FALSE) {
+				PlaySoundMem(TitleSound, DX_PLAYTYPE_LOOP, TRUE);
+			}
 		}
 	}
 }
@@ -1356,7 +1526,9 @@ void BossST(Player* p) {
 			800 >= py && 0 <= py + pw) {
 			GameState = 4;
 			StopSoundMem(MainSound);
-			PlaySoundMem(BossSound, DX_PLAYTYPE_LOOP, TRUE);
+			if (BGMFlg == FALSE) {
+				PlaySoundMem(BossSound, DX_PLAYTYPE_LOOP, TRUE);
+			}
 		}
 	}
 }
@@ -1466,7 +1638,9 @@ void BossMove() {
 
 					player.life -= 1;
 					player.muteki = 1;
-					PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
+					if (SEFlg == FALSE) {
+						PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
+					}
 				}
 			}
 			//当たり判定
@@ -1474,7 +1648,9 @@ void BossMove() {
 
 				player.life -= 1;
 				player.muteki = 1;
-				PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
+				if (SEFlg == FALSE) {
+					PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
+				}
 			}
 		}
 	}
@@ -1499,7 +1675,9 @@ void BossMove1() {
 
 			motion_index2 = BOSSAnime[BOSS_act_index];
 			boss.by = player.y - 180;
-			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 
 		if (count > 101 && count < 150) {
@@ -1570,7 +1748,9 @@ void BossMove2() {
 			boss.bx = player.x - 130;
 		}
 		if (count > 160 && count < 170) {
-			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 		if (count > 201 && count < 399) {
 			motion_index2 = BOSSUp[BOSS_act_index];
@@ -1645,7 +1825,9 @@ void BossMove3() {
 			motion_index5 = BOSSAnime[BOSS_act_index];
 			boss.by = player.y - 180;
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
-			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 		if (count > 50 && count < 100) {
 			MS = 1;
@@ -1670,8 +1852,9 @@ void BossMove3() {
 			}
 			boss.by += BOSS_SPEED;*/
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
-			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
-
+			if (SEFlg == FALSE) {
+				PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 		if (count > 300 && count < 350) {
 			MS = 1;
@@ -1697,8 +1880,9 @@ void BossMove3() {
 			}
 			boss.by += BOSS_SPEED;*/
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
-			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
-
+			if (SEFlg == FALSE) {
+				PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 		if (count > 500 && count < 550) {
 			MS = 1;
@@ -1725,7 +1909,9 @@ void BossMove3() {
 			}
 			boss.by -= BOSS_SPEED;*/
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
-			PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 
 		}
 
@@ -1778,7 +1964,9 @@ void Sibuki() {//水しぶきのアニメーション
 	DrawExtendGraph(boss.bx, SIBUKI_Y, boss.bx + boss.bw, SIBUKI_Y + 162, sibuki[motion_index9], TRUE);
 	//DrawExtendGraph(500, SIBUKI_Y, 500 + 300, SIBUKI_Y + 300, sibuki[motion_index9], TRUE);
 	if (CheckSoundMem(SibukiSE) == 0) {
-		PlaySoundMem(SibukiSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(SibukiSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 }
 
@@ -2374,7 +2562,9 @@ int ColorCheck(int x, int y) {
 			Damege = 1;
 			player.life -= 1;
 			player.muteki = 1;
-			PlaySoundMem(WallSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(WallSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 	}
 	
@@ -2403,7 +2593,9 @@ void Pouse() {
 			player.flg = FALSE;
 			boss.flg = FALSE;
 			boss.speed = FALSE;
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 		else if (key1 > 0 && g_KeyFlg & PAD_INPUT_8) {
 			player.flg = TRUE;
@@ -2421,11 +2613,15 @@ void Pouse() {
 			// メニューカーソル移動処理
 			if (g_KeyFlg & PAD_INPUT_DOWN) {
 				if (++MenuNo > 1)MenuNo = 0;
-				PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+				if (SEFlg == FALSE) {
+					PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+				}
 			}
 			if (g_KeyFlg & PAD_INPUT_UP) {
 				if (--MenuNo < 0)MenuNo = 1;
-				PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+				if (SEFlg == FALSE) {
+					PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+				}
 			}
 			if (g_KeyFlg & PAD_INPUT_2) {
 				if (push == 0) {
@@ -2457,7 +2653,9 @@ void GameOver() {
 	DrawGraph(0, 0, Gameover, TRUE);
 
 	if (CheckSoundMem(GameOverSound) == 0) {
-		PlaySoundMem(GameOverSound, DX_PLAYTYPE_BACK, TRUE);
+		if (BGMFlg == FALSE) {
+			PlaySoundMem(GameOverSound, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 
@@ -2472,17 +2670,23 @@ void GameOver() {
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_RIGHT) {
 		if (++MenuNo > 1)MenuNo = 0;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
 		if (--MenuNo < 0)MenuNo = 1;
-		PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
 	}
 
 	// Zキーでメニュー選択
 	if (g_KeyFlg & PAD_INPUT_2) {
 		if (push == 0) {
-			PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 			push = 1;
 		}
 		// sceneStageに行く処理
@@ -2490,14 +2694,18 @@ void GameOver() {
 			push = 0;
 			GameState = 1;
 			StopSoundMem(GameOverSound);
-			PlaySoundMem(MainSound, DX_PLAYTYPE_BACK, TRUE);
+			if (BGMFlg == FALSE) {
+				PlaySoundMem(MainSound, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 		else if (MenuNo == 1) {
 			push = 0;
 			GameState = 0;
 			MenuNo = 0;
 			StopSoundMem(GameOverSound);
-			PlaySoundMem(TitleSound, DX_PLAYTYPE_BACK, TRUE);
+			if (BGMFlg == FALSE) {
+				PlaySoundMem(TitleSound, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 	}
 }

@@ -1,4 +1,10 @@
 #pragma once
+
+void Musicmixer();
+
+int BGMFlg = FALSE;
+int SEFlg = FALSE;
+
 // BGM
 int MainSound;
 int TitleSound;

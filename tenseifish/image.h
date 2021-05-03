@@ -6,6 +6,7 @@ int Gamegiyo2;
 int Gamegiyo3;
 int Gamerule;
 int Gamerule2;
+int GameMS;		// ‰¹—Ê’²®
 int pauseImage;
 int Corsol;	// ƒJ[ƒ\ƒ‹‰æ‘œ•Ï”
 int Corsol2;
