@@ -788,8 +788,6 @@ int LoadImages() {
 	if ((Corsol = LoadGraph("Image/coursol.png")) == -1)return -1;
 	//ポーズ画面のカーソル画像
 	if ((Corsol2 = LoadGraph("Image/coursol2.png")) == -1)return -1;
-	// 音量調整画面のカーソル画像
-	if ((Mcorsol = LoadGraph("Image/MusicCoursol.png")) == -1)return -1;
 	//プレイヤー画像
 	//魚レベル1
 	if ((LoadDivGraph("Image/sakana.png", 10, 10, 1, 30, 30, sakana[0])) == -1)return -1;
