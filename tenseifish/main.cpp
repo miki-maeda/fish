@@ -503,7 +503,7 @@ void GameInit() {
 	player.muteki = 0;
 	Umispeed = 0;
 	Time = 2400;
-	/*Time = 60;*/
+	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -929,7 +929,7 @@ int LoadSound() {
 		ChangeVolumeSoundMem(125, TitleSound);
 		ChangeVolumeSoundMem(125, GameOverSound);
 		ChangeVolumeSoundMem(150, HelpSound);
-		ChangeVolumeSoundMem(150, BossSound);
+		ChangeVolumeSoundMem(200, BossSound);
 		// SE
 		ChangeVolumeSoundMem(125, KeikokuSE);
 		ChangeVolumeSoundMem(200, EatSE);
@@ -952,26 +952,26 @@ void Musicmixer()
 	if (BGMFlg == FALSE) {
 		SetFontSize(60);
 		DrawString(710, 270, "ON", 0xff0000);
-		DrawString(780, 270, "/", 0x000000);
+		DrawString(800, 270, "/", 0x000000);
 		DrawString(850, 270, "OFF", 0x000000);
 	}
 	else if (BGMFlg == TRUE) {
 		SetFontSize(60);
 		DrawString(710, 270, "ON", 0x000000);
-		DrawString(780, 270, "/", 0x000000);
+		DrawString(800, 270, "/", 0x000000);
 		DrawString(850, 270, "OFF", 0xff0000);
 	}
 
 	if (SEFlg == FALSE) {
 		SetFontSize(60);
 		DrawString(710, 420, "ON", 0xff0000);
-		DrawString(780, 420, "/", 0x000000);
+		DrawString(800, 420, "/", 0x000000);
 		DrawString(850, 420, "OFF", 0x000000);
 	}
 	else if (SEFlg == TRUE) {
 		SetFontSize(60);
 		DrawString(710, 420, "ON", 0x000000);
-		DrawString(780, 420, "/", 0x000000);
+		DrawString(800, 420, "/", 0x000000);
 		DrawString(850, 420, "OFF", 0xff0000);
 	}
 
@@ -1199,6 +1199,7 @@ void dieam() {
 	if (motion_index7 > 5) {
 		key2 = 0;
 		GameState = 7;
+		StopSoundMem(KeikokuSE);
 	}
 }
 
@@ -1416,6 +1417,7 @@ void GameClearHit() {
 
 	GameState = 3;
 	StopSoundMem(BossSound);
+	StopSoundMem(KeikokuSE);
 	if (SEFlg == FALSE) {
 		PlaySoundMem(ClearSE, DX_PLAYTYPE_BACK, TRUE);
 	}
@@ -1684,7 +1686,15 @@ void BossMove1() {
 			motion_index2 = BOSSAttack[BOSS_act_index];
 			boss.by = player.y - 180;
 			DrawGraph(boss.bx + 200, boss.by - 50, Keikoku, TRUE);
-			BOSS_SPEED = 20;
+			if (Leve == 1) {
+				BOSS_SPEED = 20;
+			}
+			else if (Leve == 2) {
+				BOSS_SPEED = 35;
+			}
+			else if (Leve == 3) {
+				BOSS_SPEED = 50;
+			}
 		}
 		if (count > 151 && count < 300) {
 			motion_index2 = BOSSAttack[BOSS_act_index];
@@ -1918,7 +1928,15 @@ void BossMove3() {
 		if (count > 100 && count < 300 || count > 350 && count < 550 ||
 			count > 550 && count < 800) {
 			motion_index6 = BossSonic[BOSS_act_index3];
-			soni.sx += SONIC_SPEED;
+			if (Leve == 1) {
+				soni.sx += SONIC_SPEED_Lev1;
+			}
+			else if (Leve == 2) {
+				soni.sx += SONIC_SPEED_Lev2;
+			}
+			else if (Leve == 3) {
+				soni.sx += SONIC_SPEED_Lev3;
+			}
 			DrawExtendGraph(soni.sx, soni.sy, soni.sx + soni.sw, soni.sy + soni.sh, Sonic[motion_index6], TRUE);
 		}
 		if (count == 799) {
@@ -2027,7 +2045,7 @@ void Ship() {
 			if(SHIPFlg != TRUE){
 				if (netflg == 1) {
 					NET = 0;
-					SHIP_SPEED = 5;
+					SHIP_SPEED = 10;
 					netflg = 0;
 					motion_index4 = 0;
 					NET_act_index = 0;
@@ -2060,13 +2078,13 @@ void ShipLs()
 		SetFontSize(50);
 		DrawFormatString(700, 30, 0x000000, "ƒ}ƒOƒ‚ð•ßŠl‚µ‚æ‚¤");
 
-		if (SHIP_lX == 200)
+		if (SHIP_lX == 100)
 		{
 			counth = (counth + 1) % 150;
 			SHIP_SPEED = 0;
 
 		}
-		if (SHIP_lX == 700)
+		if (SHIP_lX == 500)
 		{
 			counth = (counth + 1) % 150;
 			SHIP_SPEED = 0;
@@ -2090,11 +2108,11 @@ void ShipLs()
 			netflg = 1;
 		}
 
-		if (SHIP_X != 900)
+		if (SHIPFlg != FALSE)
 		{
 			if (netflg == 1) {
 				NET = 0;
-				SHIP_SPEED = 5;
+				SHIP_SPEED = 10;
 				netflg = 0;
 				motion_index4 = 0;
 				NET_act_index = 0;
@@ -2225,10 +2243,10 @@ void AmiLs() {
 					}
 					motion_index4 = netanime[NET_act_index];
 				}
-				if (SHIP_lX == 200) {
+				if (SHIP_lX == 100) {
 					if (motion_index4 == 4) {
 						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-						if (100 >= boss.bx && 200 <= boss.bx + boss.bh &&
+						if (200 >= boss.bx && 300 <= boss.bx + boss.bh &&
 							250 >= boss.by && 270 <= boss.by + boss.bw) {
 							cr = 1;
 						}
@@ -2249,7 +2267,7 @@ void AmiLs() {
 						}
 					}
 				}
-				else if (SHIP_lX == 700) {
+				else if (SHIP_lX == 500) {
 					if (motion_index4 == 4) {
 						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
 						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
@@ -2276,14 +2294,14 @@ void AmiLs() {
 				else if (SHIP_lX == 900) {
 					if (motion_index4 == 4) {
 						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-						if (800 >= boss.bx && 900 <= boss.bx + boss.bh &&
+						if (1000 >= boss.bx && 1100 <= boss.bx + boss.bh &&
 							250 >= boss.by && 270 <= boss.by + boss.bw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
 						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-						if (800 >= boss.bx && 900 <= boss.bx + boss.bh &&
+						if (1000 >= boss.bx && 1100 <= boss.bx + boss.bh &&
 							310 >= boss.by && 330 <= boss.by + boss.bw) {
 							cr = 1;
 
@@ -2291,7 +2309,7 @@ void AmiLs() {
 					}
 					if (motion_index4 == 6) {
 						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-						if (800 >= boss.bx && 900 <= boss.bx + boss.bh &&
+						if (1000 >= boss.bx && 1100 <= boss.bx + boss.bh &&
 							360 >= boss.by && 380 <= boss.by + boss.bw) {
 							cr = 1;
 						}

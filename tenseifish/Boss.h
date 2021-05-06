@@ -29,7 +29,9 @@ int SONIC_POS_X = 1400;
 int SONIC_POS_Y = 130;
 int SONIC_WIDTH = 350;
 int SONIC_HEIGHT = 350;
-int SONIC_SPEED =20;
+int SONIC_SPEED_Lev1 = 20;
+int SONIC_SPEED_Lev2 = 40;
+int SONIC_SPEED_Lev3 = 60;
 
 int Boss1[13] = { 0 };		//ƒ{ƒX‚Ì‰æ‘œ‚ðŠi”[‚·‚é”z—ñ
 int Boss2[13] = { 0 };		//ƒ{ƒX‚Ì‰æ‘œ‚ðŠi”[‚·‚é”z—ñ
@@ -115,7 +117,7 @@ int net1[7] = { 0 };
 int net2[7] = { 0 };
 int motion_index4;
 int NET_MOTION_INDEX = 7;
-int NET_ANI_SPEED = 20;
+int NET_ANI_SPEED = 17;
 int NET_act_wait = NET_ANI_SPEED;
 int NET_act_index = 0;
 int NET = 0;
