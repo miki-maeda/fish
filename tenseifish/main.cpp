@@ -1090,26 +1090,53 @@ void Musicmixer()
 
 void EatMove() {
 	for (int i = 0; i < 10; i++) {
-		if (eat[i].flg == TRUE) {
+		if (eat[i].flg == TRUE && Time > 60) {
 			//餌の表示
 			if (Time > 0) {
 				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
 			}
 
 			if (Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg2 != TRUE) {
-				//真っすぐ左に移動
-				if (Leve == 1 && key1 != 1 && Leve == 1 && key2 != 1) {
-					eat[i].e_x -= 6;
+				/*if (eat[i].e_y > 250&& OnOff == FALSE) {
+					if (eat[i].DMove == FALSE) {
+						EatCheck(eat[i].e_x, eat[i].e_y + eat[i].e_h);
+						if (EatCont >= 1) eat[i].DMove = TRUE;
+					}
+					else {
+						EatCheck(eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h);
+						if (EatCont >= 1) eat[i].DMove = FALSE;
+					}
+					EatCont = 0;
+				}*/
+
+				if (eat[i].DMove == TRUE) {
+					//真っすぐ右に移動
+					if (Leve == 1 && key1 != 1 && key2 != 1) {
+						eat[i].e_x += 5;
+					}
+					if (Leve == 2 && key1 != 1 && key2 != 1) {
+						eat[i].e_x += 7;
+					}
+					if (Leve == 3 && key1 != 1 && key2 != 1) {
+						eat[i].e_x += 9;
+					}
 				}
-				if (Leve == 2 && key1 != 1 && key2 != 1) {
-					eat[i].e_x -= 8;
-				}
-				if (Leve == 3 && key1 != 1 && key2 != 1) {
-					eat[i].e_x -= 10;
+				else {
+					//真っすぐ左に移動
+					if (Leve == 1 && key1 != 1 && key2 != 1) {
+						eat[i].e_x -= 5;
+					}
+					if (Leve == 2 && key1 != 1 && key2 != 1) {
+						eat[i].e_x -= 7;
+					}
+					if (Leve == 3 && key1 != 1 && key2 != 1) {
+						eat[i].e_x -= 9;
+					}
 				}
 			}
 
-			/*if (Leve == 1) {
+
+			if (Leve == 1) {
 				if (eat[i].e_x == SCREEN_WIDTH - 5)EatCheck(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) + 3) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
@@ -1124,9 +1151,7 @@ void EatMove() {
 				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) - 8) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w - 6) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
 
-			}*/
-
-
+			}
 
 			if (EatCont >= 1)
 			{
@@ -1165,7 +1190,7 @@ void EatMove() {
 	}
 
 	//餌の設定
-	if (Range / 5 % 50 == 0 && key1 < 1	&&Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg2 != TRUE) {
+	if (Range / 5 % 50 == 0 && key1 < 1	&&Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg2 != TRUE && Time > 60) {
 		EatImage();
 	}
 }
@@ -1320,7 +1345,7 @@ void PlayerEat(int* e) {
 	if (*e <= 2) {
 		//食べたものを量を増加させる
 		EatAmount++;
-		if (player.life < LifeMax) player.life++;
+		if (player.life < LifeMax && EatAmount % 3 == 0) player.life++;
 	}
 
 	//食べたものの量が一定量に達したら処理を移す

@@ -28,8 +28,7 @@ int DSpeed;				//吐き出した餌のスピード
 int RandEat = 0;		//吐き出す餌の種類
 
 //仮
-int LMflg=TRUE;
-int RMflg = FALSE;
+int OnOff=FALSE;
 
 struct Eat {
 
@@ -37,9 +36,8 @@ struct Eat {
 	int	type;			//タイプ
 	int image;			//表示する餌
 	int e_x, e_y;		//餌の座標
-	float e_w, e_h;		//横幅、縦幅
+	int e_w, e_h;		//横幅、縦幅
 	int typeD;			//出現させる種類(FALSE:餌,TRUE:敵)
-	//仮
 	int DMove;			//魚の向き
 };
 
