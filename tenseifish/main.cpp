@@ -515,7 +515,8 @@ void GameInit() {
 		eat[i].flg = FALSE;
 	}
 
-	
+	motion_index9 = 0;
+	sibuki_act_index = 0;
 	//ƒQ[ƒ€ƒƒCƒ“‚Ö
 	GameState = 2;
 
@@ -1582,7 +1583,7 @@ void BossInit() {
 	player.x = 500;
 	player.y = PLAYER_POS_Y;
 
-	motion_index9 = 0;
+	
 	motion_index4 = 0;
 	NET_act_index = 0;
 
@@ -1767,9 +1768,9 @@ void BossMove2() {
 			motion_index2 = BOSSUp[BOSS_act_index];
 			BOSS_SPEED = 0;
 			boss.by -= 20;
-			if (count == 160) {
+			/*if (count == 160) {
 				sibuki_act_index = 0;
-			}
+			}*/
 			if (count > 270 && count < 340) {
 
 				//sibuki_act_index = 0;
