@@ -855,6 +855,8 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/FishDie Level3.png", 7, 7, 1, 225, 225, fishdie[2])) == -1)return -1;
 	//ゲームオーバー画像
 	if ((Gameover = LoadGraph("Image/GameOver.png")) == -1)return -1;
+	if ((Gameover2 = LoadGraph("Image/GameOver2.png")) == -1)return -1;
+	if ((Gameover3 = LoadGraph("Image/GameOver3.png")) == -1)return -1;
 
 	//ボスへの道
 	if ((BOSSROAD = LoadGraph("Image/ボスへの道.png")) == -1)return -1;
@@ -2648,7 +2650,15 @@ void Pouse() {
 void GameOver() {
 	static bool push = 0; // 押されたかどうか確認する関数
 	SHIPFlg = FALSE;
-	DrawGraph(0, 0, Gameover, TRUE);
+	if (Leve == 2) {
+		DrawGraph(0, 0, Gameover2, TRUE);
+	}
+	else if (Leve == 3) {
+		DrawGraph(0, 0, Gameover3, TRUE);
+	}
+	else {
+		DrawGraph(0, 0, Gameover, TRUE);
+	}
 
 	if (CheckSoundMem(GameOverSound) == 0) {
 		if (BGMFlg == FALSE) {
