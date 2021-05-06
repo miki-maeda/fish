@@ -502,14 +502,14 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 2400;
+	Time = 100;
 	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
 	LeveUpflg2 = FALSE;
 	LCount = 0;
-
+	countS = 0;
 	//餌の初期化
 	for (int i = 0; i < 10; i++) {
 		eat[i].flg = FALSE;
@@ -1556,7 +1556,7 @@ void BossInit() {
 	soni.sh = SONIC_HEIGHT;
 
 
-	SHIP_X = 1500;
+	SHIP_X = 1300;
 	SHIP_lX = -400;
 	SHIP_Y = -100;
 	SHIP_W = 350;
@@ -1570,7 +1570,7 @@ void BossInit() {
 	cr = 0;
 	cr2 = 0;
 
-	net.nx = 1350;
+	net.nx = 1150;
 	net.lnx = -250;
 	net.ny = 50;
 	net.nw = 350;
@@ -1722,6 +1722,7 @@ void BossMove1() {
 			boss.by = 200;
 			BOSS_SPEED = 20;
 			BOSS_PATTREN = 2;
+			countS += 1;
 		}
 	}
 	if (boss.dir == 0) {
@@ -1797,7 +1798,7 @@ void BossMove2() {
 			count = 0;
 			BOSS_SPEED = 20;
 			BOSS_PATTREN = 3;
-
+			countS += 1;
 		}
 	}
 
@@ -1944,6 +1945,7 @@ void BossMove3() {
 			BOSS_act_index2 = 0;
 			BOSS_SPEED = 20;
 			BOSS_PATTREN = 1;
+			countS += 1;
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
 
 		}
@@ -2000,9 +2002,9 @@ void Ship() {
 			}
 			if (SHIP_COUNT2 != 0) {
 				SetFontSize(50);
-				DrawFormatString(700, 30, 0x000000, "船が来るまで%d秒", SHIP_COUNT2 / 100);
+				//DrawFormatString(700, 30, 0x000000, "船が来るまで%d秒", SHIP_COUNT2 / 100);
 			}
-			if (SHIP_COUNT2 == 0)
+			if (countS >= 3)
 			{
 				SHIP_X -= SHIP_SPEED;
 				net.nx -= SHIP_SPEED;
@@ -2042,7 +2044,7 @@ void Ship() {
 
 			//if (SHIP_X != 300)
 			//{
-			if(SHIPFlg != TRUE){
+			if (SHIPFlg != TRUE) {
 				if (netflg == 1) {
 					NET = 0;
 					SHIP_SPEED = 10;
@@ -2052,13 +2054,14 @@ void Ship() {
 				}
 			}
 			//}
-
-			if (--SHIP_act_wait <= 0)
-			{
-				if (key1 < 1) {
-					SHIP_act_index++;
-					SHIP_act_wait = SHIP_ANI_SPEED;
-					SHIP_act_index %= SHIP_MOTION_INDEX;
+			if (countS >= 3) {
+				if (--SHIP_act_wait <= 0)
+				{
+					if (key1 < 1) {
+						SHIP_act_index++;
+						SHIP_act_wait = SHIP_ANI_SPEED;
+						SHIP_act_index %= SHIP_MOTION_INDEX;
+					}
 				}
 
 				motion_index3 = shipanime[SHIP_act_index];
@@ -2067,7 +2070,6 @@ void Ship() {
 		}
 	}
 }
-
 // 船（反転）アニメーション
 void ShipLs()
 {
@@ -2139,13 +2141,15 @@ void Ami() {
 	if (SHIPFlg == FALSE) {
 		if (key1 < 1) {
 			if (cr == 0) {
-				if (SHIP_SPEED == 0) {
-					if (--NET_act_wait <= 0)
-					{
-						if (key1 < 1) {
-							NET_act_index++;
-							NET_act_wait = NET_ANI_SPEED;
-							NET_act_index %= NET_MOTION_INDEX;
+				if (countS >= 3) {
+					if (SHIP_SPEED == 0) {
+						if (--NET_act_wait <= 0)
+						{
+							if (key1 < 1) {
+								NET_act_index++;
+								NET_act_wait = NET_ANI_SPEED;
+								NET_act_index %= NET_MOTION_INDEX;
+							}
 						}
 					}
 					motion_index4 = netanime[NET_act_index];

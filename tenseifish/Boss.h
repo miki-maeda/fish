@@ -124,6 +124,7 @@ int NET = 0;
 int netflg = 0;
 int counth = 0;
 
+int countS = 0;
 struct Net //–Ô
 {
 
