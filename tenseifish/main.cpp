@@ -491,6 +491,12 @@ void GameInit() {
 	CollYadd = 0;
 	PointNom = 0;
 
+	BRMove = 0;
+	BRflg = FALSE;
+	if (BRflg == FALSE) {
+		boss.bx = BOSS_POS_X;
+	}
+
 	//プレイヤーの初期化
 	player.flg = TRUE;
 	player.x = PLAYER_POS_X;
@@ -573,9 +579,62 @@ void BackScrool()
 	//描画可能エリアを設定
 	SetDrawArea(0, 0, IwaHaba, SCREEN_HEIGHT);
 
-	DrawGraph(Iwaspeed % IwaHaba, 50, Iwa[0], TRUE);
-	DrawGraph(IwaHaba + (Iwaspeed % IwaHaba), 50, Iwa[0], TRUE);
+	if (Time > 60) {
+		DrawGraph(Iwaspeed % IwaHaba, 50, Iwa[0], TRUE);
+		DrawGraph(IwaHaba + (Iwaspeed % IwaHaba), 50, Iwa[0], TRUE);
+	}
+	else if (Time <= 60) {
+		player.flg = FALSE;
+		if (key1 != 1) {
+			if (player.y != 400) {
+				if (player.y <= 400) player.y += player.speed / 4 * 3;
+				if (player.y >= 400) player.y -= player.speed / 4 * 3;
+			}
+			player.x += player.speed / 4 * 7;
+		}
+		if (BRflg == FALSE) {
+			if (key1 < 1) {
+				if (--BOSS_act_wait <= 0)
+				{
 
+					BOSS_act_index++;
+					BOSS_act_wait = BOSS_ACT_SPEED;
+					BOSS_act_index %= BOSS_MOTION_INDEX;
+
+				}
+				if (player.muteki == 0) {
+					//当たり判定
+					if (HitBoxPlayer(&player, &boss) == TRUE) {
+
+						player.life -= 1;
+						player.muteki = 1;
+						if (SEFlg == FALSE) {
+							PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
+						}
+					}
+				}
+
+				motion_index2 = BOSSAnime[BOSS_act_index];
+				BRflg == TRUE;
+				boss.flg = TRUE;
+				boss.dir = 0;
+
+				boss.bx += 5;
+				boss.by = BOSS_POS_Y;
+				boss.bw = BOSS_WIDTH;
+				boss.bh = BOSS_HEIGHT;
+				//boss.speed = player.speed;
+
+				DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
+			}
+		}
+		if (BRMove < 1) {
+			Iwaspeed = 0;
+			BRMove = 1;
+		}
+		DrawGraph(Iwaspeed % IwaHaba, 50, Iwa[BRMove], TRUE);
+		DrawGraph(IwaHaba + (Iwaspeed % IwaHaba), 50, Iwa[BRMove], TRUE);
+	}
 
 	//エリアを戻す
 	SetDrawArea(0, 0, IwaHaba, SCREEN_HEIGHT);
@@ -800,8 +859,8 @@ int LoadImages() {
 	if ((StageImage = LoadGraph("Image/Hikei.png")) == -1) return -1;
 	//手前の背景
 	if ((Iwa[0] = LoadGraph("Image/temae4.png")) == -1) return -1;
-	/*if ((Iwa[1] = LoadGraph("Image/temae2.png")) == -1) return -1;
-	if ((Iwa[2] = LoadGraph("Image/temae3.png")) == -1) return -1;*/
+	if ((Iwa[1] = LoadGraph("Image/仮boss前1.png")) == -1) return -1;
+	if ((Iwa[2] = LoadGraph("Image/仮boss前2.png")) == -1) return -1;
 	//餌(食べれる生き物)画像
 	//エビ
 	if ((LoadDivGraph("Image/ebi.png", 3, 3, 1, 50, 50, feedImage[0])) == -1)return-1;

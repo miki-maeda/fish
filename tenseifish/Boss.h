@@ -30,8 +30,8 @@ int SONIC_POS_Y = 130;
 int SONIC_WIDTH = 350;
 int SONIC_HEIGHT = 350;
 int SONIC_SPEED_Lev1 = 20;
-int SONIC_SPEED_Lev2 = 40;
-int SONIC_SPEED_Lev3 = 60;
+int SONIC_SPEED_Lev2 = 35;
+int SONIC_SPEED_Lev3 = 45;
 
 int Boss1[13] = { 0 };		//ボスの画像を格納する配列
 int Boss2[13] = { 0 };		//ボスの画像を格納する配列
@@ -40,6 +40,8 @@ int Sonic[3] = { 0 };      //ボスの必殺技を格納する配列
 int Hokaku[5] = { 0 };    //ボスの捕獲を格納する配列
 int Hokaku2[5] = { 0 };	  //ボスの捕獲を格納する配列（反転）
 
+bool BRflg;
+int BRMove;
 
 int BOSSBoom[] = { 2,2,1,1,0,0,5,6,5,4,5,6 };		//必殺技するときのアニメーションの番号 
 
