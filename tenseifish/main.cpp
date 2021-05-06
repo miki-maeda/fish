@@ -502,7 +502,7 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 100;
+	Time = 2400;
 	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
