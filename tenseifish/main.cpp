@@ -1641,7 +1641,7 @@ void BossInit() {
 	soni.sh = SONIC_HEIGHT;
 
 
-	SHIP_X = 1300;
+	SHIP_X = 1500;
 	SHIP_lX = -400;
 	SHIP_Y = -100;
 	SHIP_W = 350;
@@ -1655,7 +1655,7 @@ void BossInit() {
 	cr = 0;
 	cr2 = 0;
 
-	net.nx = 1150;
+	net.nx = 1350;
 	net.lnx = -250;
 	net.ny = 50;
 	net.nw = 350;
