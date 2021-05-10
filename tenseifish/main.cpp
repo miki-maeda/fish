@@ -1825,7 +1825,7 @@ void BossMove2() {
 		/*DrawFormatString(100, 180, 0x000000, "%d", boss.bx);
 		DrawFormatString(100, 240, 0x000000, "%d", boss.by);*/
 		if (count > 0 && count < 100) {
-			if (boss.bx == 0) {
+			if (boss.bx > 0) {
 
 				BOSS_SPEED = 0;
 			}
