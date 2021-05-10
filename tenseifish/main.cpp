@@ -876,10 +876,10 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/minokasago.png", 3, 3, 1, 120,120, EnemyImage[1])) == -1)return-1;
 
 	//船
-	if ((LoadDivGraph("Image/船.png", 9, 3, 1, 400, 700, ship1)) == -1)return -1;
+	if ((LoadDivGraph("Image/船.png", 3, 3, 1, 400, 350, ship1)) == -1)return -1;
 
 	//船2
-	if ((LoadDivGraph("Image/船2.png", 9, 3, 1, 400, 700, ship2)) == -1)return -1;
+	if ((LoadDivGraph("Image/船2.png", 3, 3, 1, 400, 350, ship2)) == -1)return -1;
 
 	//網
 	if ((LoadDivGraph("Image/網.png", 7, 7, 1, 400, 400, net1)) == -1)return -1;
