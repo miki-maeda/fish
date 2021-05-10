@@ -1772,13 +1772,13 @@ void BossMove1() {
 			boss.by = player.y - 180;
 			DrawGraph(boss.bx + 200, boss.by - 50, Keikoku, TRUE);
 			if (Leve == 1) {
-				BOSS_SPEED = 20;
+				BOSS_SPEED = 10;
 			}
 			else if (Leve == 2) {
-				BOSS_SPEED = 35;
+				BOSS_SPEED = 15;
 			}
 			else if (Leve == 3) {
-				BOSS_SPEED = 50;
+				BOSS_SPEED = 20;
 			}
 		}
 		if (count > 151 && count < 300) {

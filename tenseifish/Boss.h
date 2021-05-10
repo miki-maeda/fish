@@ -29,9 +29,9 @@ int SONIC_POS_X = 1400;
 int SONIC_POS_Y = 130;
 int SONIC_WIDTH = 350;
 int SONIC_HEIGHT = 350;
-int SONIC_SPEED_Lev1 = 20;
-int SONIC_SPEED_Lev2 = 35;
-int SONIC_SPEED_Lev3 = 45;
+int SONIC_SPEED_Lev1 = 10;
+int SONIC_SPEED_Lev2 = 15;
+int SONIC_SPEED_Lev3 = 20;
 
 int Boss1[13] = { 0 };		//ƒ{ƒX‚Ì‰æ‘œ‚ðŠi”[‚·‚é”z—ñ
 int Boss2[13] = { 0 };		//ƒ{ƒX‚Ì‰æ‘œ‚ðŠi”[‚·‚é”z—ñ
