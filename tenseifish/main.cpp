@@ -864,16 +864,20 @@ int LoadImages() {
 	//餌(食べれる生き物)画像
 	//エビ
 	if ((LoadDivGraph("Image/ebi.png", 3, 3, 1, 50, 50, feedImage[0])) == -1)return-1;
+	if ((LoadDivGraph("Image/ebi2.png", 3, 3, 1, 50, 50, feedImageur[0])) == -1)return-1;
 	//アジ
 	if ((LoadDivGraph("Image/azi.png", 3, 3, 1, 60, 60, feedImage[1])) == -1)return-1;
+	if ((LoadDivGraph("Image/azi2.png", 3, 3, 1, 60, 60, feedImageur[1])) == -1)return-1;
 	//イカ
 	if ((LoadDivGraph("Image/ika.png", 3, 3, 1, 50, 50, feedImage[2])) == -1)return-1;
+	if ((LoadDivGraph("Image/ika2.png", 3, 3, 1, 50, 50, feedImageur[2])) == -1)return-1;
 
 	//敵
 	//クラゲ
 	if ((LoadDivGraph("Image/kurage.png", 3, 3, 1, 80, 80, EnemyImage[0])) == -1)return-1;
 	//ミノカサゴ
 	if ((LoadDivGraph("Image/minokasago.png", 3, 3, 1, 120,120, EnemyImage[1])) == -1)return-1;
+	if ((LoadDivGraph("Image/minokasago2.png", 3, 3, 1, 120, 120, feedImageur[3])) == -1)return-1;
 
 	//船
 	if ((LoadDivGraph("Image/船.png", 3, 3, 1, 400, 350, ship1)) == -1)return -1;
@@ -1093,21 +1097,26 @@ void EatMove() {
 		if (eat[i].flg == TRUE && Time > 60) {
 			//餌の表示
 			if (Time > 0) {
-				DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h, eat[i].image, TRUE);
+				if (eat[i].DMove == FALSE) {
+					DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + e_w, eat[i].e_y + e_h, eat[i].image, TRUE);
+				}
+				else if(eat[i].DMove == TRUE&&eat[i].type<4){
+					DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + e_w, eat[i].e_y + e_h, eat[i].imageur, TRUE);
+				}
 			}
 
 			if (Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg2 != TRUE) {
-				/*if (eat[i].e_y > 250&& OnOff == FALSE) {
+				if (eat[i].e_y > 250) {
 					if (eat[i].DMove == FALSE) {
-						EatCheck(eat[i].e_x, eat[i].e_y + eat[i].e_h);
+						EatCheck(eat[i].e_x - 1 - (Leve * 2), eat[i].e_y);
 						if (EatCont >= 1) eat[i].DMove = TRUE;
 					}
 					else {
-						EatCheck(eat[i].e_x + eat[i].e_w, eat[i].e_y + eat[i].e_h);
+						EatCheck(eat[i].e_x + 4 + (Leve * 2), eat[i].e_y);
 						if (EatCont >= 1) eat[i].DMove = FALSE;
 					}
 					EatCont = 0;
-				}*/
+				}
 
 				if (eat[i].DMove == TRUE) {
 					//真っすぐ右に移動
@@ -1124,45 +1133,45 @@ void EatMove() {
 				else {
 					//真っすぐ左に移動
 					if (Leve == 1 && key1 != 1 && key2 != 1) {
-						eat[i].e_x -= 5;
+						eat[i].e_x -= 6;
 					}
 					if (Leve == 2 && key1 != 1 && key2 != 1) {
-						eat[i].e_x -= 7;
+						eat[i].e_x -= 8;
 					}
 					if (Leve == 3 && key1 != 1 && key2 != 1) {
-						eat[i].e_x -= 9;
+						eat[i].e_x -= 10;
 					}
 				}
 			}
 
 
 			if (Leve == 1) {
-				if (eat[i].e_x == SCREEN_WIDTH - 5)EatCheck(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) + 3) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - 5)EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) + 3) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - e_w) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
 			}
 			if (Leve == 2) {
-				if (eat[i].e_x == SCREEN_WIDTH - 7) EatCheck(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) - 5) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w - 2) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - 7) EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) - 5) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - e_w - 2) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
 			}
 			if (Leve == 3) {
-				if (eat[i].e_x == SCREEN_WIDTH - 9) EatCheck(eat[i].e_x - 1, eat[i].e_y + eat[i].e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - (eat[i].e_w / 2) - 8) EatCheck(eat[i].e_x + (eat[i].e_w / 2) - 1, eat[i].e_y + eat[i].e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - eat[i].e_w - 6) EatCheck(eat[i].e_x + eat[i].e_w - 1, eat[i].e_y + eat[i].e_h);
-
+				if (eat[i].e_x == SCREEN_WIDTH - 9) EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) - 8) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - e_w - 6) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
 			}
 
 			if (EatCont >= 1)
 			{
 				EatCont = 0;
-				eat[i] = eat0;
+				eat[i].flg = FALSE;
 			}
 
 			if (eat[i].flg == FALSE)continue;
 
 			//画面外に行ったら削除
 			if (eat[i].e_x < 0 - 40)eat[i].flg = FALSE;
+			if (eat[i].e_x > 1410 + e_w)eat[i].flg = FALSE;
 
 			//魚に当たったら場合の処理
 			if (Hit(&player, &eat[i]) == TRUE) {
@@ -1184,13 +1193,16 @@ void EatMove() {
 				else {
 					eat[i].image = EnemyImage[eat[i].type - 3][motion_index];
 				}
+				if (eat[i].type <= 3&&eat[i].DMove == TRUE) {
+					eat[i].imageur = feedImageur[eat[i].type][motion_index];
+				}
 
 			}
 		}
 	}
 
 	//餌の設定
-	if (Range / 5 % 50 == 0 && key1 < 1	&&Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg2 != TRUE && Time > 60) {
+	if (Range / 5 % 50 == 0 && key1 < 1 && Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg2 != TRUE && Time > 60) {
 		EatImage();
 	}
 }
@@ -1203,6 +1215,10 @@ int EatImage() {
 			eat[i].type = GetRand(7)%5;
 			if (eat[i].type <= 2) {
 				eat[i].image = feedImage[eat[i].type][0];
+				
+			}
+			else if (eat[i].type <= 3) {
+				eat[i].imageur = feedImageur[eat[i].type][0];
 			}
 			else {
 				eat[i].image = EnemyImage[eat[i].type - 3][0];
@@ -1227,8 +1243,8 @@ int EatImage() {
 				break;
 			}
 
-			eat[i].e_w = 50 * 1.5;
-			eat[i].e_h = 50 * 1.5;
+			e_w = 50 * 1.5;
+			e_h = 50 * 1.5;
 
 			return TRUE;
 		}
@@ -1430,8 +1446,8 @@ int Hit(Player* p, Eat* e) {
 		int phw = player.w;
 		int ex = e->e_x;
 		int ey = e->e_y;
-		int ew = e->e_w;
-		int eh = e->e_h;
+		int ew = e_w;
+		int eh = e_h;
 		int etypeD = e->typeD;
 
 		if (Leve == 1) {
@@ -2678,17 +2694,48 @@ int ColorCheck(int x, int y) {
 	return colorsum;
 }
 
-int EatCheck(int x, int y) {
+//岩との当たり判定(エサ)
+void EatCheck(int x, int y) {
+
+	int mx2;
+
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 155; j++) {
+			mx = j * 50 + Iwaspeed % IwaHaba;
+			my = i * 50 + 400;
+			mx2 = mx + IwaHaba;
+			mw = 50;
+			mh = 50;
+			if (EatI[i][j] == 1) {
+				if (mx + mw > x && mx<x + e_w &&
+					my + mh>y && my < y + e_h) {
+					EatCont++;
+				}
+				if (mx2 + mw > x && mx2<x + e_w &&
+					my + mh>y && my < y + e_h) {
+					EatCont++;
+				}
+			}
+		}
+	}
+
+	return;
+}
+
+//出現場所の判定
+void EatCheck1(int x, int y) {
+
 	Cr1 = GetPixel(x, y);
 	GetColor2(Cr1, &er, &eg, &eb);
 
-	if ((er == 98) && (eg == 96) && (eb == 94) && (Eatflg < 1)) {
-		Eatflg = 1;
+	if ((er == 98) && (eg == 96) && (eb == 94) && (Eatflg < TRUE)) {
+		Eatflg = FALSE;
 		EatCont++;
 	}
 
-	if (Eatflg == 1) Eatflg = 0;
-	return colorsum;
+	if (Eatflg == FALSE) Eatflg = TRUE;
+
+	return;
 }
 
 void Pouse() {
