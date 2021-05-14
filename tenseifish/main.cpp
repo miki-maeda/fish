@@ -34,6 +34,8 @@ void GameGiyo3();
 void GameRule();
 void GameRule2();
 void dieam();
+void AwaAnime();
+
 
 int LoadImages();          //画像読み込み
 int LoadSound();		// 音楽読込み
@@ -531,6 +533,16 @@ void GameInit() {
 	if (BGMFlg == FALSE) {
 		PlaySoundMem(MainSound, DX_PLAYTYPE_BACK, TRUE);
 	}
+	AWA_Y = 700;
+	AWA_X = 700;
+	AWA_aX = 850;
+	AWA_aY = 600;
+	AWA_bX = 1040;
+	AWA_bY = 750;
+	AWA_rX = 1300;
+	AWA_rY = 650;
+	AWA_cX = 1410;
+	AWA_cY = 750;
 }
 
 /***********************************************
@@ -544,6 +556,7 @@ void GameMain() {
 	MeterImage();
 	BossST(&player);
 	Pouse();
+	AwaAnime();
 }
 /*************************************
  *背景画像スクロール処理
@@ -574,6 +587,46 @@ void BackScrool()
 
 	//エリアを戻す
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+
+	//気泡表示
+	AwaAnime();
+	if (AWA_Y > 148 && AWA_X > 0) {
+		DrawExtendGraph(AWA_X, AWA_Y, AWA_X + 27, AWA_Y + 32, awa[motion_index10], TRUE);
+	}
+	else {
+		AWA_X = 700;
+		AWA_Y = 700;
+	}
+	if (AWA_bY > 148 && AWA_bX > 0) {
+		DrawExtendGraph(AWA_bX, AWA_bY, AWA_bX + 27, AWA_bY + 32, awa[motion_index10], TRUE);
+	}
+	else {
+		AWA_bX = 1040;
+		AWA_bY = 750;
+	}
+
+	if (AWA_aY > 148 && AWA_aX > 0) {
+		DrawExtendGraph(AWA_aX, AWA_aY, AWA_aX + 27, AWA_aY + 32, awa[motion_index10], TRUE);
+	}
+	else {
+		AWA_aX = 850;
+		AWA_aY = 600;
+	}
+	if (AWA_rY > 148 && AWA_rX > 0) {
+		DrawExtendGraph(AWA_rX, AWA_rY, AWA_rX + 27, AWA_rY + 32, awa[motion_index10], TRUE);
+	}
+	else {
+		AWA_rX = 1300;
+		AWA_rY = 650;
+	}
+	if (AWA_cY > 148 && AWA_cX > 0) {
+		DrawExtendGraph(AWA_cX, AWA_cY, AWA_cX + 27, AWA_cY + 32, awa[motion_index10], TRUE);
+	}
+	else {
+		AWA_cX = 1410;
+		AWA_cY = 750;
+	}
 
 	//岩画像表示
 
@@ -645,6 +698,63 @@ void BackScrool()
 	SetFontSize(60);
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
 }
+void AwaAnime() {
+
+	if (key1 < 1) {
+		if (AWA_Y > 148 || AWA_aY > 148 || AWA_bY > 148 || AWA_rY > 148) {
+			if (Leve == 1) {
+				AWA_Y -= 1;
+				AWA_aY -= 1;
+				AWA_bY -= 1;
+				AWA_X -= 1;
+				AWA_aX -= 1;
+				AWA_bX -= 1;
+				AWA_rX -= 1;
+				AWA_rY -= 1;
+				AWA_cX -= 1;
+				AWA_cY -= 1;
+
+			}
+			else if (Leve == 2) {
+				AWA_Y -= 1;
+				AWA_aY -= 1;
+				AWA_bY -= 1;
+				AWA_X -= 2;
+				AWA_aX -= 2;
+				AWA_bX -= 2;
+				AWA_rX -= 2;
+				AWA_rY -= 1;
+				AWA_cX -= 2;
+				AWA_cY -= 1;
+			}
+			else {
+				AWA_Y -= 1;
+				AWA_aY -= 1;
+				AWA_bY -= 1;
+				AWA_X -= 3;
+				AWA_aX -= 3;
+				AWA_bX -= 3;
+				AWA_rX -= 3;
+				AWA_rY -= 1;
+				AWA_cX -= 3;
+				AWA_cY -= 1;
+			}
+		}
+	}
+
+
+	if (--awa_act_wait <= 0)
+	{
+		if (key1 < 1) {
+			awa_act_index++;
+			awa_act_wait = awa_ANI_SPEED;
+			awa_act_index %= awa_MOTION_INDEX;
+		}
+		motion_index10 = awaanime[awa_act_index];
+	}
+
+}
+
 
 void PlayerMove() {
 	
@@ -845,6 +955,8 @@ int LoadImages() {
 	if ((GameMS = LoadGraph("Image/GameMusicSelect.png")) == -1)return -1;
 	//ポーズ画像
 	if ((pauseImage = LoadGraph("Image/pause.png")) == -1)return-1;
+	//気泡（背景）
+	if ((LoadDivGraph("Image/awaanime.png", 3, 3, 1, 27, 32, awa)) == -1)return -1;
 	// カーソル画像
 	if ((Corsol = LoadGraph("Image/coursol.png")) == -1)return -1;
 	//ポーズ画面のカーソル画像
