@@ -508,7 +508,8 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 2400;
+	/*Time = 2400;*/
+	Time = 2400/2;
 	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
@@ -1546,43 +1547,43 @@ void GameClear() {
 	//レベルが1の時
 	if (Leve == 1) {
 		//イカが一番多い時
-		if (im >= am != em && im >= em != am && im > 4) {
+		if (im >= am != em && im >= em != am ) {
 			EndBranch = 2;
 		}
 		//アジが一番多い時
-		else if (am >= em && am > im && am > 4) {
+		else if (am >= em && am > im) {
 			EndBranch = 3;
 		}
 		//エビが一番多い場合
-		else if (em > am && em > im && em > 4) {
+		else if (em > am && em > im ) {
 			EndBranch = 4;
 		}
 	}
 	else if (Leve == 2) {
 		//イカが一番多い時
-		if (im >= am != em && im >= em != am && im > 4) {
+		if (im >= am != em && im >= em != am ) {
 			EndBranch = 5;
 		}
 		//アジが一番多い時
-		else if (am >= em && am > im && am > 4) {
+		else if (am >= em && am > im ) {
 			EndBranch = 6;
 		}
 		//エビが一番多い場合
-		else if (em > am && em > im && em > 4) {
+		else if (em > am && em > im ) {
 			EndBranch = 7;
 		}
 	}
 	else if (Leve == 3) {
 		//イカが一番多い時
-		if (im >= am != em && im >= em != am && im > 4) {
+		if (im >= am != em && im >= em != am ) {
 			EndBranch = 8;
 		}
 		//アジが一番多い時
-		else if (am >= em && am > im && am > 4) {
+		else if (am >= em && am > im ) {
 			EndBranch = 9;
 		}
 		//エビが一番多い場合
-		else if (em > am && em > im && em > 4) {
+		else if (em > am && em > im ) {
 			EndBranch = 10;
 		}
 	}
