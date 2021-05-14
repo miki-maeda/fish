@@ -877,7 +877,7 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/kurage.png", 3, 3, 1, 80, 80, EnemyImage[0])) == -1)return-1;
 	//ミノカサゴ
 	if ((LoadDivGraph("Image/minokasago.png", 3, 3, 1, 120,120, EnemyImage[1])) == -1)return-1;
-	if ((LoadDivGraph("Image/minokasago2.png", 3, 3, 1, 120, 120, feedImageur[3])) == -1)return-1;
+	if ((LoadDivGraph("Image/minokasagoLG.png", 3, 3, 1, 120, 120, feedImageur[3])) == -1)return-1;
 
 	//船
 	if ((LoadDivGraph("Image/船.png", 3, 3, 1, 400, 350, ship1)) == -1)return -1;
@@ -904,15 +904,17 @@ int LoadImages() {
 	//Boss捕獲2
 	if ((LoadDivGraph("Image/マグロ捕獲2.png", 4, 4, 1, 350, 500, Hokaku2)) == -1)return -1;
 	//ゲームクリア画像
-	if ((Gameclear[0] = LoadGraph("Image/GameClear.png")) == -1)return -1;
-	if ((Gameclear[1] = LoadGraph("Image/GameClear(NoEat).png")) == -1)return -1;
-	if ((Gameclear[2] = LoadGraph("Image/GameClear(MaxEat).png")) == -1)return -1;
-	if ((Gameclear[3] = LoadGraph("Image/GameClear(ikaMax).png")) == -1)return -1;
-	if ((Gameclear[4] = LoadGraph("Image/GameClear(aziMax).png")) == -1)return -1;
-	if ((Gameclear[5] = LoadGraph("Image/GameClear(ebiMax).png")) == -1)return -1;
-	if ((Gameclear[6] = LoadGraph("Image/GameClear(レベル1).png")) == -1)return -1;
-	if ((Gameclear[7] = LoadGraph("Image/GameClear(レベル2).png")) == -1)return -1;
-	if ((Gameclear[8] = LoadGraph("Image/GameClear(レベル3).png")) == -1)return -1;
+	if ((Gameclear[0] = LoadGraph("Image/GameClear(puran).png")) == -1)return -1;
+	if ((Gameclear[1] = LoadGraph("Image/GameClear(nin).png")) == -1)return -1;
+	if ((Gameclear[2] = LoadGraph("Image/GameClear(ika).png")) == -1)return -1;
+	if ((Gameclear[3] = LoadGraph("Image/GameClear(azi).png")) == -1)return -1;
+	if ((Gameclear[4] = LoadGraph("Image/GameClear(ebi).png")) == -1)return -1;
+	if ((Gameclear[5] = LoadGraph("Image/GameClear(utubo).png")) == -1)return -1;
+	if ((Gameclear[6] = LoadGraph("Image/GameClear(isogi).png")) == -1)return -1;
+	if ((Gameclear[7] = LoadGraph("Image/GameClear(burobu).png")) == -1)return -1;
+	if ((Gameclear[8] = LoadGraph("Image/GameClear(maguro).png")) == -1)return -1;
+	if ((Gameclear[9] = LoadGraph("Image/GameClear(same).png")) == -1)return -1;
+	if ((Gameclear[10] = LoadGraph("Image/GameClear(tai).png")) == -1)return -1;
 	//ゲームオーバー時のアニメーション
 	if ((LoadDivGraph("Image/FishDie.png", 7, 7, 1, 30, 30, fishdie[0])) == -1)return -1;
 	if ((LoadDivGraph("Image/FishDie Level2.png", 7, 7, 1, 150, 150, fishdie[1])) == -1)return -1;
@@ -1145,7 +1147,7 @@ void EatMove() {
 			}
 
 
-			if (Leve == 1) {
+			/*if (Leve == 1) {
 				if (eat[i].e_x == SCREEN_WIDTH - 5)EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) + 3) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - e_w) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
@@ -1159,7 +1161,7 @@ void EatMove() {
 				if (eat[i].e_x == SCREEN_WIDTH - 9) EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) - 8) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - e_w - 6) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
-			}
+			}*/
 
 			if (EatCont >= 1)
 			{
@@ -1534,35 +1536,55 @@ void GameClear() {
 	//エンディング判定
 	//何も食べなかった場合
 	if (EatAmount == 0) {
-		EndBranch = 1;
+		EndBranch = 0;
 	}
 	//全てが平均的な場合
 	else if (em == im && em == am && am == im) {
-		EndBranch = 2;
+		EndBranch = 1;
 	}
-	//イカが一番多い時
-	else if (im >= am!=em && im >= em!=am && im > 4) {
-		EndBranch = 3;
+
+	//レベルが1の時
+	if (Leve == 1) {
+		//イカが一番多い時
+		if (im >= am != em && im >= em != am && im > 4) {
+			EndBranch = 2;
+		}
+		//アジが一番多い時
+		else if (am >= em && am > im && am > 4) {
+			EndBranch = 3;
+		}
+		//エビが一番多い場合
+		else if (em > am && em > im && em > 4) {
+			EndBranch = 4;
+		}
 	}
-	//アジが一番多い場合
-	else if (am >= em && am > im&&am>4) {
-		EndBranch = 4;
+	else if (Leve == 2) {
+		//イカが一番多い時
+		if (im >= am != em && im >= em != am && im > 4) {
+			EndBranch = 5;
+		}
+		//アジが一番多い時
+		else if (am >= em && am > im && am > 4) {
+			EndBranch = 6;
+		}
+		//エビが一番多い場合
+		else if (em > am && em > im && em > 4) {
+			EndBranch = 7;
+		}
 	}
-	//エビが一番多い場合
-	else if (em > am && em > im&&em>4) {
-		EndBranch = 5;
-	}
-	//レベルが1の状態で餌が平均、MAXじゃない場合
-	else if (Leve == 1 && em < 5 && am < 5 && im < 5) {
-		EndBranch = 6;
-	}
-	//レベルが2の状態で餌が平均、MAXじゃない場合
-	else if (Leve == 2 && em < 5 && am < 5 && im < 5) {
-		EndBranch = 7;
-	}
-	//レベルが3の状態で餌が平均、MAXじゃない場合
-	else if (Leve == 3 && em < 5 && am < 5 && im < 5) {
-		EndBranch = 8;
+	else if (Leve == 3) {
+		//イカが一番多い時
+		if (im >= am != em && im >= em != am && im > 4) {
+			EndBranch = 8;
+		}
+		//アジが一番多い時
+		else if (am >= em && am > im && am > 4) {
+			EndBranch = 9;
+		}
+		//エビが一番多い場合
+		else if (em > am && em > im && em > 4) {
+			EndBranch = 10;
+		}
 	}
 	
 

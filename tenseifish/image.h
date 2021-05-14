@@ -17,7 +17,7 @@ int Iwaspeed = 0;//手前のスピード
 int Umispeed = 0;//海のスピード
 int MenuNo = 0;	// カーソルの番号
 int Life;
-int Gameclear[9];
+int Gameclear[11];
 int Gameover;
 int Gameover2;
 int Gameover3;
