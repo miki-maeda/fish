@@ -864,13 +864,13 @@ int LoadImages() {
 	//餌(食べれる生き物)画像
 	//エビ
 	if ((LoadDivGraph("Image/ebi.png", 3, 3, 1, 50, 50, feedImage[0])) == -1)return-1;
-	if ((LoadDivGraph("Image/ebi2.png", 3, 3, 1, 50, 50, feedImageur[0])) == -1)return-1;
+	if ((LoadDivGraph("Image/ebiLG.png", 3, 3, 1, 50, 50, feedImageur[0])) == -1)return-1;
 	//アジ
 	if ((LoadDivGraph("Image/azi.png", 3, 3, 1, 60, 60, feedImage[1])) == -1)return-1;
-	if ((LoadDivGraph("Image/azi2.png", 3, 3, 1, 60, 60, feedImageur[1])) == -1)return-1;
+	if ((LoadDivGraph("Image/aziLG.png", 3, 3, 1, 60, 60, feedImageur[1])) == -1)return-1;
 	//イカ
 	if ((LoadDivGraph("Image/ika.png", 3, 3, 1, 50, 50, feedImage[2])) == -1)return-1;
-	if ((LoadDivGraph("Image/ika2.png", 3, 3, 1, 50, 50, feedImageur[2])) == -1)return-1;
+	if ((LoadDivGraph("Image/ikaLG.png", 3, 3, 1, 50, 50, feedImageur[2])) == -1)return-1;
 
 	//敵
 	//クラゲ
@@ -1788,13 +1788,13 @@ void BossMove1() {
 			boss.by = player.y - 180;
 			DrawGraph(boss.bx + 200, boss.by - 50, Keikoku, TRUE);
 			if (Leve == 1) {
-				BOSS_SPEED = 10;
+				BOSS_SPEED = 20;
 			}
 			else if (Leve == 2) {
-				BOSS_SPEED = 15;
+				BOSS_SPEED = 25;
 			}
 			else if (Leve == 3) {
-				BOSS_SPEED = 20;
+				BOSS_SPEED = 30;
 			}
 		}
 		if (count > 151 && count < 300) {
