@@ -510,8 +510,8 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	/*Time = 2400;*/
-	Time = 2400/2;
+	Time = 2400;
+	//Time = 2400/2;
 	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
@@ -987,7 +987,7 @@ int LoadImages() {
 
 	//ìG
 	//ÉNÉâÉQ
-	if ((LoadDivGraph("Image/kurage.png", 3, 3, 1, 80, 80, EnemyImage[0])) == -1)return-1;
+	if ((LoadDivGraph("Image/kurage(âº).png", 3, 3, 1, 80, 80, EnemyImage[0])) == -1)return-1;
 	//É~ÉmÉJÉTÉS
 	if ((LoadDivGraph("Image/minokasago.png", 3, 3, 1, 120,120, EnemyImage[1])) == -1)return-1;
 	if ((LoadDivGraph("Image/minokasagoLG.png", 3, 3, 1, 120, 120, feedImageur[3])) == -1)return-1;
