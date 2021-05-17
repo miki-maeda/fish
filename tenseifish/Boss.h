@@ -6,6 +6,7 @@ void BossMove2();
 void BossMove3();
 void BossStage();
 void BossBackScrool();
+void BossMeter();
 
 void Ami();
 void AmiLs();	// îΩì]î≈
@@ -127,6 +128,9 @@ int netflg = 0;
 int counth = 0;
 
 int countS = 0;
+//bossêÌÇÃÉÅÅ[É^Å[
+float boss_Y = 923;
+float bm = 0;
 struct Net //ñ‘
 {
 

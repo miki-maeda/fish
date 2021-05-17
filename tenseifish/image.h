@@ -29,4 +29,5 @@ int feedImageur[4][3];	//右側を向く餌の画像を格納する変数 1エビ,2アジ,3イカ4ミノ
 int EnemyImage[2][3];	//敵の画像を格納する変数 1クラゲ,2ミノカサゴ
 int fishdie[3][7] = { 0 };
 int BOSSROAD;           //ボスへの道
-
+int BOSSMETER;           //マグロへの道の表し
+int BOSSY;              //マグロへの道の表し（矢印）

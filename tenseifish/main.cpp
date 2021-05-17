@@ -519,6 +519,8 @@ void GameInit() {
 	LeveUpflg2 = FALSE;
 	LCount = 0;
 	countS = 0;
+	bm = 0.143;
+	boss_Y = 923;
 	//餌の初期化
 	for (int i = 0; i < 10; i++) {
 		eat[i].flg = FALSE;
@@ -557,6 +559,7 @@ void GameMain() {
 	BossST(&player);
 	Pouse();
 	AwaAnime();
+	BossMeter();
 }
 /*************************************
  *背景画像スクロール処理
@@ -1039,6 +1042,8 @@ int LoadImages() {
 
 	//ボスへの道
 	if ((BOSSROAD = LoadGraph("Image/ボスへの道.png")) == -1)return -1;
+	if ((BOSSMETER = LoadGraph("Image/ボス戦への目印2.png")) == -1)return -1;
+	if ((BOSSY = LoadGraph("Image/BOSS_Y.png")) == -1)return -1;
 	//水しぶき
 	if ((LoadDivGraph("Image/hasira.png", 8, 8, 1, 167, 500, sibuki)) == -1)return -1;
 
@@ -1749,7 +1754,22 @@ void GameClear() {
 		}
 	}
 }
+void  BossMeter() {
 
+	DrawGraph(900, 0, BOSSMETER, TRUE);
+	if (key1 < 1) {
+		if (Time > 0) {
+			if (boss_Y > 1273) {
+				bm = 0;
+			}
+
+			boss_Y += bm;
+
+		}
+	}
+	DrawGraph(boss_Y, 40, BOSSY, TRUE);
+
+}
 //ボスステージ移行（当たったら）
 void BossST(Player* p) {
 
