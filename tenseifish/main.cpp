@@ -707,17 +707,12 @@ void BackScrool()
 void AwaAnime() {
 
 	if (key1 < 1) {
-		if (AWA_Y > 148 || AWA_aY > 148 || AWA_bY > 148 || AWA_rY > 148) {
+		if (AWA_Y > 148 || AWA_aY > 148 || AWA_bY > 148 || AWA_rY > 148 || AWA_cY > 148) {
 			if (Leve == 1) {
 				AWA_Y -= 1;
 				AWA_aY -= 1;
 				AWA_bY -= 1;
-				AWA_X -= 1;
-				AWA_aX -= 1;
-				AWA_bX -= 1;
-				AWA_rX -= 1;
 				AWA_rY -= 1;
-				AWA_cX -= 1;
 				AWA_cY -= 1;
 
 			}
@@ -725,25 +720,38 @@ void AwaAnime() {
 				AWA_Y -= 1;
 				AWA_aY -= 1;
 				AWA_bY -= 1;
-				AWA_X -= 2;
-				AWA_aX -= 2;
-				AWA_bX -= 2;
-				AWA_rX -= 2;
 				AWA_rY -= 1;
-				AWA_cX -= 2;
 				AWA_cY -= 1;
 			}
 			else {
 				AWA_Y -= 1;
 				AWA_aY -= 1;
 				AWA_bY -= 1;
-				AWA_X -= 3;
-				AWA_aX -= 3;
-				AWA_bX -= 3;
-				AWA_rX -= 3;
 				AWA_rY -= 1;
-				AWA_cX -= 3;
 				AWA_cY -= 1;
+			}
+			if (player.flg == TRUE && LeveUpflg1 != TRUE) {
+				if (Leve == 1) {
+					AWA_X -= 1;
+					AWA_aX -= 1;
+					AWA_bX -= 1;
+					AWA_rX -= 1;
+					AWA_cX -= 1;
+				}
+				else if (Leve == 2) {
+					AWA_X -= 2;
+					AWA_aX -= 2;
+					AWA_bX -= 2;
+					AWA_rX -= 2;
+					AWA_cX -= 2;
+				}
+				else {
+					AWA_X -= 3;
+					AWA_aX -= 3;
+					AWA_bX -= 3;
+					AWA_rX -= 3;
+					AWA_cX -= 3;
+				}
 			}
 		}
 	}
