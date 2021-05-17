@@ -1225,7 +1225,7 @@ void EatMove() {
 				if (eat[i].DMove == FALSE) {
 					DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + e_w, eat[i].e_y + e_h, eat[i].image, TRUE);
 				}
-				else if(eat[i].DMove == TRUE&&eat[i].type<4){
+				else if(eat[i].DMove == TRUE&&eat[i].type<=3){
 					DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + e_w, eat[i].e_y + e_h, eat[i].imageur, TRUE);
 				}
 			}
@@ -1339,7 +1339,6 @@ int EatImage() {
 			eat[i].type = GetRand(7)%5;
 			if (eat[i].type <= 2) {
 				eat[i].image = feedImage[eat[i].type][0];
-				
 			}
 			else if (eat[i].type <= 3) {
 				eat[i].imageur = feedImageur[eat[i].type][0];
@@ -1358,11 +1357,11 @@ int EatImage() {
 				eat[i].e_y = GetRand(5) * 100 + 150;
 				break;
 			case 3:
-				eat[i].e_y = GetRand(1) * 100 + 150;
+				eat[i].e_y = GetRand(3) * 100 + 150;
 				eat[i].typeD = TRUE;
 				break;
 			case 4:
-				eat[i].e_y = GetRand(3) * 100 + 150;
+				eat[i].e_y = GetRand(1) * 100 + 150;
 				eat[i].typeD = TRUE;
 				break;
 			}
