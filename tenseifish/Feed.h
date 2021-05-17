@@ -27,8 +27,9 @@ int Deatflg = FALSE;	//フラグ
 int DSpeed;				//吐き出した餌のスピード
 int RandEat = 0;		//吐き出す餌の種類
 
-int mx, my, mw, mh;
-int e_w, e_h;
+int mx, my, mw, mh;		
+int e_w, e_h;			//エサのサイズ
+int Dx = 0, Dy = 0, Dw = 0, Dh = 0;	//吐き出す時の座標
 
 struct Eat {
 

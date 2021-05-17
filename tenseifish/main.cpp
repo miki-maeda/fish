@@ -484,9 +484,13 @@ void GameInit() {
 	im = 0;
 	EatAmount = 0;
 	Leve = 1;
+	LeveC = Leve;
 	Scke = 1;
 	LeveUp = 10;
 	RandEat = 3;
+	Deatflg = FALSE;
+	Dx = 0, Dy = 0, Dw = 0, Dh = 0;
+	DSpeed = 0;
 
 	//当たり判定用変数の初期化
 	CollXadd = 0;
@@ -511,7 +515,6 @@ void GameInit() {
 	player.muteki = 0;
 	Umispeed = 0;
 	Time = 2400;
-	//Time = 2400/2;
 	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
@@ -699,7 +702,7 @@ void BackScrool()
 
 	//レベル表示
 	SetFontSize(60);
-	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
+	DrawFormatString(0, 0, 0x000000, "Lv.%d", LeveC);
 }
 void AwaAnime() {
 
@@ -928,6 +931,7 @@ void PlayerMove() {
 				LeveUpflg2 = FALSE;
 				player.flg = TRUE;
 				LCount = 0;
+				LeveC = Leve;
 
 			}
 		}
@@ -989,11 +993,12 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/ikaLG.png", 3, 3, 1, 50, 50, feedImageur[2])) == -1)return-1;
 
 	//敵
-	//クラゲ
-	if ((LoadDivGraph("Image/kurage(仮).png", 3, 3, 1, 80, 80, EnemyImage[0])) == -1)return-1;
 	//ミノカサゴ
-	if ((LoadDivGraph("Image/minokasago.png", 3, 3, 1, 120,120, EnemyImage[1])) == -1)return-1;
+	if ((LoadDivGraph("Image/minokasago.png", 3, 3, 1, 120,120, EnemyImage[0])) == -1)return-1;
 	if ((LoadDivGraph("Image/minokasagoLG.png", 3, 3, 1, 120, 120, feedImageur[3])) == -1)return-1;
+
+	//クラゲ
+	if ((LoadDivGraph("Image/kurage(仮).png", 3, 3, 1, 80, 80, EnemyImage[1])) == -1)return-1;
 
 	//船
 	if ((LoadDivGraph("Image/船.png", 3, 3, 1, 400, 350, ship1)) == -1)return -1;
@@ -1264,22 +1269,21 @@ void EatMove() {
 				}
 			}
 
-
-			/*if (Leve == 1) {
-				if (eat[i].e_x == SCREEN_WIDTH - 5)EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) + 3) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - e_w) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
+			if (Leve == 1) {
+				if (eat[i].e_x == SCREEN_WIDTH - 6)EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) + 5) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - e_w + 3) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
 			}
 			if (Leve == 2) {
-				if (eat[i].e_x == SCREEN_WIDTH - 7) EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) - 5) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - e_w - 2) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - 8) EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) + 3) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - e_w + 5) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
 			}
 			if (Leve == 3) {
-				if (eat[i].e_x == SCREEN_WIDTH - 9) EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) - 8) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
-				if (eat[i].e_x == SCREEN_WIDTH - e_w - 6) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
-			}*/
+				if (eat[i].e_x == SCREEN_WIDTH - 10) EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) + 3) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
+				if (eat[i].e_x == SCREEN_WIDTH - e_w + 5) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
+			}
 
 			if (EatCont >= 1)
 			{
@@ -1493,10 +1497,10 @@ void PlayerEat(int* e) {
 	}
 }
 
+//エサを吐き出す処理
 void DEat() {
 
 	static int DEflg = FALSE;
-	static int Dx = 0, Dy = 0, Dw = 0, Dh = 0;
 
 	if (DEflg == FALSE) {
 		RandEat = GetRand(2);
@@ -1533,7 +1537,7 @@ void DEat() {
 	}
 
 	if (RandEat < 3) {
-		DrawExtendGraph(Dx + Dw / 2 + 10 + DSpeed, Dy + Dh / 2 + 10, Dx + Dw + DSpeed - 10, Dy + Dh - 10, feedImage[RandEat][0], Deatflg);
+		DrawExtendGraph(Dx + Dw / 2 + 10 + DSpeed, Dy + Dh / 2 + 10, Dx + Dw + DSpeed - 10, Dy + Dh - 10, feedImage[RandEat][0], TRUE);
 		DSpeed += 10;
 		if (Dx + DSpeed >= SCREEN_WIDTH) {
 			Deatflg = FALSE;
