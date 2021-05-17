@@ -26,7 +26,6 @@ void GameHelp();		//ゲームヘルプ処理
 void BackScrool();         //背景画像スクロール処理
 void GameClear();		//ゲームクリア処理
 void GameOver();
-void Goal();
 void Pouse();
 void GameGiyo();
 void GameGiyo2();
@@ -524,6 +523,7 @@ void GameInit() {
 	countS = 0;
 	bm = 0.143;
 	boss_Y = 923;
+	MovieCount = 0;
 	//餌の初期化
 	for (int i = 0; i < 10; i++) {
 		eat[i].flg = FALSE;
@@ -557,12 +557,14 @@ void GameMain() {
 	BackScrool();
 	PlayerMove();
 	EatMove();
-	LifeImage();
-	MeterImage();
+	if (Time > 60) {
+		LifeImage();
+		MeterImage();
+		BossMeter();
+	}
 	BossST(&player);
 	Pouse();
 	AwaAnime();
-	BossMeter();
 }
 /*************************************
  *背景画像スクロール処理
@@ -643,17 +645,47 @@ void BackScrool()
 		DrawGraph(Iwaspeed % IwaHaba, 50, Iwa[0], TRUE);
 		DrawGraph(IwaHaba + (Iwaspeed % IwaHaba), 50, Iwa[0], TRUE);
 	}
-	else if (Time <= 60) {
+	if (Time < 59) {
+		BossMovie();
+	}
+
+	//エリアを戻す
+	SetDrawArea(0, 0, IwaHaba, SCREEN_HEIGHT);
+
+
+	//レベル表示
+	SetFontSize(60);
+	DrawFormatString(0, 0, 0x000000, "Lv.%d", LeveC);
+}
+void BossMovie() {
+
+	if (key1 < 1) {
+		DrawBox(0, 0, 1410, MY, GetColor(0, 0, 0), TRUE);
+		DrawBox(0, 800, 1410, MY2, GetColor(0, 0, 0), TRUE);
+		//DrawFormatString(100, 160, 0x000000, "%d", MovieCount);
 		player.flg = FALSE;
-		if (key1 != 1) {
-			if (player.y != 400) {
-				if (player.y <= 400) player.y += player.speed / 4 * 3;
-				if (player.y >= 400) player.y -= player.speed / 4 * 3;
-			}
-			player.x += player.speed / 4 * 7;
+		MovieCount = (MovieCount + 1) % 200;
+		if (MovieCount == 1) {
+			player.x = 500;
+			player.y = 400;
+			MY = 0;
+			MY2 = 800;
 		}
-		if (BRflg == FALSE) {
-			if (key1 < 1) {
+		if (MovieCount < 50) {
+			if (MY < 130) {
+				MY += 5;
+			}
+			if (MY2 > 670) {
+				MY2 -= 5;
+			}
+		}
+		if (MovieCount > 50) {
+			player.x += player.speed;
+		}
+
+		if (MovieCount > 50) {
+			if (BRflg == FALSE) {
+
 				if (--BOSS_act_wait <= 0)
 				{
 
@@ -661,17 +693,6 @@ void BackScrool()
 					BOSS_act_wait = BOSS_ACT_SPEED;
 					BOSS_act_index %= BOSS_MOTION_INDEX;
 
-				}
-				if (player.muteki == 0) {
-					//当たり判定
-					if (HitBoxPlayer(&player, &boss) == TRUE) {
-
-						player.life -= 1;
-						player.muteki = 1;
-						if (SEFlg == FALSE) {
-							PlaySoundMem(DamegeSE, DX_PLAYTYPE_BACK, TRUE);
-						}
-					}
 				}
 
 				motion_index2 = BOSSAnime[BOSS_act_index];
@@ -683,26 +704,17 @@ void BackScrool()
 				boss.by = BOSS_POS_Y;
 				boss.bw = BOSS_WIDTH;
 				boss.bh = BOSS_HEIGHT;
-				//boss.speed = player.speed;
 
 				DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
 			}
 		}
-		if (BRMove < 1) {
+		if (BRMove == 0) {
 			Iwaspeed = 0;
 			BRMove = 1;
 		}
-		DrawGraph(Iwaspeed % IwaHaba, 50, Iwa[BRMove], TRUE);
-		DrawGraph(IwaHaba + (Iwaspeed % IwaHaba), 50, Iwa[BRMove], TRUE);
+		//DrawGraph(800, 50, BOSSROAD, TRUE);
+
 	}
-
-	//エリアを戻す
-	SetDrawArea(0, 0, IwaHaba, SCREEN_HEIGHT);
-
-
-	//レベル表示
-	SetFontSize(60);
-	DrawFormatString(0, 0, 0x000000, "Lv.%d", LeveC);
 }
 void AwaAnime() {
 
@@ -1639,11 +1651,7 @@ int Hit(Player* p, Eat* e) {
 	return FALSE;
 }
 
-void Goal() {
-	/*if (Time <= 0) {
-		DrawBox(1200, 400, 1300, 500, GetColor(255, 212, 0), FALSE);
-	}*/
-}
+
 //ゲームクリア（当たったら）
 void GameClearHit() {
 
@@ -1790,7 +1798,7 @@ void BossST(Player* p) {
 	int pw = p->w;
 
 	if (Time <= 0) {
-		DrawGraph(800, 50, BOSSROAD, TRUE);
+		
 		if (1410 >= px && 1410 <= px + ph &&
 			800 >= py && 0 <= py + pw) {
 			GameState = 4;
@@ -2421,26 +2429,30 @@ void Ami() {
 					}
 					motion_index4 = netanime[NET_act_index];
 				}
+				int bbx = (boss.bx - (boss.bw - boss.bw - 100));
+				int bby = (boss.by - (boss.bh - boss.bh - 150));
+				int bbw = (boss.bx - (boss.bw - boss.bw - 100)) + boss.bh - 270;
+				int bbh = (boss.by - (boss.bh - boss.bh - 150)) + boss.bw - 280;
 				if (SHIP_X == 1300) {
 					if (motion_index4 == 4) {
 						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-						if (1300 >= boss.bx && 1400 <= boss.bx + boss.bh &&
-							250 >= boss.by && 270 <= boss.by + boss.bw) {
+						if (1300 >= bbx && 1400 <= bbh &&
+							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
 						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-						if (1300 >= boss.bx && 1400 <= boss.bx + boss.bh &&
-							310 >= boss.by && 330 <= boss.by + boss.bw) {
+						if (1300 >= bbx && 1400 <= bbh &&
+							310 >= bby && 330 <= bbw) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
 						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-						if (1300 >= boss.bx && 1400 <= boss.bx + boss.bh &&
-							360 >= boss.by && 380 <= boss.by + boss.bw) {
+						if (1300 >= bbx && 1400 <= bbh &&
+							360 >= bby && 380 <= bbw) {
 							cr = 1;
 						}
 					}
@@ -2448,23 +2460,23 @@ void Ami() {
 				else if (SHIP_X == 700) {
 					if (motion_index4 == 4) {
 						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
-							250 >= boss.by && 270 <= boss.by + boss.bw) {
+						if (600 >= bbx && 700 <= bbh &&
+							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
 						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
-							310 >= boss.by && 330 <= boss.by + boss.bw) {
+						if (600 >= bbx && 700 <= bbh &&
+							310 >= bby && 330 <= bbw) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
 						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
-							360 >= boss.by && 380 <= boss.by + boss.bw) {
+						if (600 >= bbx && 700 <= bbh &&
+							360 >= bby && 380 <= bbw) {
 							cr = 1;
 						}
 					}
@@ -2472,23 +2484,23 @@ void Ami() {
 				else if (SHIP_X == 300) {
 					if (motion_index4 == 4) {
 						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-						if (300 >= boss.bx && 400 <= boss.bx + boss.bh &&
-							250 >= boss.by && 270 <= boss.by + boss.bw) {
+						if (300 >= bbx && 400 <= bbh &&
+							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
 						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-						if (300 >= boss.bx && 400 <= boss.bx + boss.bh &&
-							310 >= boss.by && 330 <= boss.by + boss.bw) {
+						if (300 >= bbx && 400 <= bbh &&
+							310 >= bby && 330 <= bbw) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
 						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-						if (300 >= boss.bx && 400 <= boss.bx + boss.bh &&
-							360 >= boss.by && 380 <= boss.by + boss.bw) {
+						if (300 >= bbx && 400 <= bbh &&
+							360 >= bby && 380 <= bbw) {
 							cr = 1;
 						}
 					}
@@ -2514,26 +2526,30 @@ void AmiLs() {
 					}
 					motion_index4 = netanime[NET_act_index];
 				}
+				int bbx = (boss.bx - (boss.bw - boss.bw - 100));
+				int bby = (boss.by - (boss.bh - boss.bh - 150));
+				int bbw = (boss.bx - (boss.bw - boss.bw - 100)) + boss.bh - 270;
+				int bbh = (boss.by - (boss.bh - boss.bh - 150)) + boss.bw - 280;
 				if (SHIP_lX == 100) {
 					if (motion_index4 == 4) {
 						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-						if (200 >= boss.bx && 300 <= boss.bx + boss.bh &&
-							250 >= boss.by && 270 <= boss.by + boss.bw) {
+						if (200 >= bbx && 300 <= bbh &&
+							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
 						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-						if (200 >= boss.bx && 300 <= boss.bx + boss.bh &&
-							310 >= boss.by && 330 <= boss.by + boss.bw) {
+						if (200 >= bbx && 300 <= bbh &&
+							310 >= bby && 330 <= bbw) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
 						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-						if (200 >= boss.bx && 300 <= boss.bx + boss.bh &&
-							360 >= boss.by && 380 <= boss.by + boss.bw) {
+						if (200 >= bbx && 300 <= bbh &&
+							360 >= bby && 380 <= bbw) {
 							cr = 1;
 						}
 					}
@@ -2541,23 +2557,23 @@ void AmiLs() {
 				else if (SHIP_lX == 500) {
 					if (motion_index4 == 4) {
 						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
-							250 >= boss.by && 270 <= boss.by + boss.bw) {
+						if (600 >= bbx && 700 <= bbh &&
+							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
 						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
-							310 >= boss.by && 330 <= boss.by + boss.bw) {
+						if (600 >= bbx && 700 <= bbh &&
+							310 >= bby && 330 <= bbw) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
 						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-						if (600 >= boss.bx && 700 <= boss.bx + boss.bh &&
-							360 >= boss.by && 380 <= boss.by + boss.bw) {
+						if (600 >= bbx && 700 <= bbh &&
+							360 >= bby && 380 <= bbw) {
 							cr = 1;
 						}
 					}
@@ -2565,23 +2581,23 @@ void AmiLs() {
 				else if (SHIP_lX == 900) {
 					if (motion_index4 == 4) {
 						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-						if (1000 >= boss.bx && 1100 <= boss.bx + boss.bh &&
-							250 >= boss.by && 270 <= boss.by + boss.bw) {
+						if (1000 >= bbx && 1100 <= bbh &&
+							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
 						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-						if (1000 >= boss.bx && 1100 <= boss.bx + boss.bh &&
-							310 >= boss.by && 330 <= boss.by + boss.bw) {
+						if (1000 >= bbx && 1100 <= bbh &&
+							310 >= bby && 330 <= bbw) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
 						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-						if (1000 >= boss.bx && 1100 <= boss.bx + boss.bh &&
-							360 >= boss.by && 380 <= boss.by + boss.bw) {
+						if (1000 >= bbx && 1100 <= bbh &&
+							360 >= bby && 380 <= bbw) {
 							cr = 1;
 						}
 					}

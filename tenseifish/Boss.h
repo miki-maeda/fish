@@ -7,6 +7,7 @@ void BossMove3();
 void BossStage();
 void BossBackScrool();
 void BossMeter();
+void BossMovie();
 
 void Ami();
 void AmiLs();	// 反転版
@@ -43,6 +44,9 @@ int Hokaku2[5] = { 0 };	  //ボスの捕獲を格納する配列（反転）
 
 bool BRflg;
 int BRMove;
+int MovieCount;
+int MY;
+int MY2;
 
 int BOSSBoom[] = { 2,2,1,1,0,0,5,6,5,4,5,6 };		//必殺技するときのアニメーションの番号 
 
