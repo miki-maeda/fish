@@ -514,7 +514,7 @@ void GameInit() {
 	player.muteki = 0;
 	Umispeed = 0;
 	Time = 2400;
-	//Time = 60;
+	//Time = 100;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -658,10 +658,11 @@ void BackScrool()
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", LeveC);
 }
 void BossMovie() {
-
+	DrawBox(0, 0, 1410, MY, GetColor(0, 0, 0), TRUE);
+	DrawBox(0, 800, 1410, MY2, GetColor(0, 0, 0), TRUE);
+	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
 	if (key1 < 1) {
-		DrawBox(0, 0, 1410, MY, GetColor(0, 0, 0), TRUE);
-		DrawBox(0, 800, 1410, MY2, GetColor(0, 0, 0), TRUE);
+		
 		//DrawFormatString(100, 160, 0x000000, "%d", MovieCount);
 		player.flg = FALSE;
 		MovieCount = (MovieCount + 1) % 200;
@@ -705,7 +706,7 @@ void BossMovie() {
 				boss.bw = BOSS_WIDTH;
 				boss.bh = BOSS_HEIGHT;
 
-				DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
+				//DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
 			}
 		}
 		if (BRMove == 0) {
@@ -2276,7 +2277,7 @@ void Ship() {
 				sc = 0;
 			}
 			if (SHIP_COUNT2 != 0) {
-				SetFontSize(50);
+				//SetFontSize(50);
 				//DrawFormatString(700, 30, 0x000000, "‘D‚ª—ˆ‚é‚Ü‚Å%d•b", SHIP_COUNT2 / 100);
 			}
 			if (countS >= 3)
@@ -2429,20 +2430,20 @@ void Ami() {
 					}
 					motion_index4 = netanime[NET_act_index];
 				}
-				int bbx = (boss.bx - (boss.bw - boss.bw - 100));
+				int bbx = (boss.bx - (boss.bw - boss.bw - 180));
 				int bby = (boss.by - (boss.bh - boss.bh - 150));
-				int bbw = (boss.bx - (boss.bw - boss.bw - 100)) + boss.bh - 270;
+				int bbw = (boss.bx - (boss.bw - boss.bw - 180)) + boss.bh - 270;
 				int bbh = (boss.by - (boss.bh - boss.bh - 150)) + boss.bw - 280;
 				if (SHIP_X == 1300) {
 					if (motion_index4 == 4) {
-						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						//DrawBox(1300, 250, 1400, 270, GetColor(255, 255, 255), FALSE);
 						if (1300 >= bbx && 1400 <= bbh &&
 							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						//DrawBox(1300, 310, 1400, 330, GetColor(255, 255, 255), FALSE);
 						if (1300 >= bbx && 1400 <= bbh &&
 							310 >= bby && 330 <= bbw) {
 							cr = 1;
@@ -2450,23 +2451,23 @@ void Ami() {
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						//DrawBox(1300, 360, 1400, 380, GetColor(255, 255, 255), FALSE);
 						if (1300 >= bbx && 1400 <= bbh &&
 							360 >= bby && 380 <= bbw) {
 							cr = 1;
 						}
 					}
 				}
-				else if (SHIP_X == 700) {
+				else if (SHIP_X == 800) {
 					if (motion_index4 == 4) {
-						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						//DrawBox(600, 250, 700, 270, GetColor(255, 255, 255), FALSE);
 						if (600 >= bbx && 700 <= bbh &&
 							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						//DrawBox(600, 310, 700, 330, GetColor(255, 255, 255), FALSE);
 						if (600 >= bbx && 700 <= bbh &&
 							310 >= bby && 330 <= bbw) {
 							cr = 1;
@@ -2474,7 +2475,7 @@ void Ami() {
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						//DrawBox(600, 360, 700, 380, GetColor(255, 255, 255), FALSE);
 						if (600 >= bbx && 700 <= bbh &&
 							360 >= bby && 380 <= bbw) {
 							cr = 1;
@@ -2483,14 +2484,14 @@ void Ami() {
 				}
 				else if (SHIP_X == 300) {
 					if (motion_index4 == 4) {
-						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						//DrawBox(300, 250, 400, 270, GetColor(255, 255, 255), FALSE);
 						if (300 >= bbx && 400 <= bbh &&
 							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						//DrawBox(300, 310, 400, 330, GetColor(255, 255, 255), FALSE);
 						if (300 >= bbx && 400 <= bbh &&
 							310 >= bby && 330 <= bbw) {
 							cr = 1;
@@ -2498,7 +2499,7 @@ void Ami() {
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						//DrawBox(300, 360, 400, 380, GetColor(255, 255, 255), FALSE);
 						if (300 >= bbx && 400 <= bbh &&
 							360 >= bby && 380 <= bbw) {
 							cr = 1;
@@ -2526,20 +2527,20 @@ void AmiLs() {
 					}
 					motion_index4 = netanime[NET_act_index];
 				}
-				int bbx = (boss.bx - (boss.bw - boss.bw - 100));
+				int bbx = (boss.bx - (boss.bw - boss.bw - 180));
 				int bby = (boss.by - (boss.bh - boss.bh - 150));
-				int bbw = (boss.bx - (boss.bw - boss.bw - 100)) + boss.bh - 270;
+				int bbw = (boss.bx - (boss.bw - boss.bw - 180)) + boss.bh - 270;
 				int bbh = (boss.by - (boss.bh - boss.bh - 150)) + boss.bw - 280;
 				if (SHIP_lX == 100) {
 					if (motion_index4 == 4) {
-						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						//DrawBox(200, 250, 300, 270, GetColor(255, 255, 255), FALSE);
 						if (200 >= bbx && 300 <= bbh &&
 							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						//DrawBox(200, 310, 300, 330, GetColor(255, 255, 255), FALSE);
 						if (200 >= bbx && 300 <= bbh &&
 							310 >= bby && 330 <= bbw) {
 							cr = 1;
@@ -2547,7 +2548,7 @@ void AmiLs() {
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						//DrawBox(200, 360, 300, 380, GetColor(255, 255, 255), FALSE);
 						if (200 >= bbx && 300 <= bbh &&
 							360 >= bby && 380 <= bbw) {
 							cr = 1;
@@ -2556,14 +2557,14 @@ void AmiLs() {
 				}
 				else if (SHIP_lX == 500) {
 					if (motion_index4 == 4) {
-						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						//DrawBox(600, 250, 700, 270, GetColor(255, 255, 255), FALSE);
 						if (600 >= bbx && 700 <= bbh &&
 							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						//DrawBox(600, 310, 700, 330, GetColor(255, 255, 255), FALSE);
 						if (600 >= bbx && 700 <= bbh &&
 							310 >= bby && 330 <= bbw) {
 							cr = 1;
@@ -2571,7 +2572,7 @@ void AmiLs() {
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+						//DrawBox(600, 360, 700, 380, GetColor(255, 255, 255), FALSE);
 						if (600 >= bbx && 700 <= bbh &&
 							360 >= bby && 380 <= bbw) {
 							cr = 1;
@@ -2580,14 +2581,14 @@ void AmiLs() {
 				}
 				else if (SHIP_lX == 900) {
 					if (motion_index4 == 4) {
-						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
+						//DrawBox(1000, 250, 1100, 270, GetColor(255, 255, 255), FALSE);
 						if (1000 >= bbx && 1100 <= bbh &&
 							250 >= bby && 270 <= bbw) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
+						//DrawBox(1000, 310, 1100, 330, GetColor(255, 255, 255), FALSE);
 						if (1000 >= bbx && 1100 <= bbh &&
 							310 >= bby && 330 <= bbw) {
 							cr = 1;
@@ -2595,7 +2596,7 @@ void AmiLs() {
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
+					    //DrawBox(1000, 360, 1100, 380, GetColor(255, 255, 255), FALSE);
 						if (1000 >= bbx && 1100 <= bbh &&
 							360 >= bby && 380 <= bbw) {
 							cr = 1;
@@ -2694,7 +2695,7 @@ int HitBoxPlayer(Player* p, Boss* b)
 		int ph = px + 20 + p->h - 30;
 		int pw = py + p->w - 50;
 
-		int bx1 = b->bx - (b->bw - boss.bw - 100);
+		int bx1 = b->bx - (b->bw - boss.bw - 180);
 		int by2 = b->by - (b->bh - boss.bh - 150);
 		int bh1 = bx1 + b->bh - 270;
 		int bw2 = by2 + b->bw - 280;
@@ -2717,7 +2718,7 @@ int HitBoxPlayer(Player* p, Boss* b)
 		int ph = px - 20 + p->h - 90;
 		int pw = py - 5 + p->w - 150;
 
-		int bx1 = b->bx - (b->bw - boss.bw - 100);
+		int bx1 = b->bx - (b->bw - boss.bw - 180);
 		int by2 = b->by - (b->bh - boss.bh - 150);
 		int bh1 = bx1 + b->bh - 270;
 		int bw2 = by2 + b->bw - 280;
@@ -2740,7 +2741,7 @@ int HitBoxPlayer(Player* p, Boss* b)
 		int ph = px + p->h - 90;
 		int pw = py + p->w - 130;
 
-		int bx1 = b->bx - (b->bw - boss.bw - 100);
+		int bx1 = b->bx - (b->bw - boss.bw - 180);
 		int by2 = b->by - (b->bh - boss.bh - 150);
 		int bh1 = bx1 + b->bh - 270;
 		int bw2 = by2 + b->bw - 280;
