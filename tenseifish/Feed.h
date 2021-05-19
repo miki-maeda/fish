@@ -30,6 +30,7 @@ int RandEat = 0;		//吐き出す餌の種類
 int mx, my, mw, mh;		
 int e_w, e_h;			//エサのサイズ
 int Dx = 0, Dy = 0, Dw = 0, Dh = 0;	//吐き出す時の座標
+int clear[11] = { FALSE };		//図鑑のフラグ　FALSE:未登録　TRUE:登録済み
 
 struct Eat {
 
@@ -49,6 +50,9 @@ int Hit(Player* p, Eat* e);				//敵とのあたり判定
 void EatCheck(int x, int y);				//岩との当たり判定(エサ)
 void EatCheck1(int x, int y);				//敵の出現場所の確認
 void DEat();							//岩もしくは敵に当たった時ランダムでエサゲージを下げる処理
+void PictureBook1();	//図鑑の処理する関数
+void PictureBook2();	//図鑑の処理する関数
+
 
 //マップチップ
 int EatI[8][155] =

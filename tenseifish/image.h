@@ -16,8 +16,10 @@ int IwaHaba = 7732;//手前の背景の幅
 int Iwaspeed = 0;//手前のスピード
 int Umispeed = 0;//海のスピード
 int MenuNo = 0;	// カーソルの番号
+int MenuNo1 = 0;//カーソルの番号
 int Life;
-int Gameclear[11];
+int Gameclear[12];		//エンディングの分岐の画像
+int ClearZukan[11];		//図鑑の画像
 int Gameover;
 int Gameover2;
 int Gameover3;
@@ -31,3 +33,4 @@ int fishdie[3][7] = { 0 };
 int BOSSROAD;           //ボスへの道
 int BOSSMETER;           //マグロへの道の表し
 int BOSSY;              //マグロへの道の表し（矢印）
+int Bookhaikei[2];			//図鑑の背景

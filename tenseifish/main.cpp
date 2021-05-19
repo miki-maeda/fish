@@ -119,6 +119,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			break;
 		case 13:
 			Musicmixer();
+			break;
+		case 14:
+			PictureBook1();
+			break;
+		case 15:
+			PictureBook2();
+			break;
 		}
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 	}
@@ -194,7 +201,7 @@ void GameTitle() {
 		}
 		else if (MenuNo == 1&& MenuNo2 == 0) {
 			push = 0;
-			GameState = 6;
+			GameState = 14;
 			MenuNo = 0;
 			MenuNo2 = 0;
 			if (BGMFlg == FALSE) {
@@ -1002,6 +1009,9 @@ int LoadImages() {
 	if ((Gamerule = LoadGraph("Image/ゲームルール1.png")) == -1)return -1;
 	// ゲームルール2画像
 	if ((Gamerule2 = LoadGraph("Image/ゲームルール2.png")) == -1)return -1;
+	//図鑑の背景画像
+	if ((Bookhaikei[0] = LoadGraph("Image/zukanhaikei.png")) == -1)return -1;
+	if ((Bookhaikei[1] = LoadGraph("Image/zukanhaikei2.png")) == -1)return -1;
 	// ゲーム音量調整画像
 	if ((GameMS = LoadGraph("Image/GameMusicSelect.png")) == -1)return -1;
 	//ポーズ画像
@@ -1082,6 +1092,19 @@ int LoadImages() {
 	if ((Gameclear[8] = LoadGraph("Image/GameClear(maguro).png")) == -1)return -1;
 	if ((Gameclear[9] = LoadGraph("Image/GameClear(same).png")) == -1)return -1;
 	if ((Gameclear[10] = LoadGraph("Image/GameClear(tai).png")) == -1)return -1;
+	if ((Gameclear[11] = LoadGraph("Image/mikai.png")) == -1)return -1;
+	//図鑑の時の画像 
+	if ((ClearZukan[0] = LoadGraph("Image/zukan(puran).png")) == -1)return -1;
+	if ((ClearZukan[1] = LoadGraph("Image/zukan(nin).png")) == -1)return -1;
+	if ((ClearZukan[2] = LoadGraph("Image/zukan(ika).png")) == -1)return -1;
+	if ((ClearZukan[3] = LoadGraph("Image/zukan(azi).png")) == -1)return -1;
+	if ((ClearZukan[4] = LoadGraph("Image/zukan(ebi).png")) == -1)return -1;
+	if ((ClearZukan[5] = LoadGraph("Image/zukan(utubo).png")) == -1)return -1;
+	if ((ClearZukan[6] = LoadGraph("Image/zukan(burobu).png")) == -1)return -1;
+	if ((ClearZukan[7] = LoadGraph("Image/zukan(isogi).png")) == -1)return -1;
+	if ((ClearZukan[8] = LoadGraph("Image/zukan(maguro).png")) == -1)return -1;
+	if ((ClearZukan[9] = LoadGraph("Image/zukan(same).png")) == -1)return -1;
+	if ((ClearZukan[10] = LoadGraph("Image/zukan(tai).png")) == -1)return -1;
 	//ゲームオーバー時のアニメーション
 	if ((LoadDivGraph("Image/FishDie.png", 7, 7, 1, 30, 30, fishdie[0])) == -1)return -1;
 	if ((LoadDivGraph("Image/FishDie Level2.png", 7, 7, 1, 150, 150, fishdie[1])) == -1)return -1;
@@ -1292,13 +1315,13 @@ void EatMove() {
 				if (eat[i].DMove == TRUE) {
 					//真っすぐ右に移動
 					if (Leve == 1 && key1 != 1 && key2 != 1) {
-						eat[i].e_x += 5;
+						eat[i].e_x += 6;
 					}
 					if (Leve == 2 && key1 != 1 && key2 != 1) {
-						eat[i].e_x += 7;
+						eat[i].e_x += 8;
 					}
 					if (Leve == 3 && key1 != 1 && key2 != 1) {
-						eat[i].e_x += 9;
+						eat[i].e_x += 10;
 					}
 				}
 				else {
@@ -1382,7 +1405,7 @@ int EatImage() {
 	for (int i = 0; i < 10; i++) {
 		if (eat[i].flg == FALSE) {
 			eat[i] = eat0;
-			eat[i].type = GetRand(7)%5;
+			eat[i].type = GetRand(5)%5;
 			if (eat[i].type <= 2) {
 				eat[i].image = feedImage[eat[i].type][0];
 			}
@@ -1753,6 +1776,7 @@ void GameClear() {
 
 	//エンディング表示
 	DrawGraph(0, 0, Gameclear[EndBranch], TRUE);
+	clear[EndBranch] = TRUE;
 
 	// メニューカーソルの描画
 	DrawRotaGraph(420 + MenuNo * 300, 750, 0.3f, 0, Corsol, TRUE);
@@ -3077,6 +3101,127 @@ void GameOver() {
 			if (BGMFlg == FALSE) {
 				PlaySoundMem(TitleSound, DX_PLAYTYPE_BACK, TRUE);
 			}
+		}
+	}
+}
+void PictureBook1() {
+
+	StopSoundMem(TitleSound);
+
+	static bool push = 0;	// 押されたかどうか確認する関数
+	//背景
+	DrawGraph(0, 0, Bookhaikei[0], TRUE);
+	int x = 50, y = 50, w = 400, h = 325, U = 11, a = 0;
+
+	for (int i = 1; i < 3; i++) {
+		for (int j = 1; j < 4; j++) {
+			if (clear[a] == TRUE) {
+				DrawGraph(x, y, ClearZukan[a], TRUE);
+			}
+			else {
+				DrawExtendGraph(x, y, x + w, y + h, Gameclear[U], TRUE);
+			}
+			x = x + w + 50;
+			a++;
+		}
+		y = y + h + 50;
+		x = 50;
+	}
+
+	// メニューカーソルの描画
+	DrawRotaGraph(510 + MenuNo * 230, 773, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (++MenuNo > 1)MenuNo = 0;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+	}
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (--MenuNo < 0)MenuNo = 1;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+	}
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_2) {
+		if (push == 0) {
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+			GameState = 15;
+		}
+		else {
+			push = 0;
+			GameState = 0;
+			MenuNo = 0;
+		}
+	}
+}
+
+void PictureBook2() {
+
+	static bool push = 0;	// 押されたかどうか確認する関数
+	//背景
+	DrawGraph(0, 0, Bookhaikei[1], TRUE);
+	int x = 50, y = 50, w = 400, h = 325, U = 11, a = 6;
+
+	for (int i = 1; i < 3; i++) {
+		for (int j = 1; j < 4; j++) {
+			if (i + j < 5 && clear[a] == TRUE) {
+				DrawGraph(x, y, ClearZukan[a], TRUE);
+			}
+			else if (i + j < 5 && clear[a] == FALSE) {
+				DrawExtendGraph(x, y, x + w, y + h, Gameclear[U], TRUE);
+			}
+			x = x + w + 50;
+			a++;
+		}
+		y = y + h + 50;
+		x = 50;
+	}
+
+	// メニューカーソルの描画
+	DrawRotaGraph(510 + MenuNo * 230, 773, 0.3f, 0, Corsol, TRUE);
+
+	// メニューカーソル移動処理
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (++MenuNo > 1)MenuNo = 0;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+	}
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (--MenuNo < 0)MenuNo = 1;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+	}
+
+	// Zキーでメニュー選択
+	if (g_KeyFlg & PAD_INPUT_2) {
+		if (push == 0) {
+			if (SEFlg == FALSE) {
+				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
+			}
+			push = 1;
+		}
+		// sceneStageに行く処理
+		if (MenuNo == 0) {
+			push = 0;
+			GameState = 14;
+		}
+		else {
+			push = 0;
+			GameState = 0;
+			MenuNo = 0;
 		}
 	}
 }
