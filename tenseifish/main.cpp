@@ -529,7 +529,8 @@ void GameInit() {
 	BRMove = 0;
 	BRflg = FALSE;
 	if (BRflg == FALSE) {
-		boss.bx = BOSS_POS_X;
+		boss.bx = -500;
+		boss.by = 200;
 	}
 
 	//ƒvƒŒƒCƒ„[‚Ì‰Šú‰»
@@ -2486,72 +2487,66 @@ void Ami() {
 				int bbh = (boss.by - (boss.bh - boss.bh - 150)) + boss.bw - 280;
 				if (SHIP_X == 1300) {
 					if (motion_index4 == 4) {
-						//DrawBox(1300, 250, 1400, 270, GetColor(255, 255, 255), FALSE);
-						if (1300 >= bbx && 1400 <= bbh &&
-							250 >= bby && 270 <= bbw) {
+						//1200< bbh&& bbx< 1400&& 250< bbw&& bby< 270
+						//DrawBox(1200, 250, 1400, 270, GetColor(255, 255, 255), FALSE);
+						if (1200 < bbh && bbx < 1400 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1300, 310, 1400, 330, GetColor(255, 255, 255), FALSE);
-						if (1300 >= bbx && 1400 <= bbh &&
-							310 >= bby && 330 <= bbw) {
+						//DrawBox(1200, 310, 1400, 330, GetColor(255, 255, 255), FALSE);
+						if (1200 < bbh && bbx < 1400 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-					    //DrawBox(1300, 360, 1400, 380, GetColor(255, 255, 255), FALSE);
-						if (1300 >= bbx && 1400 <= bbh &&
-							360 >= bby && 380 <= bbw) {
+						//DrawBox(1200, 360, 1400, 380, GetColor(255, 255, 255), FALSE);
+						if (1200 < bbh && bbx < 1400 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
 					}
 				}
 				else if (SHIP_X == 800) {
 					if (motion_index4 == 4) {
-						//DrawBox(800, 250, 900, 270, GetColor(255, 255, 255), FALSE);
-						if (800 >= bbx && 900 <= bbh &&
-							250 >= bby && 270 <= bbw) {
+						//700< bbh&& bbx< 900&& 250< bbw&& bby< 270
+						//DrawBox(700, 250, 900, 270, GetColor(255, 255, 255), FALSE);
+						if (700 < bbh && bbx < 900 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(800, 310, 900, 330, GetColor(255, 255, 255), FALSE);
-						if (800 >= bbx && 900 <= bbh &&
-							310 >= bby && 330 <= bbw) {
+						//DrawBox(700, 310, 900, 330, GetColor(255, 255, 255), FALSE);
+						if (700 < bbh && bbx < 900 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(800, 360, 900, 380, GetColor(255, 255, 255), FALSE);
-						if (800 >= bbx && 900 <= bbh &&
-							360 >= bby && 380 <= bbw) {
+						//DrawBox(700, 360, 900, 380, GetColor(255, 255, 255), FALSE);
+						if (700 < bbh && bbx < 900 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
 					}
 				}
 				else if (SHIP_X == 300) {
 					if (motion_index4 == 4) {
-						//DrawBox(300, 250, 400, 270, GetColor(255, 255, 255), FALSE);
-						if (300 >= bbx && 400 <= bbh &&
-							250 >= bby && 270 <= bbw) {
+						//200 < bbh && bbx < 400 && 250 < bbw && bby < 270
+						//DrawBox(200, 250, 400, 270, GetColor(255, 255, 255), FALSE);
+						if (200 < bbh && bbx < 400 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(300, 310, 400, 330, GetColor(255, 255, 255), FALSE);
-						if (300 >= bbx && 400 <= bbh &&
-							310 >= bby && 330 <= bbw) {
+						//DrawBox(200, 310, 400, 330, GetColor(255, 255, 255), FALSE);
+						if (200 < bbh && bbx < 400 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(300, 360, 400, 380, GetColor(255, 255, 255), FALSE);
-						if (300 >= bbx && 400 <= bbh &&
-							360 >= bby && 380 <= bbw) {
+						//DrawBox(200, 360, 400, 380, GetColor(255, 255, 255), FALSE);
+						if (200 < bbh && bbx < 400 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
 					}
@@ -2583,72 +2578,66 @@ void AmiLs() {
 				int bbh = (boss.by - (boss.bh - boss.bh - 150)) + boss.bw - 280;
 				if (SHIP_lX == 100) {
 					if (motion_index4 == 4) {
-						//DrawBox(400, 250, 500, 270, GetColor(255, 255, 255), FALSE);
-						if (400 >= bbx && 500 <= bbh &&
-							250 >= bby && 270 <= bbw) {
+						//350 < bbh && bbx < 550 && 250 < bbw && bby <270
+						//DrawBox(350, 250, 550, 270, GetColor(255, 255, 255), FALSE);
+						if (350 < bbh && bbx < 550 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(400, 310, 500, 330, GetColor(255, 255, 255), FALSE);
-						if (400 >= bbx && 500 <= bbh &&
-							310 >= bby && 330 <= bbw) {
+						//DrawBox(350, 310, 550, 330, GetColor(255, 255, 255), FALSE);
+						if (350 < bbh && bbx < 550 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(400, 360, 500, 380, GetColor(255, 255, 255), FALSE);
-						if (400 >= bbx && 500 <= bbh &&
-							360 >= bby && 380 <= bbw) {
+						//DrawBox(350, 360, 550, 380, GetColor(255, 255, 255), FALSE);
+						if (350 < bbh && bbx < 550 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
 					}
 				}
 				else if (SHIP_lX == 500) {
 					if (motion_index4 == 4) {
-						//DrawBox(800, 250, 900, 270, GetColor(255, 255, 255), FALSE);
-						if (800 >= bbx && 900 <= bbh &&
-							250 >= bby && 270 <= bbw) {
+						//750 < bbh && bbx < 950 && 250 < bbw && bby < 270
+						//DrawBox(750, 250, 950, 270, GetColor(255, 255, 255), FALSE);
+						if (750 < bbh && bbx < 950 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(800, 310, 900, 330, GetColor(255, 255, 255), FALSE);
-						if (800 >= bbx && 900 <= bbh &&
-							310 >= bby && 330 <= bbw) {
+						//DrawBox(750, 310, 950, 330, GetColor(255, 255, 255), FALSE);
+						if (750 < bbh && bbx < 950 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(800, 360, 900, 380, GetColor(255, 255, 255), FALSE);
-						if (800 >= bbx && 900 <= bbh &&
-							360 >= bby && 380 <= bbw) {
+						//DrawBox(750, 360, 950, 380, GetColor(255, 255, 255), FALSE);
+						if (750 < bbh && bbx < 950 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
 					}
 				}
 				else if (SHIP_lX == 900) {
 					if (motion_index4 == 4) {
-						//DrawBox(1200, 250, 1300, 270, GetColor(255, 255, 255), FALSE);
-						if (1200 >= bbx && 1300 <= bbh &&
-							250 >= bby && 270 <= bbw) {
+						//1150 < bbh && bbx <1350 && 250 < bbw && bby <270
+						//DrawBox(1150, 250, 1350, 270, GetColor(255, 255, 255), FALSE);
+						if (1150 < bbh && bbx < 1350 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1200, 310, 1300, 330, GetColor(255, 255, 255), FALSE);
-						if (1200 >= bbx && 1300 <= bbh &&
-							310 >= bby && 330 <= bbw) {
+						//DrawBox(1150, 310, 1350, 330, GetColor(255, 255, 255), FALSE);
+						if (1150 < bbh && bbx < 1350 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(1200, 360, 1300, 380, GetColor(255, 255, 255), FALSE);
-						if (1200 >= bbx && 1300 <= bbh &&
-							360 >= bby && 380 <= bbw) {
+						//DrawBox(1150, 360, 1350, 380, GetColor(255, 255, 255), FALSE);
+						if (1150 < bbh && bbx < 1350 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
 					}
