@@ -971,9 +971,11 @@ void PlayerMove() {
 				if (LeveUpflg2 == TRUE) {
 					if (Leve == 2) {
 						Leve = 3;
+						Scke = 1.5;
 					}
 					else if (Leve == 3) {
 						Leve = 2;
+						Scke = 3;
 					}
 				}
 			}
@@ -984,7 +986,6 @@ void PlayerMove() {
 				player.flg = TRUE;
 				LCount = 0;
 				LeveC = Leve;
-
 			}
 		}
 	}
