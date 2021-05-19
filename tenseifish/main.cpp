@@ -17,6 +17,7 @@ const int SCREEN_WIDTH = 1410;
 const int SCREEN_HEIGHT = 800;
 
 int ScroolSpeed;
+int MenuNo2 = 0;
 
 
 void GameTitle();
@@ -139,17 +140,29 @@ void GameTitle() {
 	
 	DrawGraph(0, 0, Gametitle, TRUE);
 	// メニューカーソルの描画
-	DrawRotaGraph(590, 385 + MenuNo * 108, 0.3f, 0, Corsol, TRUE);
+	DrawRotaGraph(465 + MenuNo2 * 340, 415 + MenuNo * 108, 0.3f, 0, Corsol, TRUE);
 
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_DOWN) {
-		if (++MenuNo > 2)MenuNo = 0;
+		if (++MenuNo > 1)MenuNo = 0;
 		if (SEFlg == FALSE) {
 			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 		}
 	}
 	if (g_KeyFlg & PAD_INPUT_UP) {
-		if (--MenuNo < 0)MenuNo = 2;
+		if (--MenuNo < 0)MenuNo = 1;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+	}
+	if (g_KeyFlg & PAD_INPUT_RIGHT) {
+		if (++MenuNo2 > 1)MenuNo2 = 0;
+		if (SEFlg == FALSE) {
+			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
+		}
+	}
+	if (g_KeyFlg & PAD_INPUT_LEFT) {
+		if (--MenuNo2 < 0)MenuNo2 = 1;
 		if (SEFlg == FALSE) {
 			PlaySoundMem(CarsolSE, DX_PLAYTYPE_BACK, TRUE);
 		}
@@ -166,14 +179,24 @@ void GameTitle() {
 			push = 1;
 		}
 		// sceneStageに行く処理
-		if (MenuNo == 0) {
+		if (MenuNo == 0 && MenuNo2 == 0) {
 			push = 0;
 			GameState = 1;
 		}
-		else if (MenuNo == 1) {
+		else if (MenuNo == 0&& MenuNo2 == 1) {
 			push = 0;
 			GameState = 6;
 			MenuNo = 0;
+			MenuNo2 = 0;
+			if (BGMFlg == FALSE) {
+				PlaySoundMem(HelpSound, DX_PLAYTYPE_LOOP, TRUE);
+			}
+		}
+		else if (MenuNo == 1&& MenuNo2 == 0) {
+			push = 0;
+			GameState = 6;
+			MenuNo = 0;
+			MenuNo2 = 0;
 			if (BGMFlg == FALSE) {
 				PlaySoundMem(HelpSound, DX_PLAYTYPE_LOOP, TRUE);
 			}
