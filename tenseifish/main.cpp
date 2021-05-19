@@ -697,7 +697,7 @@ void BossMovie() {
 				}
 
 				motion_index2 = BOSSAnime[BOSS_act_index];
-				BRflg == TRUE;
+				//BRflg = TRUE;
 				boss.flg = TRUE;
 				boss.dir = 0;
 
@@ -989,6 +989,8 @@ int LoadImages() {
 	if ((Corsol = LoadGraph("Image/coursol.png")) == -1)return -1;
 	//ポーズ画面のカーソル画像
 	if ((Corsol2 = LoadGraph("Image/coursol2.png")) == -1)return -1;
+	//ボスの捕獲メッセージ画像
+	if ((Messege= LoadGraph("Image/magurohokaku.png")) == -1)return -1;
 	//プレイヤー画像
 	//魚レベル1
 	if ((LoadDivGraph("Image/sakana.png", 10, 10, 1, 30, 30, sakana[0])) == -1)return -1;
@@ -2284,8 +2286,9 @@ void Ship() {
 			{
 				SHIP_X -= SHIP_SPEED;
 				net.nx -= SHIP_SPEED;
-				SetFontSize(50);
-				DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
+				DrawGraph(700, 30, Messege, TRUE);
+				/*SetFontSize(50);
+				DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");*/
 			}
 			if (SHIP_X == 1300)
 			{
@@ -2353,9 +2356,9 @@ void ShipLs()
 	{
 		SHIP_lX += SHIP_SPEED;
 		net.lnx += SHIP_SPEED;
-		SetFontSize(50);
-		DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");
-
+		/*SetFontSize(50);
+		DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");*/
+		DrawGraph(700, 30, Messege, TRUE);
 		if (SHIP_lX == 100)
 		{
 			counth = (counth + 1) % 150;
