@@ -544,7 +544,7 @@ void GameInit() {
 	player.muteki = 0;
 	Umispeed = 0;
 	Time = 2400;
-	//Time = 100;
+	/*Time = 60;*/
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -1087,8 +1087,8 @@ int LoadImages() {
 	if ((Gameclear[3] = LoadGraph("Image/GameClear(azi).png")) == -1)return -1;
 	if ((Gameclear[4] = LoadGraph("Image/GameClear(ebi).png")) == -1)return -1;
 	if ((Gameclear[5] = LoadGraph("Image/GameClear(utubo).png")) == -1)return -1;
-	if ((Gameclear[6] = LoadGraph("Image/GameClear(isogi).png")) == -1)return -1;
-	if ((Gameclear[7] = LoadGraph("Image/GameClear(burobu).png")) == -1)return -1;
+	if ((Gameclear[6] = LoadGraph("Image/GameClear(burobu).png")) == -1)return -1;
+	if ((Gameclear[7] = LoadGraph("Image/GameClear(isogi).png")) == -1)return -1;
 	if ((Gameclear[8] = LoadGraph("Image/GameClear(maguro).png")) == -1)return -1;
 	if ((Gameclear[9] = LoadGraph("Image/GameClear(same).png")) == -1)return -1;
 	if ((Gameclear[10] = LoadGraph("Image/GameClear(tai).png")) == -1)return -1;
@@ -1725,14 +1725,14 @@ void GameClear() {
 		EndBranch = 0;
 	}
 	//全てが平均的な場合
-	else if (em == im && em == am && am == im) {
+	else if (im + am + em > 0 && em == im && em == am && am == im) {
 		EndBranch = 1;
 	}
 
 	//レベルが1の時
 	if (Leve == 1) {
 		//イカが一番多い時
-		if (im >= am != em && im >= em != am ) {
+		if (im >= am && im >= em && am != em) {
 			EndBranch = 2;
 		}
 		//アジが一番多い時
@@ -1746,7 +1746,7 @@ void GameClear() {
 	}
 	else if (Leve == 2) {
 		//イカが一番多い時
-		if (im >= am != em && im >= em != am ) {
+		if (im >= am && im >= em && am != em) {
 			EndBranch = 5;
 		}
 		//アジが一番多い時
@@ -1760,7 +1760,7 @@ void GameClear() {
 	}
 	else if (Leve == 3) {
 		//イカが一番多い時
-		if (im >= am != em && im >= em != am ) {
+		if (im >= am && im >= em && am != em) {
 			EndBranch = 8;
 		}
 		//アジが一番多い時
