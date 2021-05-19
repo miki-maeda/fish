@@ -1911,6 +1911,7 @@ void BossInit() {
 	
 	motion_index4 = 0;
 	NET_act_index = 0;
+	motion_index9 = 0;
 
 	//ƒQ[ƒ€ƒƒCƒ“‚Ö
 	GameState = 5;
@@ -2096,7 +2097,7 @@ void BossMove2() {
 			/*if (count == 160) {
 				sibuki_act_index = 0;
 			}*/
-			if (count > 270 && count < 340) {
+			if (count > 270 && count < 351) {
 
 				//sibuki_act_index = 0;
 				Sibuki();
