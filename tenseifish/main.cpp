@@ -544,7 +544,7 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 2400;
+	Time = 2400/2;
 	/*Time = 60;*/
 	Iwaspeed = 0;
 	motion_index7 = 0;
@@ -1727,7 +1727,7 @@ void GameClear() {
 	//レベルが1の時
 	if (Leve == 1) {
 		//イカが一番多い時
-		if (im > am && im > em) {
+		if (im >= am && im >= em) {
 			EndBranch = 2;
 		}
 		//アジが一番多い時
@@ -1769,7 +1769,7 @@ void GameClear() {
 	}
 
 	//何も食べなかった場合
-	if (EatAmount == 0) {
+	if (im + am + em == 0) {
 		EndBranch = 0;
 	}
 
