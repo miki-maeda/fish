@@ -1726,7 +1726,7 @@ void GameClear() {
 	//レベルが1の時
 	if (Leve == 1) {
 		//イカが一番多い時
-		if (im >= am && im >= em) {
+		if (im > am && im > em) {
 			EndBranch = 2;
 		}
 		//アジが一番多い時
