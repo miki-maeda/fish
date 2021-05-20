@@ -544,8 +544,8 @@ void GameInit() {
 	player.life = LifeMax;
 	player.muteki = 0;
 	Umispeed = 0;
-	Time = 2400;
-	/*Time = 60;*/
+	/*Time = 2400;*/
+	Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -1407,7 +1407,7 @@ int EatImage() {
 	for (int i = 0; i < 10; i++) {
 		if (eat[i].flg == FALSE) {
 			eat[i] = eat0;
-			eat[i].type = GetRand(5)%5;
+			eat[i].type = GetRand(7)%5;
 			if (eat[i].type <= 2) {
 				eat[i].image = feedImage[eat[i].type][0];
 			}
@@ -1419,7 +1419,7 @@ int EatImage() {
 			}
 			switch (eat[i].type) {
 			case 0:
-				eat[i].e_y = (GetRand(2) + 3) * 100 + 150;
+				eat[i].e_y = (GetRand(3) + 2) * 100 + 150;
 				break;
 			case 1:
 				eat[i].e_y = GetRand(2) * 100 + 150;
@@ -1726,15 +1726,11 @@ void GameClear() {
 	if (EatAmount == 0) {
 		EndBranch = 0;
 	}
-	//全てが平均的な場合
-	else if (im + am + em > 0 && em == im && em == am && am == im) {
-		EndBranch = 1;
-	}
 
 	//レベルが1の時
 	if (Leve == 1) {
 		//イカが一番多い時
-		if (im >= am && im >= em && am != em) {
+		if (im >= am && im >= em) {
 			EndBranch = 2;
 		}
 		//アジが一番多い時
@@ -1748,7 +1744,7 @@ void GameClear() {
 	}
 	else if (Leve == 2) {
 		//イカが一番多い時
-		if (im >= am && im >= em && am != em) {
+		if (im >= am && im >= em ) {
 			EndBranch = 5;
 		}
 		//アジが一番多い時
@@ -1762,7 +1758,7 @@ void GameClear() {
 	}
 	else if (Leve == 3) {
 		//イカが一番多い時
-		if (im >= am && im >= em && am != em) {
+		if (im >= am && im >= em ) {
 			EndBranch = 8;
 		}
 		//アジが一番多い時
@@ -1773,6 +1769,11 @@ void GameClear() {
 		else if (em > am && em > im ) {
 			EndBranch = 10;
 		}
+	}
+
+	//全てが平均的な場合
+	if (im + am + em > 0 && em == im && em == am && am == im) {
+		EndBranch = 1;
 	}
 	
 
