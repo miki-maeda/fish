@@ -1182,6 +1182,7 @@ int LoadSound() {
 	if ((DieSE = LoadSoundMem("Sound/NES-General01-10(Pitch).mp3")) == -1)return -1;
 	if ((KeikokuSE = LoadSoundMem("Sound/meka_ge_keihou03.mp3")) == -1)return -1;
 	if ((SibukiSE = LoadSoundMem("Sound/…E‚´‚Ô[‚ñ05.mp3")) == -1)return -1;
+	if((PouseSE=LoadSoundMem("Sound/button80.mp3"))==-1)return -1;
 
 	//‰¹—Ê’²®
 		// BGM
@@ -2982,6 +2983,9 @@ void Pouse() {
 			boss.flg = TRUE;
 			boss.speed = TRUE;
 			key1 = 0;
+			if (SEFlg == FALSE) {
+				PlaySoundMem(PouseSE, DX_PLAYTYPE_BACK, TRUE);
+			}
 		}
 
 		if (key1 > 0) {
