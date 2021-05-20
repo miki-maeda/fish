@@ -545,7 +545,7 @@ void GameInit() {
 	player.muteki = 0;
 	Umispeed = 0;
 	Time = 2400/2;
-	/*Time = 60;*/
+	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -1112,9 +1112,9 @@ int LoadImages() {
 	if ((LoadDivGraph("Image/FishDie Level2.png", 7, 7, 1, 150, 150, fishdie[1])) == -1)return -1;
 	if ((LoadDivGraph("Image/FishDie Level3.png", 7, 7, 1, 225, 225, fishdie[2])) == -1)return -1;
 	//ゲームオーバー画像
-	if ((Gameover = LoadGraph("Image/GameOver.png")) == -1)return -1;
-	if ((Gameover2 = LoadGraph("Image/GameOver2.png")) == -1)return -1;
-	if ((Gameover3 = LoadGraph("Image/GameOver3.png")) == -1)return -1;
+	if ((Gameover = LoadGraph("Image/GameOver2.jpeg")) == -1)return -1;
+	if ((Gameover2 = LoadGraph("Image/GameOver2-1.jpg")) == -1)return -1;
+	if ((Gameover3 = LoadGraph("Image/GameOver2-2.jpg")) == -1)return -1;
 
 	//ボスへの道
 	if ((BOSSROAD = LoadGraph("Image/ボスへの道.png")) == -1)return -1;
