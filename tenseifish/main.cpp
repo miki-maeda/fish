@@ -1722,10 +1722,6 @@ void GameClear() {
 	int EndBranch = 0;
 
 	//エンディング判定
-	//何も食べなかった場合
-	if (EatAmount == 0) {
-		EndBranch = 0;
-	}
 
 	//レベルが1の時
 	if (Leve == 1) {
@@ -1769,6 +1765,11 @@ void GameClear() {
 		else if (em > am && em > im ) {
 			EndBranch = 10;
 		}
+	}
+
+	//何も食べなかった場合
+	if (EatAmount == 0) {
+		EndBranch = 0;
 	}
 
 	//全てが平均的な場合
