@@ -1795,7 +1795,7 @@ void GameClear() {
 	clear[EndBranch] = TRUE;
 
 	// メニューカーソルの描画
-	DrawRotaGraph(420 + MenuNo * 300, 750, 0.3f, 0, Corsol, TRUE);
+	DrawRotaGraph(465 + MenuNo * 250, 770, 0.3f, 0, Corsol, TRUE);
 
 	// メニューカーソル移動処理
 	if (g_KeyFlg & PAD_INPUT_LEFT) {
