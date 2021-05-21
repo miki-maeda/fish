@@ -64,7 +64,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	if (LoadSound() == -1)return -1;	// 音楽の読み込み
 
 	//ゲームループ
-	while (ProcessMessage() == 0 && GetHitKeyStateAll(key) == 0 && GameState != 99 && !(g_KeyFlg & PAD_INPUT_START)) {
+	while (ProcessMessage() == 0 && GetHitKeyStateAll(key) == 0 && GameState != 99 /*&& !(g_KeyFlg & PAD_INPUT_START)*/) {
 
 		if (key1 < 1) {
 			Time--;
