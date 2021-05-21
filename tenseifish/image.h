@@ -18,8 +18,9 @@ int Umispeed = 0;//海のスピード
 int MenuNo = 0;	// カーソルの番号
 int MenuNo1 = 0;//カーソルの番号
 int Life;
-int Gameclear[12];		//エンディングの分岐の画像
+int Gameclear[11];		//エンディングの分岐の画像
 int ClearZukan[11];		//図鑑の画像
+int MZukan[11];			//未登録の図鑑の画像
 int Gameover;
 int Gameover2;
 int Gameover3;

@@ -1094,7 +1094,6 @@ int LoadImages() {
 	if ((Gameclear[8] = LoadGraph("Image/GameClear(maguro).png")) == -1)return -1;
 	if ((Gameclear[9] = LoadGraph("Image/GameClear(same).png")) == -1)return -1;
 	if ((Gameclear[10] = LoadGraph("Image/GameClear(tai).png")) == -1)return -1;
-	if ((Gameclear[11] = LoadGraph("Image/mikai.png")) == -1)return -1;
 	//}ŠÓ‚Ì‚Ì‰æ‘œ 
 	if ((ClearZukan[0] = LoadGraph("Image/zukan(puran).png")) == -1)return -1;
 	if ((ClearZukan[1] = LoadGraph("Image/zukan(nin).png")) == -1)return -1;
@@ -1107,6 +1106,18 @@ int LoadImages() {
 	if ((ClearZukan[8] = LoadGraph("Image/zukan(maguro).png")) == -1)return -1;
 	if ((ClearZukan[9] = LoadGraph("Image/zukan(same).png")) == -1)return -1;
 	if ((ClearZukan[10] = LoadGraph("Image/zukan(tai).png")) == -1)return -1;
+	//–¢“o˜^‚Ì}ŠÓ‚Ì‚Ì‰æ‘œ 
+	if ((MZukan[0] = LoadGraph("Image/kagee(puran).png")) == -1)return -1;
+	if ((MZukan[1] = LoadGraph("Image/kagee(nin).png")) == -1)return -1;
+	if ((MZukan[2] = LoadGraph("Image/kagee(ika).png")) == -1)return -1;
+	if ((MZukan[3] = LoadGraph("Image/kagee(azi).png")) == -1)return -1;
+	if ((MZukan[4] = LoadGraph("Image/kagee(ebi).png")) == -1)return -1;
+	if ((MZukan[5] = LoadGraph("Image/kagee(utubo).png")) == -1)return -1;
+	if ((MZukan[6] = LoadGraph("Image/kagee(burobu).png")) == -1)return -1;
+	if ((MZukan[7] = LoadGraph("Image/kagee(isogi).png")) == -1)return -1;
+	if ((MZukan[8] = LoadGraph("Image/kagee(maguro).png")) == -1)return -1;
+	if ((MZukan[9] = LoadGraph("Image/kagee(same).png")) == -1)return -1;
+	if ((MZukan[10] = LoadGraph("Image/kagee(tai).png")) == -1)return -1;
 	//ƒQ[ƒ€ƒI[ƒo[‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
 	if ((LoadDivGraph("Image/FishDie.png", 7, 7, 1, 30, 30, fishdie[0])) == -1)return -1;
 	if ((LoadDivGraph("Image/FishDie Level2.png", 7, 7, 1, 150, 150, fishdie[1])) == -1)return -1;
@@ -3108,7 +3119,7 @@ void PictureBook1() {
 	static bool push = 0;	// ‰Ÿ‚³‚ê‚½‚©‚Ç‚¤‚©Šm”F‚·‚éŠÖ”
 	//”wŒi
 	DrawGraph(0, 0, Bookhaikei[0], TRUE);
-	int x = 50, y = 50, w = 400, h = 325, U = 11, a = 0;
+	int x = 50, y = 50, w = 400, h = 325, a = 0;
 
 	for (int i = 1; i < 3; i++) {
 		for (int j = 1; j < 4; j++) {
@@ -3116,7 +3127,7 @@ void PictureBook1() {
 				DrawGraph(x, y, ClearZukan[a], TRUE);
 			}
 			else {
-				DrawExtendGraph(x, y, x + w, y + h, Gameclear[U], TRUE);
+				DrawExtendGraph(x, y, x + w, y + h, MZukan[a], TRUE);
 			}
 			x = x + w + 50;
 			a++;
@@ -3168,7 +3179,7 @@ void PictureBook2() {
 	static bool push = 0;	// ‰Ÿ‚³‚ê‚½‚©‚Ç‚¤‚©Šm”F‚·‚éŠÖ”
 	//”wŒi
 	DrawGraph(0, 0, Bookhaikei[1], TRUE);
-	int x = 50, y = 50, w = 400, h = 325, U = 11, a = 6;
+	int x = 50, y = 50, w = 400, h = 325, a = 6;
 
 	for (int i = 1; i < 3; i++) {
 		for (int j = 1; j < 4; j++) {
@@ -3176,7 +3187,7 @@ void PictureBook2() {
 				DrawGraph(x, y, ClearZukan[a], TRUE);
 			}
 			else if (i + j < 5 && clear[a] == FALSE) {
-				DrawExtendGraph(x, y, x + w, y + h, Gameclear[U], TRUE);
+				DrawExtendGraph(x, y, x + w, y + h, MZukan[a], TRUE);
 			}
 			x = x + w + 50;
 			a++;
