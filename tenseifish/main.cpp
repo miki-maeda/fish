@@ -47,7 +47,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 
-	SetMainWindowText("a");// タイトル変更
+	SetMainWindowText("fish finis");// タイトル変更
 
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
 
@@ -748,7 +748,7 @@ void BossMovie() {
 
 	}
 }
-void AwaAnime() {
+void AwaAnime() {//泡のアニメーション
 
 	if (key1 < 1) {
 		if (AWA_Y > 148 || AWA_aY > 148 || AWA_bY > 148 || AWA_rY > 148 || AWA_cY > 148) {
@@ -2112,7 +2112,7 @@ void BossMove2() {
 			/*if (count == 160) {
 				sibuki_act_index = 0;
 			}*/
-			if (count > 270 && count < 351) {
+			if (count > 270 && count < 351) {//マグロが水中から飛び跳ねるタイミングで水しぶきのアニメーション
 
 				//sibuki_act_index = 0;
 				Sibuki();
@@ -2300,7 +2300,7 @@ void Sibuki() {//水しぶきのアニメーション
 
 	int count_s = 10;
 
-	if (count_s != 0) {
+	if (count_s != 0) {//魚のレベルによって泡のスピード変化
 		if (Leve == 1) {
 			boss.bx -= 1.5;
 		}
