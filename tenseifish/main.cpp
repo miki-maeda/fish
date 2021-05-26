@@ -10,13 +10,14 @@ int	g_NowKey;				// 今回の入力キー
 int	g_KeyFlg;				// 入力キー情報
 char key[256];
 
-int GameState = 0;          //初期化　
+int GameState = 0;          //ゲーム状態の初期化　
 
 //画面領域の大きさ
 const int SCREEN_WIDTH = 1410;
 const int SCREEN_HEIGHT = 800;
 
-int ScroolSpeed;
+
+int ScroolSpeed;           //スクロールスピード
 int MenuNo2 = 0;
 
 
@@ -26,7 +27,7 @@ void GameMain();		//ゲームメイン処理
 void GameHelp();		//ゲームヘルプ処理
 void BackScrool();         //背景画像スクロール処理
 void GameClear();		//ゲームクリア処理
-void GameOver();
+void GameOver();        //ゲームオーバー処理
 void Pouse();
 void GameGiyo();
 void GameGiyo2();
@@ -47,7 +48,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 
-	SetMainWindowText("fish finis");// タイトル変更
+	SetMainWindowText("fish finish");// タイトル変更
 
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
 
@@ -91,10 +92,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			GameClear();
 			break;
 		case 4:
-			BossInit();
+			BossInit();     //BOSS初期化処理
 			break;
 		case 5:
-			BossStage();
+			BossStage();    //BOSSステージ処理
 			break;
 		case 6:
 			GameHelp();
@@ -621,7 +622,7 @@ void BackScrool()
 	/*SetDrawBlendMode(DX_BLENDMODE_ALPHA, 122);*/
 	DrawGraph(Umispeed % SCREEN_WIDTH, 0, StageImage, TRUE);
 	DrawGraph(SCREEN_WIDTH + (Umispeed % SCREEN_WIDTH), 0, StageImage, TRUE);
-	//設定を元に戻す。
+	//設定を元に戻す
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	//エリアを戻す
@@ -728,7 +729,6 @@ void BossMovie() {
 				}
 
 				motion_index2 = BOSSAnime[BOSS_act_index];
-				//BRflg = TRUE;
 				boss.flg = TRUE;
 				boss.dir = 0;
 
@@ -744,7 +744,7 @@ void BossMovie() {
 			Iwaspeed = 0;
 			BRMove = 1;
 		}
-		//DrawGraph(800, 50, BOSSROAD, TRUE);
+		
 
 	}
 }
@@ -813,7 +813,7 @@ void AwaAnime() {//泡のアニメーション
 
 }
 
-
+//プレイヤーの動作処理
 void PlayerMove() {
 	
 	if (--act_wait <= 0)
@@ -928,6 +928,7 @@ void PlayerMove() {
 		}
 	}
 
+	//プレイヤーがダメージ受けた時の処理
 	if (player.muteki == 1) {
 		if (key1 < 1 && key2 < 1) {
 
@@ -996,6 +997,7 @@ void PlayerMove() {
 	//if (Leve == 3) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2, GetColor(0, 0, 255), TRUE);		//右下
 }
 
+//画像読み込み
 int LoadImages() {
 	//タイトル画像
 	if ((Gametitle = LoadGraph("Image/umi.png")) == -1)return -1;
@@ -1876,6 +1878,7 @@ void BossST(Player* p) {
 	}
 }
 
+//BOSSの初期化
 void BossInit() {
 
 	//Bossの初期化
@@ -1932,6 +1935,7 @@ void BossInit() {
 	GameState = 5;
 }
 
+//BOSSステージのスクロール
 void BossBackScrool() {
 	if (GameState == 5 && key1 < 1 && GameState == 5 && key2 < 1) {
 		ScroolSpeed -= player.speed;
@@ -1949,6 +1953,8 @@ void BossBackScrool() {
 	SetFontSize(60);
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", Leve);
 }
+
+//BOSSの動きのパターン
 void BossMove() {
 
 	if (--BOSS_act_wait <= 0)
@@ -1999,6 +2005,8 @@ void BossMove() {
 		}
 	}
 }
+
+//BOSSの動きパターン１
 void BossMove1() {
 
 	if (key1 < 1) {
@@ -2075,6 +2083,7 @@ void BossMove1() {
 	}
 }
 
+//パターン２
 void BossMove2() {
 	if (key1 < 1) {
 		count = (count + 1) % 500;
@@ -2112,7 +2121,7 @@ void BossMove2() {
 			/*if (count == 160) {
 				sibuki_act_index = 0;
 			}*/
-			if (count > 270 && count < 351) {//マグロが水中から飛び跳ねるタイミングで水しぶきのアニメーション
+			if (count > 270 && count < 351) {
 
 				//sibuki_act_index = 0;
 				Sibuki();
@@ -2149,6 +2158,7 @@ void BossMove2() {
 
 }
 
+//パターン３
 void BossMove3() {
 	if (--BOSS_act_wait2 <= 0)
 	{
@@ -2292,7 +2302,7 @@ void BossMove3() {
 
 		}
 	}
-	//DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss2[motion_index5], TRUE);
+
 }
 
 void Sibuki() {//水しぶきのアニメーション
@@ -2704,6 +2714,9 @@ void BHALs() {
 	}
 }
 
+/***********************************************
+/*BOSSステージの処理*/
+/***********************************************/
 void BossStage() {
 
 	BossBackScrool();
