@@ -5,6 +5,7 @@
 #include "Boss.h"
 #include "Sound.h"
 #include "CollisionDetiction.h"
+
 int	g_OldKey;				// 前回の入力キー
 int	g_NowKey;				// 今回の入力キー
 int	g_KeyFlg;				// 入力キー情報
@@ -21,27 +22,26 @@ int ScroolSpeed;           //スクロールスピード
 int MenuNo2 = 0;
 
 
-void GameTitle();
+void GameTitle();		//ゲームタイトル処理
 void GameInit();		//ゲーム初期化処理
 void GameMain();		//ゲームメイン処理
 void GameHelp();		//ゲームヘルプ処理
-void BackScrool();         //背景画像スクロール処理
+void BackScrool();      //背景画像スクロール処理
 void GameClear();		//ゲームクリア処理
 void GameOver();        //ゲームオーバー処理
-void Pouse();
-void GameGiyo();
-void GameGiyo2();
-void GameGiyo3();
-void GameRule();
-void GameRule2();
-void dieam();
-void AwaAnime();
-
+void Pouse();			//ポーズ画面
+void GameGiyo();		//ゲーム概要1
+void GameGiyo2();		//ゲーム概要2
+void GameGiyo3();		//ゲーム概要3
+void GameRule();		//ゲームルール1
+void GameRule2();		//ゲームルール1
+void dieam();			//ゲームオーバー時のアニメーション
+void AwaAnime();		//気泡のアニメーション
 
 int LoadImages();          //画像読み込み
 int LoadSound();		// 音楽読込み
 
-int Time = 2400;
+int Time = 2400;		//ゲーム内時間
 
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
@@ -53,8 +53,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	ChangeWindowMode(TRUE);		// ウィンドウモードで起動
 
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
-
-	//SetGraphMode(800, 600, 16);
 
 	if (DxLib_Init() == -1) return -1;	// DXライブラリの初期化処理
 
@@ -80,7 +78,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
 		switch (GameState) {
 		case 0:
-			GameTitle();
+			GameTitle();	//ゲームタイトル
 			break;
 		case 1:
 			GameInit();		//ゲーム初期処理
@@ -89,7 +87,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			GameMain();		//ゲームメイン処理
 			break;
 		case 3:
-			GameClear();
+			GameClear();	//ゲームクリア
 			break;
 		case 4:
 			BossInit();     //BOSS初期化処理
@@ -98,34 +96,34 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 			BossStage();    //BOSSステージ処理
 			break;
 		case 6:
-			GameHelp();
+			GameHelp();		//ゲームヘルプ
 			break;
 		case 7:
-			GameOver();
+			GameOver();		//ゲームオーバー
 			break;
 		case 8:
-			GameGiyo();
+			GameGiyo();		//ゲーム概要1
 			break;
 		case 9:
-			GameGiyo2();
+			GameGiyo2();	//ゲーム概要2
 			break;
 		case 10:
-			GameGiyo3();
+			GameGiyo3();	//ゲーム概要3
 			break;
 		case 11:
-			GameRule();
+			GameRule();		//ゲームルール
 			break;
 		case 12:
-			GameRule2();
+			GameRule2();	//ゲームルール2
 			break;
 		case 13:
-			Musicmixer();
+			Musicmixer();	//BGM調整
 			break;
 		case 14:
-			PictureBook1();
+			PictureBook1();	//図鑑表示
 			break;
 		case 15:
-			PictureBook2();
+			PictureBook2();	//図鑑表示2
 			break;
 		}
 		ScreenFlip();			// 裏画面の内容を表画面に反映
@@ -135,6 +133,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 	return 0;	// ソフトの終了
 }
 
+//ゲームタイトル
 void GameTitle() {
 	static bool push = 0;	// 押されたかどうか確認する関数
 
@@ -216,6 +215,7 @@ void GameTitle() {
 	}
 }
 
+//ゲームヘルプ
 void GameHelp()
 {
 	static bool push = 0;	// 押されたかどうか確認する関数
@@ -276,6 +276,7 @@ void GameHelp()
 	}
 }
 
+//ゲーム概要
 void GameGiyo()
 {
 	static bool push = 0;	// 押されたかどうか確認する関数
@@ -321,6 +322,7 @@ void GameGiyo()
 	}
 }
 
+//ゲーム概要2
 void GameGiyo2()
 {
 	static bool push = 0;	// 押されたかどうか確認する関数
@@ -366,6 +368,7 @@ void GameGiyo2()
 	}
 }
 
+//ゲーム概要3
 void GameGiyo3()
 {
 	static bool push = 0;	// 押されたかどうか確認する関数
@@ -412,6 +415,7 @@ void GameGiyo3()
 	}
 }
 
+//ゲームルール
 void GameRule()
 {
 	static bool push = 0;	// 押されたかどうか確認する関数
@@ -457,6 +461,7 @@ void GameRule()
 	}
 }
 
+//ゲームルール2
 void GameRule2()
 {
 	static bool push = 0;	// 押されたかどうか確認する関数
@@ -546,7 +551,6 @@ void GameInit() {
 	player.muteki = 0;
 	Umispeed = 0;
 	Time = 2400;
-	//Time = 60;
 	Iwaspeed = 0;
 	motion_index7 = 0;
 	LeveUpflg1 = FALSE;
@@ -618,8 +622,6 @@ void BackScrool()
 
 	//描画可能エリアを設定
 	SetDrawArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-	//透過
-	/*SetDrawBlendMode(DX_BLENDMODE_ALPHA, 122);*/
 	DrawGraph(Umispeed % SCREEN_WIDTH, 0, StageImage, TRUE);
 	DrawGraph(SCREEN_WIDTH + (Umispeed % SCREEN_WIDTH), 0, StageImage, TRUE);
 	//設定を元に戻す
@@ -689,13 +691,14 @@ void BackScrool()
 	SetFontSize(60);
 	DrawFormatString(0, 0, 0x000000, "Lv.%d", LeveC);
 }
+
+//ボスが追いかけてくる処理
 void BossMovie() {
 	DrawBox(0, 0, 1410, MY, GetColor(0, 0, 0), TRUE);
 	DrawBox(0, 800, 1410, MY2, GetColor(0, 0, 0), TRUE);
 	DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
 	if (key1 < 1) {
 		
-		//DrawFormatString(100, 160, 0x000000, "%d", MovieCount);
 		player.flg = FALSE;
 		MovieCount = (MovieCount + 1) % 200;
 		if (MovieCount == 1) {
@@ -736,8 +739,6 @@ void BossMovie() {
 				boss.by = BOSS_POS_Y;
 				boss.bw = BOSS_WIDTH;
 				boss.bh = BOSS_HEIGHT;
-
-				//DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index2], TRUE);
 			}
 		}
 		if (BRMove == 0) {
@@ -748,7 +749,9 @@ void BossMovie() {
 
 	}
 }
-void AwaAnime() {//泡のアニメーション
+
+//泡のアニメーション
+void AwaAnime() {
 
 	if (key1 < 1) {
 		if (AWA_Y > 148 || AWA_aY > 148 || AWA_bY > 148 || AWA_rY > 148 || AWA_cY > 148) {
@@ -877,6 +880,7 @@ void PlayerMove() {
 
 	int ColorCheck(int x, int y);
 
+	//プレイヤーと岩との当たり判定
 	if (Leve == 1) {
 		ColorCheck(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd);		//左上
 		ColorCheck(player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 - CollYadd);	//右上
@@ -884,8 +888,6 @@ void PlayerMove() {
 		ColorCheck(player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 + CollYadd);	//右下
 	}
 	else if (Leve == 2) {
-		//if (Leve == 2) DrawBox(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4, player.x + player.w / 2 + CollXadd, player.y + player.h / 2 + CollYadd + 2, GetColor(0, 255, 0), TRUE);
-
 		ColorCheck(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4);		//左上
 		ColorCheck(player.x + player.w / 2 + CollXadd, player.y + player.h / 2 + CollYadd + 2);		//右上
 		ColorCheck(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4);		//左下
@@ -918,9 +920,6 @@ void PlayerMove() {
 		}
 	}
 
-	/*act_index++;
-	act_index %= MAX_MOTION_INDEX;*/
-	//DrawGraph(player.x, player.y, sakana[Leve - 1][motion_index], TRUE);
 	int motion_index = anime[act_index];
 	if (player.muteki == 0&&key2 < 1) {
 		if (key2 < 1) {
@@ -947,10 +946,10 @@ void PlayerMove() {
 		
 	}
 
+	//成長したときの点滅処理
 	if (LeveUpflg1 == TRUE) {
 		if (key1 < 1 || key2 < 1) {
 			player.flg = FALSE;
-			// ダメージが入ると５回のうち２回表示する。
 			LCount = (LCount + 1) % 21;
 			if (LCount % 5 == 0) {
 				if (LeveUpflg2 != TRUE) {
@@ -990,11 +989,6 @@ void PlayerMove() {
 			}
 		}
 	}
-	
-	//当たり判定の範囲確認用BOX
-	//if (Leve == 1) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 3, player.y + player.h / 2 + CollYadd, GetColor(255, 0, 0), TRUE);		//右下
-	//if (Leve == 2) DrawBox(player.x + player.w / 2, player.y + player.h / 2 - CollYadd / 4, player.x + player.w / 2 + CollXadd, player.y + player.h / 2 + CollYadd + 2, GetColor(0, 255, 0), TRUE);		//右下
-	//if (Leve == 3) DrawBox(player.x + player.w / 2 - CollXadd, player.y + player.h / 2 - CollYadd, player.x + player.w / 2 + CollXadd * 5 + 5, player.y + player.h / 2 + CollYadd * 2, GetColor(0, 0, 255), TRUE);		//右下
 }
 
 //画像読み込み
@@ -1301,7 +1295,7 @@ void Musicmixer()
 	}
 }
 
-
+//エサ、敵の動き
 void EatMove() {
 	for (int i = 0; i < 10; i++) {
 		if (eat[i].flg == TRUE && Time > 60) {
@@ -1310,6 +1304,7 @@ void EatMove() {
 				if (eat[i].DMove == FALSE) {
 					DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + e_w, eat[i].e_y + e_h, eat[i].image, TRUE);
 				}
+				//エサ、敵の反転表示
 				else if(eat[i].DMove == TRUE&&eat[i].type<=3){
 					DrawExtendGraph(eat[i].e_x, eat[i].e_y, eat[i].e_x + e_w, eat[i].e_y + e_h, eat[i].imageur, TRUE);
 				}
@@ -1318,10 +1313,12 @@ void EatMove() {
 			if (Damege != 1 && LeveUpflg1 != TRUE && LeveUpflg2 != TRUE) {
 				if (eat[i].e_y > 250) {
 					if (eat[i].DMove == FALSE) {
+						//目の前が岩じゃないかの判定
 						EatCheck(eat[i].e_x - 1 - (Leve * 2), eat[i].e_y);
 						if (EatCont >= 1) eat[i].DMove = TRUE;
 					}
 					else {
+						//目の前が岩じゃないかの判定
 						EatCheck(eat[i].e_x + 4 + (Leve * 2), eat[i].e_y);
 						if (EatCont >= 1) eat[i].DMove = FALSE;
 					}
@@ -1354,6 +1351,7 @@ void EatMove() {
 				}
 			}
 
+			//岩の中じゃないかの処理
 			if (Leve == 1) {
 				if (eat[i].e_x == SCREEN_WIDTH - 6)EatCheck1(eat[i].e_x - 1, eat[i].e_y + e_h);
 				if (eat[i].e_x == SCREEN_WIDTH - (e_w / 2) + 5) EatCheck1(eat[i].e_x + (e_w / 2) - 1, eat[i].e_y + e_h);
@@ -1370,6 +1368,7 @@ void EatMove() {
 				if (eat[i].e_x == SCREEN_WIDTH - e_w + 5) EatCheck1(eat[i].e_x + e_w - 1, eat[i].e_y + e_h);
 			}
 
+			//岩にめり込んでいないかの判定
 			if (EatCont >= 1)
 			{
 				EatCont = 0;
@@ -1378,7 +1377,7 @@ void EatMove() {
 
 			if (eat[i].flg == FALSE)continue;
 
-			//画面外に行ったら削除
+			//画面外に行ったら消す
 			if (eat[i].e_x < 0 - 40)eat[i].flg = FALSE;
 			if (eat[i].e_x > 1410 + e_w)eat[i].flg = FALSE;
 
@@ -1416,6 +1415,7 @@ void EatMove() {
 	}
 }
 
+//敵、エサの設定
 int EatImage() {
 
 	for (int i = 0; i < 10; i++) {
@@ -1464,6 +1464,7 @@ int EatImage() {
 //ライフ
 void LifeImage() {
 
+	//ライフの表示
 	for (int i = 0; i < player.life; i++)
 	{
 		DrawGraph(LifeX + (60 * i), LIfeY, Life, TRUE);
@@ -1478,7 +1479,10 @@ void LifeImage() {
 
 	}
 }
+
+//ゲームオーバー時のアニメーション
 void dieam() {
+
 
 	if (--DEI_act_wait <= 0)
 	{
@@ -1531,7 +1535,7 @@ void MeterImage() {
 //成長
 void PlayerGrowth() {
 
-	//サイズの変更量の増加
+	//サイズの変更量
 	if (Leve == 1) {
 		Scke = 2;
 		player.w *= Scke;
@@ -1554,6 +1558,7 @@ void PlayerGrowth() {
 //食べた時の処理
 void PlayerEat(int* e) {
 
+	//食べたエサの判定
 	switch (*e) {
 	case 0:
 		if (em < 5) em++;
@@ -1565,6 +1570,7 @@ void PlayerEat(int* e) {
 		if (im < 5)im++;
 		break;
 	}
+
 
 	if (*e <= 2) {
 		//食べたものを量を増加させる
@@ -1586,6 +1592,7 @@ void DEat() {
 
 	static int DEflg = FALSE;
 
+	//吐き出しているエサがないかの処理
 	if (DEflg == FALSE) {
 		RandEat = GetRand(2);
 		switch (RandEat) {
@@ -1606,6 +1613,7 @@ void DEat() {
 		DEflg = TRUE;
 	}
 
+	//吐き出したエサの座標を設定
 	if (Deatflg == FALSE) {
 		Dx = player.x;
 		Dy = player.y;
@@ -1620,6 +1628,7 @@ void DEat() {
 		Deatflg = TRUE;
 	}
 
+	//エサの設定の判定
 	if (RandEat < 3) {
 		DrawExtendGraph(Dx + Dw / 2 + 10 + DSpeed, Dy + Dh / 2 + 10, Dx + Dw + DSpeed - 10, Dy + Dh - 10, feedImage[RandEat][0], TRUE);
 		DSpeed += 10;
@@ -1640,7 +1649,7 @@ void DEat() {
 	}
 }
 
-//餌とプレイヤーのあたり判定
+//エサ、敵とプレイヤーのあたり判定
 int Hit(Player* p, Eat* e) {
 
 	if (Time > 0) {
@@ -1700,6 +1709,8 @@ int Hit(Player* p, Eat* e) {
 				return TRUE;
 			}
 		}
+
+		//敵との当たり判定
 		else {
 			if (ex + ew >= phx && ex <= phx + phw &&
 				ey + eh >= phy && ey <= phy + phh && player.muteki == 0) {
@@ -1729,6 +1740,7 @@ void GameClearHit() {
 	SHIPFlg = FALSE;
 }
 
+//ゲームクリア画面
 void GameClear() {
 	static bool push = 0; // 押されたかどうか確認する関数
 
@@ -1736,7 +1748,6 @@ void GameClear() {
 	int EndBranch = 0;
 
 	//エンディング判定
-
 	//レベルが1の時
 	if (Leve == 1) {
 		//イカが一番多い時
@@ -1752,6 +1763,7 @@ void GameClear() {
 			EndBranch = 4;
 		}
 	}
+	//レベルが2の時
 	else if (Leve == 2) {
 		//イカが一番多い時
 		if (im >= am && im >= em ) {
@@ -1766,6 +1778,7 @@ void GameClear() {
 			EndBranch = 7;
 		}
 	}
+	//レベルが3の時
 	else if (Leve == 3) {
 		//イカが一番多い時
 		if (im >= am && im >= em ) {
@@ -1841,6 +1854,8 @@ void GameClear() {
 		}
 	}
 }
+
+//ボスまでの距離
 void  BossMeter() {
 
 	DrawGraph(900, 0, BOSSMETER, TRUE);
@@ -1857,6 +1872,7 @@ void  BossMeter() {
 	DrawGraph(boss_Y, 40, BOSSY, TRUE);
 
 }
+
 //ボスステージ移行（当たったら）
 void BossST(Player* p) {
 
@@ -1866,7 +1882,6 @@ void BossST(Player* p) {
 	int pw = p->w;
 
 	if (Time <= 0) {
-		
 		if (1410 >= px && 1410 <= px + ph &&
 			800 >= py && 0 <= py + pw) {
 			GameState = 4;
@@ -2012,9 +2027,6 @@ void BossMove1() {
 	if (key1 < 1) {
 
 		count = (count + 1) % 500;
-		//DrawFormatString(100, 160, 0x000000, "%d", count);
-		/*DrawFormatString(100, 180, 0x000000, "%d", boss.bx);
-		DrawFormatString(100, 240, 0x000000, "%d", boss.by);*/
 
 		if (count == 1) {
 			BOSS_SPEED = 20;
@@ -2087,9 +2099,6 @@ void BossMove1() {
 void BossMove2() {
 	if (key1 < 1) {
 		count = (count + 1) % 500;
-		//DrawFormatString(100, 160, 0x000000, "%d", count);
-		/*DrawFormatString(100, 180, 0x000000, "%d", boss.bx);
-		DrawFormatString(100, 240, 0x000000, "%d", boss.by);*/
 		if (count > 0 && count < 100) {
 			if (boss.bx > 0) {
 
@@ -2118,9 +2127,6 @@ void BossMove2() {
 			motion_index2 = BOSSUp[BOSS_act_index];
 			BOSS_SPEED = 0;
 			boss.by -= 20;
-			/*if (count == 160) {
-				sibuki_act_index = 0;
-			}*/
 			if (count > 270 && count < 351) {
 
 				//sibuki_act_index = 0;
@@ -2173,7 +2179,6 @@ void BossMove3() {
 	}
 	if (key1 < 1) {
 		count = (count + 1) % 900;
-		//DrawFormatString(100, 160, 0x000000, "%d", count);
 		if (count > 0 && count < 25) {
 			if (boss.bx == 0) {
 
@@ -2207,13 +2212,8 @@ void BossMove3() {
 		if (count > 100 && count < 300) {
 			BOSS_act_index2 = 0;
 			MS = 0;
-			//BOSS_SPEED = 10;
 			motion_index5 = BOSSAnime[BOSS_act_index];
 			boss.by = player.y - 180;
-			/*if (boss.by > 300) {
-				BOSS_SPEED = 0;
-			}
-			boss.by += BOSS_SPEED;*/
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
 			if (SEFlg == FALSE) {
 				PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
@@ -2229,19 +2229,13 @@ void BossMove3() {
 		}
 		if (count == 349) {
 			soni.sx = 190;
-			//soni.sy = 340;
 			soni.sy = player.y - 100;
 		}
 		if (count > 350 && count < 500) {
 			BOSS_act_index2 = 0;
 			MS = 0;
-			//BOSS_SPEED = 10;
 			motion_index5 = BOSSAnime[BOSS_act_index];
 			boss.by = player.y - 180;
-			/*if (boss.by > 450) {
-				BOSS_SPEED = 0;
-			}
-			boss.by += BOSS_SPEED;*/
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
 			if (SEFlg == FALSE) {
 				PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
@@ -2257,7 +2251,6 @@ void BossMove3() {
 		}
 		if (count == 549) {
 			soni.sx = 190;
-			//soni.sy = 470;
 			soni.sy = player.y - 100;
 		}
 		if (count > 550 && count < 800) {
@@ -2265,12 +2258,6 @@ void BossMove3() {
 			MS = 0;
 			motion_index5 = BOSSAnime[BOSS_act_index];
 			boss.by = player.y - 180;
-			/*BOSS_SPEED = 10;
-			motion_index5 = BOSSAnime[BOSS_act_index];
-			if (boss.by < 300) {
-				BOSS_SPEED = 0;
-			}
-			boss.by -= BOSS_SPEED;*/
 			DrawExtendGraph(boss.bx, boss.by, boss.bx + boss.bw, boss.by + boss.bh, Boss1[motion_index5], TRUE);
 			if (SEFlg == FALSE) {
 				PlaySoundMem(KeikokuSE, DX_PLAYTYPE_BACK, TRUE);
@@ -2305,12 +2292,14 @@ void BossMove3() {
 
 }
 
-void Sibuki() {//水しぶきのアニメーション
+//水しぶきのアニメーション
+void Sibuki() {
 
 
 	int count_s = 10;
 
-	if (count_s != 0) {//魚のレベルによって泡のスピード変化
+	//魚のレベルによって泡のスピード変化
+	if (count_s != 0) {
 		if (Leve == 1) {
 			boss.bx -= 1.5;
 		}
@@ -2322,6 +2311,7 @@ void Sibuki() {//水しぶきのアニメーション
 		}
 	}
 
+	//水しぶきのアニメーション
 	if (--sibuki_act_wait <= 0)
 	{
 		if (key1 < 1) {
@@ -2334,7 +2324,6 @@ void Sibuki() {//水しぶきのアニメーション
 
 	}
 	DrawExtendGraph(boss.bx, SIBUKI_Y, boss.bx + boss.bw, SIBUKI_Y + 162, sibuki[motion_index9], TRUE);
-	//DrawExtendGraph(500, SIBUKI_Y, 500 + 300, SIBUKI_Y + 300, sibuki[motion_index9], TRUE);
 	if (CheckSoundMem(SibukiSE) == 0) {
 		if (SEFlg == FALSE) {
 			PlaySoundMem(SibukiSE, DX_PLAYTYPE_BACK, TRUE);
@@ -2345,6 +2334,8 @@ void Sibuki() {//水しぶきのアニメーション
 
 //船アニメーション
 void Ship() {
+
+	//船の判定
 	if (SHIPFlg == FALSE) {
 		if (key1 < 1) {
 			SHIP_COUNT += sc;
@@ -2352,18 +2343,16 @@ void Ship() {
 			if (SHIP_COUNT2 == 0) {
 				sc = 0;
 			}
-			if (SHIP_COUNT2 != 0) {
-				//SetFontSize(50);
-				//DrawFormatString(700, 30, 0x000000, "船が来るまで%d秒", SHIP_COUNT2 / 100);
-			}
+
+			//ボスの攻撃が三回行ったら船が動き出す
 			if (countS >= 3)
 			{
 				SHIP_X -= SHIP_SPEED;
 				net.nx -= SHIP_SPEED;
 				DrawGraph(700, 30, Messege, TRUE);
-				/*SetFontSize(50);
-				DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");*/
 			}
+
+			//座標についたら船が止まる
 			if (SHIP_X == 1300)
 			{
 				counth = (counth + 1) % 150;
@@ -2395,8 +2384,6 @@ void Ship() {
 				netflg = 1;
 			}
 
-			//if (SHIP_X != 300)
-			//{
 			if (SHIPFlg != TRUE) {
 				if (netflg == 1) {
 					NET = 0;
@@ -2426,13 +2413,14 @@ void Ship() {
 // 船（反転）アニメーション
 void ShipLs()
 {
+	//船(反転)の判定
 	if (SHIPFlg == TRUE)
 	{
 		SHIP_lX += SHIP_SPEED;
 		net.lnx += SHIP_SPEED;
-		/*SetFontSize(50);
-		DrawFormatString(700, 30, 0x000000, "マグロを捕獲しよう");*/
 		DrawGraph(700, 30, Messege, TRUE);
+
+		//座標についたら船が止まる
 		if (SHIP_lX == 100)
 		{
 			counth = (counth + 1) % 150;
@@ -2511,23 +2499,20 @@ void Ami() {
 				int bby = (boss.by - (boss.bh - boss.bh - 150));
 				int bbw = (boss.bx - (boss.bw - boss.bw - 180)) + boss.bh - 270;
 				int bbh = (boss.by - (boss.bh - boss.bh - 150)) + boss.bw - 280;
+				//網との判定(座標)
 				if (SHIP_X == 1300) {
 					if (motion_index4 == 4) {
-						//1200< bbh&& bbx< 1400&& 250< bbw&& bby< 270
-						//DrawBox(1200, 250, 1400, 270, GetColor(255, 255, 255), FALSE);
 						if (1200 < bbh && bbx < 1400 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1200, 310, 1400, 330, GetColor(255, 255, 255), FALSE);
 						if (1200 < bbh && bbx < 1400 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(1200, 360, 1400, 380, GetColor(255, 255, 255), FALSE);
 						if (1200 < bbh && bbx < 1400 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
@@ -2535,21 +2520,17 @@ void Ami() {
 				}
 				else if (SHIP_X == 800) {
 					if (motion_index4 == 4) {
-						//700< bbh&& bbx< 900&& 250< bbw&& bby< 270
-						//DrawBox(700, 250, 900, 270, GetColor(255, 255, 255), FALSE);
 						if (700 < bbh && bbx < 900 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(700, 310, 900, 330, GetColor(255, 255, 255), FALSE);
 						if (700 < bbh && bbx < 900 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(700, 360, 900, 380, GetColor(255, 255, 255), FALSE);
 						if (700 < bbh && bbx < 900 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
@@ -2557,21 +2538,17 @@ void Ami() {
 				}
 				else if (SHIP_X == 300) {
 					if (motion_index4 == 4) {
-						//200 < bbh && bbx < 400 && 250 < bbw && bby < 270
-						//DrawBox(200, 250, 400, 270, GetColor(255, 255, 255), FALSE);
 						if (200 < bbh && bbx < 400 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(200, 310, 400, 330, GetColor(255, 255, 255), FALSE);
 						if (200 < bbh && bbx < 400 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(200, 360, 400, 380, GetColor(255, 255, 255), FALSE);
 						if (200 < bbh && bbx < 400 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
@@ -2583,6 +2560,7 @@ void Ami() {
 	}
 }
 
+//網(反転)アニメーション
 void AmiLs() {
 	if (SHIPFlg == TRUE) {
 		if (key1 < 1) {
@@ -2602,23 +2580,21 @@ void AmiLs() {
 				int bby = (boss.by - (boss.bh - boss.bh - 150));
 				int bbw = (boss.bx - (boss.bw - boss.bw - 180)) + boss.bh - 270;
 				int bbh = (boss.by - (boss.bh - boss.bh - 150)) + boss.bw - 280;
+
+				//網との判定(座標)
 				if (SHIP_lX == 100) {
 					if (motion_index4 == 4) {
-						//350 < bbh && bbx < 550 && 250 < bbw && bby <270
-						//DrawBox(350, 250, 550, 270, GetColor(255, 255, 255), FALSE);
 						if (350 < bbh && bbx < 550 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(350, 310, 550, 330, GetColor(255, 255, 255), FALSE);
 						if (350 < bbh && bbx < 550 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(350, 360, 550, 380, GetColor(255, 255, 255), FALSE);
 						if (350 < bbh && bbx < 550 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
@@ -2626,21 +2602,17 @@ void AmiLs() {
 				}
 				else if (SHIP_lX == 500) {
 					if (motion_index4 == 4) {
-						//750 < bbh && bbx < 950 && 250 < bbw && bby < 270
-						//DrawBox(750, 250, 950, 270, GetColor(255, 255, 255), FALSE);
 						if (750 < bbh && bbx < 950 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(750, 310, 950, 330, GetColor(255, 255, 255), FALSE);
 						if (750 < bbh && bbx < 950 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(750, 360, 950, 380, GetColor(255, 255, 255), FALSE);
 						if (750 < bbh && bbx < 950 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
@@ -2648,21 +2620,17 @@ void AmiLs() {
 				}
 				else if (SHIP_lX == 900) {
 					if (motion_index4 == 4) {
-						//1150 < bbh && bbx <1350 && 250 < bbw && bby <270
-						//DrawBox(1150, 250, 1350, 270, GetColor(255, 255, 255), FALSE);
 						if (1150 < bbh && bbx < 1350 && 250 < bbw && bby < 270) {
 							cr = 1;
 						}
 					}
 					if (motion_index4 == 5) {
-						//DrawBox(1150, 310, 1350, 330, GetColor(255, 255, 255), FALSE);
 						if (1150 < bbh && bbx < 1350 && 310 < bbw && bby < 330) {
 							cr = 1;
 
 						}
 					}
 					if (motion_index4 == 6) {
-						//DrawBox(1150, 360, 1350, 380, GetColor(255, 255, 255), FALSE);
 						if (1150 < bbh && bbx < 1350 && 360 < bbw && bby < 380) {
 							cr = 1;
 						}
@@ -2674,6 +2642,7 @@ void AmiLs() {
 	}
 }
 
+//ボスの捕獲アニメーション
 void BHA() {
 	if (SHIPFlg == FALSE) {
 		if (key1 < 1) {
@@ -2694,6 +2663,7 @@ void BHA() {
 	}
 }
 
+//ボスの捕獲(反転)アニメーション
 void BHALs() {
 	if (SHIPFlg == TRUE) {
 		if (key1 < 1) {
@@ -2727,6 +2697,7 @@ void BossStage() {
 	}
 	LifeImage();
 	MeterImage();
+	//捕獲アニメーションの判定
 	if (cr == 1) {
 		if (SHIPFlg == FALSE) {
 			BHA();
@@ -2768,10 +2739,6 @@ int HitBoxPlayer(Player* p, Boss* b)
 		int bh1 = bx1 + b->bh - 270;
 		int bw2 = by2 + b->bw - 280;
 
-		//判定確認用
-		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);*/
-
 		//短径が重なっていたら当たり
 		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {
 			return TRUE;
@@ -2790,10 +2757,6 @@ int HitBoxPlayer(Player* p, Boss* b)
 		int by2 = b->by - (b->bh - boss.bh - 150);
 		int bh1 = bx1 + b->bh - 270;
 		int bw2 = by2 + b->bw - 280;
-
-		//判定確認用
-		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);*/
 
 		//短径が重なっていたら当たり
 		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {
@@ -2814,10 +2777,6 @@ int HitBoxPlayer(Player* p, Boss* b)
 		int bh1 = bx1 + b->bh - 270;
 		int bw2 = by2 + b->bw - 280;
 
-		//判定確認用
-		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		DrawBox(bx1, by2, bh1, bw2, 0xFFFFFF, FALSE);*/
-
 		//短径が重なっていたら当たり
 		if (px < bh1 && bx1 < ph && py < bw2 && by2 < pw) {
 			return TRUE;
@@ -2827,6 +2786,7 @@ int HitBoxPlayer(Player* p, Boss* b)
 	}
 }
 
+//魚(プレイヤー)と衝撃波の判定
 int HitBoxPlayer2(Player* p, Soni* s)
 {
 	if (Leve == 1) {
@@ -2841,10 +2801,6 @@ int HitBoxPlayer2(Player* p, Soni* s)
 		int sh1 = sx1 + s->sh - 390;
 		int sw2 = sy2 + s->sw - 200;
 
-		////判定確認用
-		//DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		//DrawBox(sx1, sy2, sh1, sw2, 0xFFFFFF, FALSE);
-
 		//短径が重なっていたら当たり
 		if (px < sh1 && sx1 < ph && py < sw2 && sy2 < pw) {
 			return TRUE;
@@ -2863,10 +2819,6 @@ int HitBoxPlayer2(Player* p, Soni* s)
 		int sy2 = s->sy - (s->sh - soni.sh - 100);
 		int sh1 = sx1 + s->sh - 390;
 		int sw2 = sy2 + s->sw - 200;
-
-		////判定確認用
-		//DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		//DrawBox(sx1, sy2, sh1, sw2, 0xFFFFFF, FALSE);
 
 		//短径が重なっていたら当たり
 		if (px < sh1 && sx1 < ph && py < sw2 && sy2 < pw) {
@@ -2887,10 +2839,6 @@ int HitBoxPlayer2(Player* p, Soni* s)
 		int sh1 = sx1 + s->sh - 390;
 		int sw2 = sy2 + s->sw - 200;
 
-		////判定確認用
-		/*DrawBox(px, py, ph, pw, 0xFFFFFF, FALSE);
-		DrawBox(sx1, sy2, sh1, sw2, 0xFFFFFF, FALSE);*/
-
 		//短径が重なっていたら当たり
 		if (px < sh1 && sx1 < ph && py < sw2 && sy2 < pw) {
 			return TRUE;
@@ -2900,11 +2848,13 @@ int HitBoxPlayer2(Player* p, Soni* s)
 	}
 }
 
-
+//魚(プレイヤー)と岩の当たり判定
 int ColorCheck(int x, int y) {
 	
 	Cr1 = GetPixel(x, y);
 	GetColor2(Cr1, &r, &g, &b);
+
+	//岩(色で)の判定
 	if (r == 98 && g == 96 && b == 94) {
 		if (player.muteki == 0) {
 			if (PointNom == 0) {
@@ -2950,6 +2900,7 @@ void EatCheck(int x, int y) {
 
 	int mx2;
 
+	//マップチップを使っての岩との判定
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 155; j++) {
 			mx = j * 50 + Iwaspeed % IwaHaba;
@@ -2979,6 +2930,7 @@ void EatCheck1(int x, int y) {
 	Cr1 = GetPixel(x, y);
 	GetColor2(Cr1, &er, &eg, &eb);
 
+	//色で判定
 	if ((er == 98) && (eg == 96) && (eb == 94) && (Eatflg < TRUE)) {
 		Eatflg = FALSE;
 		EatCont++;
@@ -2989,10 +2941,12 @@ void EatCheck1(int x, int y) {
 	return;
 }
 
+//ポーズ
 void Pouse() {
 	static bool push = 0;
 
 	if (player.life > 0) {
+		//startボタンを押すと止まる
 		if (g_KeyFlg & PAD_INPUT_8 && key1 < 1) {
 			key1 = 1;
 			player.flg = FALSE;
@@ -3002,6 +2956,7 @@ void Pouse() {
 				PlaySoundMem(DesitionSE, DX_PLAYTYPE_BACK, TRUE);
 			}
 		}
+		//startボタンを押すと動き出す
 		else if (key1 > 0 && g_KeyFlg & PAD_INPUT_8) {
 			player.flg = TRUE;
 			boss.flg = TRUE;
@@ -3012,6 +2967,7 @@ void Pouse() {
 			}
 		}
 
+		//ポーズ画面表示
 		if (key1 > 0) {
 			DrawGraph(355, 100, pauseImage, TRUE);
 			//player.flg = FALSE;
@@ -3055,9 +3011,12 @@ void Pouse() {
 		}
 	}
 }
+
+//ゲームオーバー
 void GameOver() {
 	static bool push = 0; // 押されたかどうか確認する関数
 	SHIPFlg = FALSE;
+	//ゲームオーバー処理(レベル別)
 	if (Leve == 2) {
 		DrawGraph(0, 0, Gameover2, TRUE);
 	}
@@ -3125,6 +3084,8 @@ void GameOver() {
 		}
 	}
 }
+
+//図鑑表示1
 void PictureBook1() {
 
 	StopSoundMem(TitleSound);
@@ -3134,6 +3095,7 @@ void PictureBook1() {
 	DrawGraph(0, 0, Bookhaikei[0], TRUE);
 	int x = 50, y = 50, w = 400, h = 325, a = 0;
 
+	//図鑑の表示
 	for (int i = 1; i < 3; i++) {
 		for (int j = 1; j < 4; j++) {
 			if (clear[a] == TRUE) {
@@ -3187,6 +3149,7 @@ void PictureBook1() {
 	}
 }
 
+//図鑑表示2
 void PictureBook2() {
 
 	static bool push = 0;	// 押されたかどうか確認する関数
@@ -3194,6 +3157,7 @@ void PictureBook2() {
 	DrawGraph(0, 0, Bookhaikei[1], TRUE);
 	int x = 50, y = 50, w = 400, h = 325, a = 6;
 
+	//図鑑の表示
 	for (int i = 1; i < 3; i++) {
 		for (int j = 1; j < 4; j++) {
 			if (i + j < 5 && clear[a] == TRUE) {

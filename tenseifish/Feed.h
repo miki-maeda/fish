@@ -8,10 +8,10 @@ void PlayerEat(int* e);		//プレイヤーが餌を食べたとき
 
 //変数
 int Leve = 1;			//レベル
-int Scke = 1;			//大きくなる量
+int Scke = 1;			//大きくなるサイズ
 int LeveUp = 10;			//レベルが上がるのに必要な量
 int EatAmount;		//食べたものの量(合計)
-int em, am, im;
+int em, am, im;		//エサ量(別)
 int MoveSpeed = 50;		//アニメーションが変わるスピード
 int MoveEat = MoveSpeed;	//アニメーションが変わるまでの時間
 int CountEat = 0;		//カウントする
@@ -27,11 +27,12 @@ int Deatflg = FALSE;	//フラグ
 int DSpeed;				//吐き出した餌のスピード
 int RandEat = 0;		//吐き出す餌の種類
 
-int mx, my, mw, mh;		
+int mx, my, mw, mh;		//マップチップの座標を入れる変数
 int e_w, e_h;			//エサのサイズ
 int Dx = 0, Dy = 0, Dw = 0, Dh = 0;	//吐き出す時の座標
 int clear[11] = { FALSE };		//図鑑のフラグ　FALSE:未登録　TRUE:登録済み
 
+//エサ、敵の設定
 struct Eat {
 
 	int flg;			//使用フラグ
@@ -44,14 +45,14 @@ struct Eat {
 };
 
 struct Eat eat[10];				//餌の表示する数
-struct Eat eat0 = { TRUE,0,0,0,1410,0,FALSE,FALSE };
+struct Eat eat0 = { TRUE,0,0,0,1410,0,FALSE,FALSE };	//エサ、敵の初期設定
 
 int Hit(Player* p, Eat* e);				//敵とのあたり判定
 void EatCheck(int x, int y);				//岩との当たり判定(エサ)
 void EatCheck1(int x, int y);				//敵の出現場所の確認
 void DEat();							//岩もしくは敵に当たった時ランダムでエサゲージを下げる処理
-void PictureBook1();	//図鑑の処理する関数
-void PictureBook2();	//図鑑の処理する関数
+void PictureBook1();	//図鑑の処理する関数1
+void PictureBook2();	//図鑑の処理する関数2
 
 
 //マップチップ
