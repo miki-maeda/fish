@@ -2942,7 +2942,7 @@ int ColorCheck(int x, int y) {
 		}
 	}
 	
-	return colorsum;
+	return 0;
 }
 
 //Šâ‚Æ‚Ì“–‚½‚è”»’è(ƒGƒT)
