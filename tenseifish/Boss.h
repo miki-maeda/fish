@@ -16,7 +16,7 @@ void ShipLs();	// 反転版
 void BHA();//BOSSの捕獲アニメーション処理
 void BHALs();	// 反転版
 
-void Sibuki();
+void Sibuki();//水しぶきのアニメーション
 
 
 //Bossの初期値
@@ -97,7 +97,7 @@ int BOSSB_MOTION_INDEX = 12;
 int SONIC_MOTION_INDEX = 2;	
 int HOKAKU_MOTION_INDEX = 4;	// 4コマ
 
-
+//ボスの攻撃時の水しぶきアニメーション
 int sibukianime[] = { 0,1,2,3,4,5,6,7 };
 int sibuki[8] = { 0 };
 int sibuki_ANI_SPEED = 10;

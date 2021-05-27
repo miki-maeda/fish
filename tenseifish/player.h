@@ -50,6 +50,7 @@ void BossST(Player* P);//ボスステージ移行
 //キー取得用配列
 extern char key[256];
 
+//プレイヤーのゲームオーバー時のアニメーション
 int deianime[] = { 0,1,2,3,4,5,6 };
 int dei1[7] = { 0 };
 int dei2[7] = { 0 };
