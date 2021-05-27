@@ -6,7 +6,7 @@ void BossMove2();//パターン２
 void BossMove3();//パターン３
 void BossStage();//BOSSのステージ
 void BossBackScrool();//BOSSステージのスクロール
-void BossMeter();
+void BossMeter();	// ボス戦への距離
 void BossMovie();//ボス戦に行く前のムービー処理
 
 void Ami();//網の処理
@@ -27,7 +27,7 @@ int BOSS_HEIGHT = 450;
 int BOSS_SPEED = 20;
 
 int Keikoku;        //ボスの警告
-int Messege;
+int Messege;		//ボス捕獲メッセージ
 
 //衝撃波の初期値
 int SONIC_POS_X = 1400;
@@ -87,9 +87,9 @@ int motion_index8;
 int BOSS_PATTREN;   //BOSSパターンを格納する変数
 int count;         //BOSSの次の動きまでを数える変数
 int MS = 0;        //ボス戦のパターン3に制限を設ける変数
-int sc;
-int cr;
-int cr2;
+int sc;			   //船の秒数カウント
+int cr;			   //捕獲アニメーション
+int cr2;		   //捕獲アニメーション(反転)
 
 //モーションの数
 int BOSS_MOTION_INDEX = 4;
